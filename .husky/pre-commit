@@ -1,6 +1,7 @@
-npm test || {
+npm run lint || {
   echo "==================================================================="
-  echo "❌ You can't commit your code since there are failed tests! ❌"
+  echo "❌ You can't push this code since Linting errors detected! ❌"
+  echo "💡 Note: You can use `npm run lint:fix` if you're lazy to fix!"
   echo "==================================================================="
   exit 1
 }

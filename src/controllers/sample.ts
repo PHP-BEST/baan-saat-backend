@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import Sample from "../models/Sample";
+import Sample from '../models/Sample';
 
 export const getSamples = async (req: Request, res: Response) => {
   const samples = await Sample.find();
@@ -13,7 +13,7 @@ export const getSampleById = async (req: Request, res: Response) => {
   if (!sample) {
     return res
       .status(404)
-      .json({ success: false, message: "Sample not found" });
+      .json({ success: false, message: 'Sample not found' });
   }
   res.status(200).json({ success: true, data: sample });
 };
@@ -23,7 +23,7 @@ export const addSample = async (req: Request, res: Response) => {
   if (!newSample) {
     return res
       .status(400)
-      .json({ success: false, message: "Failed to create sample" });
+      .json({ success: false, message: 'Failed to create sample' });
   }
   res.status(200).json({ success: true, data: newSample });
 };
@@ -36,7 +36,7 @@ export const updateSample = async (req: Request, res: Response) => {
   if (!updatedSample) {
     return res
       .status(404)
-      .json({ success: false, message: "Sample not found" });
+      .json({ success: false, message: 'Sample not found' });
   }
   res.status(200).json({ success: true, data: updatedSample });
 };
@@ -47,7 +47,7 @@ export const deleteSample = async (req: Request, res: Response) => {
   if (!deletedSample) {
     return res
       .status(404)
-      .json({ success: false, message: "Sample not found" });
+      .json({ success: false, message: 'Sample not found' });
   }
   res.status(200).json({ success: true, data: deletedSample });
 };

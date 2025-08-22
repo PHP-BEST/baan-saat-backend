@@ -1,17 +1,17 @@
 // For testing sample.ts
 
-import request from "supertest";
-import express, { Application } from "express";
-import sampleRouter from "../routes/sample";
-import mongoose from "mongoose";
+import request from 'supertest';
+import express, { Application } from 'express';
+import sampleRouter from '../routes/sample';
+import mongoose from 'mongoose';
 
 // Set up Express app for testing
 const app: Application = express();
 app.use(express.json());
-app.use("/samples", sampleRouter);
+app.use('/samples', sampleRouter);
 
 beforeAll(async () => {
-  const mongo_uri = process.env.MONGO_URI_TEST || "";
+  const mongo_uri = process.env.MONGO_URI_TEST || '';
   await mongoose.connect(mongo_uri);
 });
 
@@ -22,56 +22,56 @@ afterAll(async () => {
   await mongoose.disconnect();
 });
 
-describe("Testing Sample API...", () => {
+describe('Testing Sample API...', () => {
   let firstSampleId: string;
-  let firstName = "Test";
-  let firstNewName = "Test 1";
-  let firstDescription = "A test sample";
-  let firstNewDescription = "A test sample 1";
+  const firstName = 'Test';
+  const firstNewName = 'Test 1';
+  const firstDescription = 'A test sample';
+  const firstNewDescription = 'A test sample 1';
 
-  it("Add first sample", async () => {
+  it('Add first sample', async () => {
     const res = await request(app)
-      .post("/samples")
+      .post('/samples')
       .send({ name: firstName, description: firstDescription });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data).toHaveProperty("_id");
+    expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.name).toBe(firstName);
     expect(res.body.data.description).toBe(firstDescription);
     firstSampleId = res.body.data._id;
   });
 
-  it("Add second sample", async () => {
-    const name = "Test2";
-    const description = "A test sample2";
+  it('Add second sample', async () => {
+    const name = 'Test2';
+    const description = 'A test sample2';
     const res = await request(app)
-      .post("/samples")
+      .post('/samples')
       .send({ name: name, description: description });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data).toHaveProperty("_id");
+    expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.name).toBe(name);
     expect(res.body.data.description).toBe(description);
   });
 
-  it("Get 2 samples", async () => {
-    const res = await request(app).get("/samples");
+  it('Get 2 samples', async () => {
+    const res = await request(app).get('/samples');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(2);
   });
 
-  it("Get the first sample by id", async () => {
+  it('Get the first sample by id', async () => {
     const res = await request(app).get(`/samples/${firstSampleId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data).toHaveProperty("_id", firstSampleId);
+    expect(res.body.data).toHaveProperty('_id', firstSampleId);
     expect(res.body.data.name).toBe(firstName);
     expect(res.body.data.description).toBe(firstDescription);
   });
 
-  it("Update the first sample", async () => {
+  it('Update the first sample', async () => {
     const res = await request(app)
       .put(`/samples/${firstSampleId}`)
       .send({ name: firstNewName, description: firstNewDescription });
@@ -81,7 +81,7 @@ describe("Testing Sample API...", () => {
     expect(res.body.data.description).toBe(firstNewDescription);
   });
 
-  it("Delete the first sample", async () => {
+  it('Delete the first sample', async () => {
     const res = await request(app).delete(`/samples/${firstSampleId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);

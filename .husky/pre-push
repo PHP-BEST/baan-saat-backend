@@ -1,0 +1,22 @@
+npm run lint || {
+  echo "==================================================================="
+  echo "❌ You can't push this code since Linting errors detected! ❌"
+  echo "💡 Note: You can use `npm run lint:fix` if you're lazy to fix!"
+  echo "==================================================================="
+  exit 1
+},
+
+npm run format || {
+  echo "==================================================================="
+  echo "❌ You can't push this code since Code formatting issues detected! ❌"
+  echo "💡 Note: You can use `npm run format:fix` if you're lazy to fix!"
+  echo "==================================================================="
+  exit 1
+},
+
+npm test || {
+  echo "==================================================================="
+  echo "❌ You can't push this code since Failed tests detected! ❌"
+  echo "==================================================================="
+  exit 1
+}

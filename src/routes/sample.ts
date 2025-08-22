@@ -1,11 +1,11 @@
-import express from "express";
+import express from 'express';
 import {
   addSample,
   deleteSample,
   getSampleById,
   getSamples,
   updateSample,
-} from "../controllers/sample";
+} from '../controllers/sample';
 
 const sampleRouter = express.Router();
 
@@ -20,7 +20,7 @@ const sampleRouter = express.Router();
  *       200:
  *         description: Returns a list of all samples
  */
-sampleRouter.get("/", getSamples);
+sampleRouter.get('/', getSamples);
 
 /**
  * @openapi
@@ -42,7 +42,7 @@ sampleRouter.get("/", getSamples);
  *       404:
  *         description: Sample not found
  */
-sampleRouter.get("/:id", getSampleById);
+sampleRouter.get('/:id', getSampleById);
 
 /**
  * @openapi
@@ -68,7 +68,7 @@ sampleRouter.get("/:id", getSampleById);
  *       400:
  *         description: Failed to create sample
  */
-sampleRouter.post("/", addSample);
+sampleRouter.post('/', addSample);
 
 /**
  * @openapi
@@ -101,7 +101,7 @@ sampleRouter.post("/", addSample);
  *       404:
  *         description: Sample not found
  */
-sampleRouter.put("/:id", updateSample);
+sampleRouter.put('/:id', updateSample);
 
 /**
  * @openapi
@@ -123,6 +123,6 @@ sampleRouter.put("/:id", updateSample);
  *       404:
  *         description: Sample not found
  */
-sampleRouter.delete("/:id", deleteSample);
+sampleRouter.delete('/:id', deleteSample);
 
 export default sampleRouter;
