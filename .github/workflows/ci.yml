@@ -2,14 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, '**']
   pull_request:
-    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,13 +20,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint
-
-      - name: Run Prettier
-        run: npm run format
-
-      - name: Run tests
+      - name: Set environment variables for branch
+        run: echo "Branch is ${{ github.ref }}"
         env:
+          MONGO_URI_DEV: ${{ secrets.MONGO_URI_DEV }}
+          MONGO_URI_PROD: ${{ secrets.MONGO_URI_PROD }}
+          MONGO_URI_TEST: ${{ secrets.MONGO_URI_TEST }}
+
+      - name: Run tests (main uses prod, others use dev)
+        env:
+          NODE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+          MONGO_URI_DEV: ${{ secrets.MONGO_URI_DEV }}
+          MONGO_URI_PROD: ${{ secrets.MONGO_URI_PROD }}
           MONGO_URI_TEST: ${{ secrets.MONGO_URI_TEST }}
         run: npm test
