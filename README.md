@@ -13,6 +13,7 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 ## Installation
 
 1. Clone this repository:
+
    ```bash
    git clone https://github.com/PHP-BEST/baan-saat-backend.git
    cd baan-saat-backend
@@ -25,17 +26,7 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 
 ## Environment Setup
 
-Create a `.env` file in the root directory with the following variables:
-
-```
-NODE_ENV=...
-PORT=...
-MONGO_URI_DEV=...
-MONGO_URI_PROD=...
-MONGO_URI_TEST=...
-```
-
-You can check `.env.example` for checking the meaning of each variable
+Create a `.env` file in the root directory with the variables in [.env.example](/.env.example)
 
 ## Running the Application
 
@@ -83,20 +74,32 @@ src/
 1. **Create a New Branch**
    - Always create a new branch from the latest `developer` branch before starting work.
    - Use a descriptive branch naming convention based on your task type:
-     - For new features: `feat:<feature-name>`
-     - For bug fixes: `fix:<short-description>`
-     - For documentation: `docs:<short-description>`
-     - For refactoring: `refactor:<short-description>`
-     - For chores/maintenance: `chore:<short-description>`
+     - For new features: `feat/<feature-name>`
+     - For bug fixes: `fix/<short-description>`
+     - For documentation: `docs/<short-description>`
+     - For refactoring: `refactor/<short-description>`
+     - For chores/maintenance: `chore/<short-description>`
    - Example:
      ```bash
      git checkout developer
      git pull
-     git checkout -b feat:user-auth
+     git checkout -b feat/user-auth
      ```
 
 2. **Commit and Push Changes**
    - Write clear and concise commit messages.
+   - Use a descriptive naming convention based on your task type:
+     - For new features: `feat: <feature-name>`
+     - For bug fixes: `fix: <short-description>`
+     - For documentation: `docs: <short-description>`
+     - For refactoring: `refactor: <short-description>`
+     - For chores/maintenance: `chore: <short-description>`
+   - Example
+
+   ```bash
+   git commit -m "fix: add authentication"
+   ```
+
    - Push your branch to the remote repository.
 
 3. **Open a Pull Request**
