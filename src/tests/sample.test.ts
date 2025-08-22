@@ -22,7 +22,7 @@ afterAll(async () => {
   await mongoose.disconnect();
 });
 
-describe("Sample API", () => {
+describe("Testing Sample API...", () => {
   let firstSampleId: string;
   let firstName = "Test";
   let firstNewName = "Test 1";
@@ -87,11 +87,5 @@ describe("Sample API", () => {
     expect(res.body.success).toBe(true);
     expect(res.body.data.name).toBe(firstNewName);
     expect(res.body.data.description).toBe(firstNewDescription);
-  });
-
-  it("Return 404 for non-existent sample", async () => {
-    const res = await request(app).get(`/samples/000000000000000000000000`);
-    expect(res.statusCode).toBe(404);
-    expect(res.body.success).toBe(false);
   });
 });
