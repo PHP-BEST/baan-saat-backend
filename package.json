@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "src/server.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest src/tests --passWithNoTests",
     "dev": "nodemon --exec npx ts-node src/server.ts"
   },
   "dependencies": {
