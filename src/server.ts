@@ -30,13 +30,14 @@ app.use(cors());
 
 app.use("/samples", sampleRouter);
 
+// Swagger Configuration
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
       title: "Project Baan Saat API",
       version: "1.0.0",
-      description: "API documentation for Project Baan Saat",
+      description: "API Documentation for Project Baan Saat",
     },
   },
   apis: ["./src/routes/*.ts"],
@@ -44,6 +45,7 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
+// Swagger is at /api-docs
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(process.env.PORT, () =>

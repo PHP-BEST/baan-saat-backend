@@ -89,8 +89,8 @@ describe("Sample API", () => {
     expect(res.body.data.description).toBe(firstNewDescription);
   });
 
-  it("Return 404 for non-existent sample", async () => {
-    const res = await request(app).get(`/samples/000000000000000000000000`);
+  it("Return 404 for non-existent path", async () => {
+    const res = await request(app).get(`/samples/0123`);
     expect(res.statusCode).toBe(404);
     expect(res.body.success).toBe(false);
   });
