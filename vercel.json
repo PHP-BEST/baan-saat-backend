@@ -1,5 +1,33 @@
 {
-  "version": 2,
-  "builds": [{ "src": "src/server.ts", "use": "@vercel/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "src/server.ts" }]
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "developer": true
+    }
+  },
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "preview": {
+    "env": {
+      "NODE_ENV": "development"
+    }
+  }
 }
