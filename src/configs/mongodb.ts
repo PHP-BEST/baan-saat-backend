@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
-import path from 'path';
 
 const connectDB = async () => {
   mongoose.set('strictQuery', true);
 
   const entryFile = process.argv[1] || '';
-  const isProd = entryFile.includes(`${path.sep}dist${path.sep}`);
+  const isProd = entryFile.includes('dist');
 
   let mongoUri: string;
 
