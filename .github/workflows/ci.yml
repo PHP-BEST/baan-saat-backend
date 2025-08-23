@@ -27,9 +27,8 @@ jobs:
           MONGO_URI_PROD: ${{ secrets.MONGO_URI_PROD }}
           MONGO_URI_TEST: ${{ secrets.MONGO_URI_TEST }}
 
-      - name: Run tests (main uses prod, others use dev)
+      - name: Run tests
         env:
-          NODE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
           MONGO_URI_DEV: ${{ secrets.MONGO_URI_DEV }}
           MONGO_URI_PROD: ${{ secrets.MONGO_URI_PROD }}
           MONGO_URI_TEST: ${{ secrets.MONGO_URI_TEST }}

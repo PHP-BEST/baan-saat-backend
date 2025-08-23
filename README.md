@@ -49,6 +49,12 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
   ```
 - By default, the app runs on `localhost:5000`.
 
+- **Start the production server:**
+  ```bash
+  npm run build
+  npm start
+  ```
+
 ## Project Structure
 
 ```
