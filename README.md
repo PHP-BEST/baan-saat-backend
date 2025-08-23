@@ -4,7 +4,6 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Environment Setup](#environment-setup)
 - [Running the Application](#running-the-application)
@@ -16,12 +15,6 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 - [Workflow & Branching](#workflow--branching)
 
 ---
-
-## Prerequisites
-
-- **Node.js**
-- **npm**
-- **MongoDB**
 
 ## Installation
 
