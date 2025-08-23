@@ -27,7 +27,6 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 ## Environment Setup
 
 - Create a `.env` file in the root directory with the variables in [.env.example](/.env.example)
-- Create a `.env` file in the root directory with the variables in [.env.example](/.env.example)
 
 ## Running the Application
 
