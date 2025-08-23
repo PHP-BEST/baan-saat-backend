@@ -29,7 +29,7 @@ describe('Testing Sample API...', () => {
   const firstDescription = 'A test sample';
   const firstNewDescription = 'A test sample 1';
 
-  it('Add first sample', async () => {
+  it('Add the first sample', async () => {
     const res = await request(app)
       .post('/samples')
       .send({ name: firstName, description: firstDescription });
@@ -41,7 +41,7 @@ describe('Testing Sample API...', () => {
     firstSampleId = res.body.data._id;
   });
 
-  it('Add second sample', async () => {
+  it('Add the second sample', async () => {
     const name = 'Test2';
     const description = 'A test sample2';
     const res = await request(app)
@@ -54,7 +54,7 @@ describe('Testing Sample API...', () => {
     expect(res.body.data.description).toBe(description);
   });
 
-  it('Get 2 samples', async () => {
+  it('Get both samples', async () => {
     const res = await request(app).get('/samples');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
