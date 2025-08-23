@@ -2,6 +2,19 @@
 
 This guide outlines how to set up, develop, test, and maintain the `baan-saat-backend` project.
 
+## Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Environment Setup](#environment-setup)
+- [Running the Application](#running-the-application)
+- [Project Structure](#project-structure)
+- [Code Quality](#code-quality)
+- [Testing](#testing)
+- [API Documentation](#api-documentation)
+- [Deployment](#deployment)
+- [Workflow & Branching](#workflow--branching)
+
 ---
 
 ## Prerequisites
@@ -48,6 +61,41 @@ src/
   server.ts     # Application entry point
 ```
 
+### File Index and Naming Conventions
+
+#### `/src/configs/` - Configuration Files
+**Purpose**: Database connections, external service configurations, and environment-specific settings
+**Naming Convention**: `<service-name>.ts`
+
+- `mongodb.ts` - MongoDB connection configuration with environment-based URI selection
+
+#### `/src/controllers/` - Route Handlers
+**Purpose**: Business logic and request/response handling for API endpoints
+**Naming Convention**: `<resource-name>.ts`
+
+- `sample.ts` - CRUD operations for Sample resource (getSamples, getSampleById, addSample, updateSample, deleteSample)
+
+#### `/src/models/` - Database Models
+**Purpose**: Mongoose schemas and data models for MongoDB collections
+**Naming Convention**: `<ModelName>.ts` (PascalCase, singular)
+
+- `Sample.ts` - Sample model with name and description fields
+
+#### `/src/routes/` - API Route Definitions
+**Purpose**: Express route definitions with OpenAPI/Swagger documentation
+**Naming Convention**: `<resource-name>.ts` (should match corresponding controller)
+
+- `sample.ts` - Sample API routes with full CRUD endpoints and Swagger documentation
+
+#### `/src/tests/` - Test Files
+**Purpose**: Jest and Supertest integration and unit tests
+**Naming Convention**: `<resource-name>.test.ts`
+
+- `sample.test.ts` - Integration tests for Sample API endpoints with full CRUD testing workflow
+
+#### Root Files
+- `server.ts` - Main application entry point with Express setup, middleware configuration, and Swagger integration
+
 ## Code Quality
 
 - **Linting:**
@@ -88,6 +136,7 @@ The backend is deployed on Vercel with two environments:
 ### Deployment Workflow
 1. Push changes to `developer` branch → Development environment updates automatically
 2. Merge `developer` to `main` branch → Production environment updates automatically
+3. Use development URL for testing before production deployment
 
 ## Workflow & Branching
 
@@ -99,16 +148,10 @@ The backend is deployed on Vercel with two environments:
      - For documentation: `docs/<short-description>`
      - For refactoring: `refactor/<short-description>`
      - For chores/maintenance: `chore/<short-description>`
-     - For new features: `feat/<feature-name>`
-     - For bug fixes: `fix/<short-description>`
-     - For documentation: `docs/<short-description>`
-     - For refactoring: `refactor/<short-description>`
-     - For chores/maintenance: `chore/<short-description>`
    - Example:
      ```bash
      git checkout developer
      git pull
-     git checkout -b feat/user-auth
      git checkout -b feat/user-auth
      ```
 
@@ -127,7 +170,7 @@ The backend is deployed on Vercel with two environments:
      git commit -m "feat: add user authentication"
      git push origin feat/user-auth
      ```
-     
+
 3. **Open a Pull Request**
    - **On GitHub**, open a pull request from your feature/fix branch to the `developer` branch (never directly into `main`).
    - Assign reviewers if required.
