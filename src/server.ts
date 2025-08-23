@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 import sampleRouter from './routes/sample';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -42,6 +42,10 @@ const swaggerOptions = {
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({ success: true, data: 'Connection Successful!' });
+});
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
