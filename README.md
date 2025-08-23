@@ -99,10 +99,16 @@ The backend is deployed on Vercel with two environments:
      - For documentation: `docs/<short-description>`
      - For refactoring: `refactor/<short-description>`
      - For chores/maintenance: `chore/<short-description>`
+     - For new features: `feat/<feature-name>`
+     - For bug fixes: `fix/<short-description>`
+     - For documentation: `docs/<short-description>`
+     - For refactoring: `refactor/<short-description>`
+     - For chores/maintenance: `chore/<short-description>`
    - Example:
      ```bash
      git checkout developer
      git pull
+     git checkout -b feat/user-auth
      git checkout -b feat/user-auth
      ```
 
@@ -121,7 +127,7 @@ The backend is deployed on Vercel with two environments:
      git commit -m "feat: add user authentication"
      git push origin feat/user-auth
      ```
-
+     
 3. **Open a Pull Request**
    - **On GitHub**, open a pull request from your feature/fix branch to the `developer` branch (never directly into `main`).
    - Assign reviewers if required.
