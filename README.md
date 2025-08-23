@@ -137,7 +137,7 @@ The backend is deployed on Vercel with two environments:
   - Used for testing and staging
   - Connected to development database and services
 
-- **Production**: https://baan-saat-backend-production.vercel.app/
+- **Production**: https://baan-saat-backend.vercel.app/
   - Automatically deploys from the `main` branch
   - Live production environment
   - Connected to production database and services
