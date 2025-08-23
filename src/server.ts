@@ -16,7 +16,6 @@ connectDB();
 const app: Application = express();
 
 app.use(express.json());
-
 app.use(helmet());
 app.use(xss());
 app.use(
@@ -46,8 +45,14 @@ const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.listen(process.env.PORT, () =>
-  console.log(
-    `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`,
-  ),
-);
+// Export the app for Vercel
+export default app;
+
+// Only listen when running locally
+if (require.main === module) {
+  app.listen(process.env.PORT, () =>
+    console.log(
+      `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`,
+    ),
+  );
+}
