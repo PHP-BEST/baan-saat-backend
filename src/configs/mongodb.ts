@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   mongoose.set('strictQuery', true);
+
   let mongoUri: string = '';
   if (process.env.NODE_ENV === 'production') {
     mongoUri = process.env.MONGO_URI_PROD || '';
