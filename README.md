@@ -131,7 +131,7 @@ src/
 
 The backend is deployed on Vercel with two environments:
 
-- **Development**: https://baan-saat-backend-git-developer-php-wanttosurvives-projects.vercel.app/
+- **Development**: https://baan-saat-backend-dev.vercel.app/
   - Automatically deploys from the `developer` branch
   - Used for testing and staging
   - Connected to development database and services
