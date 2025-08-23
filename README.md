@@ -27,6 +27,7 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 ## Environment Setup
 
 - Create a `.env` file in the root directory with the variables in [.env.example](/.env.example)
+- Create a `.env` file in the root directory with the variables in [.env.example](/.env.example)
 
 ## Running the Application
 
@@ -74,11 +75,17 @@ src/
      - For documentation: `docs/<short-description>`
      - For refactoring: `refactor/<short-description>`
      - For chores/maintenance: `chore/<short-description>`
+     - For new features: `feat/<feature-name>`
+     - For bug fixes: `fix/<short-description>`
+     - For documentation: `docs/<short-description>`
+     - For refactoring: `refactor/<short-description>`
+     - For chores/maintenance: `chore/<short-description>`
    - Example:
 
      ```bash
      git checkout developer
      git pull
+     git checkout -b feat/user-auth
      git checkout -b feat/user-auth
      ```
 
@@ -96,11 +103,24 @@ src/
      git commit -m "fix: add authentication"
      ```
 
+   - Use a descriptive naming convention based on your task type:
+     - For new features: `feat: <feature-name>`
+     - For bug fixes: `fix: <short-description>`
+     - For documentation: `docs: <short-description>`
+     - For refactoring: `refactor: <short-description>`
+     - For chores/maintenance: `chore: <short-description>`
+   - Example:
+
+     ```bash
+     git commit -m "fix: add authentication"
+     ```
+
    - Push your branch to the remote repository.
 
 3. **Open a Pull Request**
    - Merge your feature/fix branch **only into the `developer` branch** (never directly into `main`).
    - Assign reviewers if required, and wait for approval before merging.
+   - After merging branches, I recommend deleting your working branch and recreate it from new developer branch...
    - After merging branches, I recommend deleting your working branch and recreate it from new developer branch...
 
 4. **Never Commit Directly to `main` or `developer`**
