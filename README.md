@@ -136,7 +136,6 @@ The backend is deployed on Vercel with two environments:
 ### Deployment Workflow
 1. Push changes to `developer` branch → Development environment updates automatically
 2. Merge `developer` to `main` branch → Production environment updates automatically
-3. Use development URL for testing before production deployment
 
 ## Workflow & Branching
 
@@ -170,7 +169,7 @@ The backend is deployed on Vercel with two environments:
      git commit -m "feat: add user authentication"
      git push origin feat/user-auth
      ```
-
+     
 3. **Open a Pull Request**
    - **On GitHub**, open a pull request from your feature/fix branch to the `developer` branch (never directly into `main`).
    - Assign reviewers if required.
