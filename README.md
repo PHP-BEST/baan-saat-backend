@@ -38,13 +38,6 @@ npm run dev
 
 This code normally runs on `localhost:5000`
 
-To start in production mode (after building):
-
-```bash
-npm run build
-npm start
-```
-
 ## Project Structure
 
 ```
