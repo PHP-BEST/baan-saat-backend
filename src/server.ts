@@ -59,7 +59,10 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.get('/', (req: Request, res: Response) => {
-  res.status(200).json({ success: true, data: 'Connection Successful!' });
+  res.status(200).json({
+    success: true,
+    data: `${process.env.NODE_ENV}: Connection Successful!`,
+  });
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
