@@ -9,6 +9,7 @@ import rateLimit from 'express-rate-limit';
 import hpp from 'hpp';
 import cors from 'cors';
 import connectDB from './configs/mongodb';
+import { allowedOrigins } from './configs/cors';
 
 dotenv.config();
 connectDB();
@@ -25,7 +26,21 @@ app.use(
   }),
 );
 app.use(hpp());
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }),
+);
 
 app.use('/samples', sampleRouter);
 

@@ -26,8 +26,11 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
+   npm install husky --save-dev
+   npx husky install
    ```
 
 ## Environment Setup
@@ -131,7 +134,7 @@ src/
 
 The backend is deployed on Vercel with two environments:
 
-- **Development**: https://baan-saat-backend-git-developer-php-wanttosurvives-projects.vercel.app/
+- **Development**: https://baan-saat-backend-dev.vercel.app/
   - Automatically deploys from the `developer` branch
   - Used for testing and staging
   - Connected to development database and services
