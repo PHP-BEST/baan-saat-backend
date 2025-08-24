@@ -50,7 +50,7 @@ const swaggerOptions = {
     info: {
       title: 'Project Baan Saat API',
       version: '1.0.0',
-      description: 'API documentation for Project Baan Saat',
+      description: 'API documentation for Baan Saat',
     },
   },
   apis: ['./src/routes/*.ts'],
@@ -59,7 +59,10 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.get('/', (req: Request, res: Response) => {
-  res.status(200).json({ success: true, data: 'Connection Successful!' });
+  res.status(200).json({
+    success: true,
+    data: `${process.env.NODE_ENV}: Connection Successful!`,
+  });
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
