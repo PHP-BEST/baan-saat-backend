@@ -30,7 +30,7 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
    ```bash
    npm install
    npm install husky --save-dev
-   npx husky install
+   npx husky
    ```
 
 ## Environment Setup
