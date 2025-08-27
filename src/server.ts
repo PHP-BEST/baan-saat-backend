@@ -1,53 +1,58 @@
 import dotenv from "dotenv";
 import express, { Application } from "express";
-import sampleRouter from "./routes/sample";
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-import helmet from "helmet";
-import { xss } from "express-xss-sanitizer";
-import rateLimit from "express-rate-limit";
-import hpp from "hpp";
 import cors from "cors";
-import connectDB from "./configs/mongodb";
+import passport from "passport"
+import session from "express-session"
+import MongoStore from "connect-mongo";
+import { CipherKey } from "crypto";
+
+import mongoose from "mongoose";
+import { mongoUri } from "./configs/configs";
+
+import initializePassport from "./auth/initializePassport";
+
+import authRoutes from "./auth/authRoutes";
 
 dotenv.config();
-connectDB();
 
 const app: Application = express();
 
-app.use(express.json());
+(async() => {
+  mongoose.set("strictQuery", true);
+  await mongoose.connect(mongoUri);
+})()
 
-app.use(helmet());
-app.use(xss());
-app.use(
-  rateLimit({
-    windowMs: 10 * 60 * 1000,
-    max: 100,
-  })
-);
-app.use(hpp());
 app.use(cors());
 
-app.use("/samples", sampleRouter);
+const store = MongoStore.create({
+  mongoUrl: mongoUri,
+  collectionName: "sessions",
+  ttl: 14 * 24 * 60 * 60 // Session TTL in seconds (14 days)
+});
 
-const swaggerOptions = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Project Baan Saat API",
-      version: "1.0.0",
-      description: "API documentation for Project Baan Saat",
-    },
-  },
-  apis: ["./src/routes/*.ts"],
-};
+app.use(session({
+  secret: process.env.SESSION_SECRET as CipherKey,
+  resave: false,
+  saveUninitialized: false,
+  store: store,
+  cookie: {
+    // Cookie expiration in milliseconds (e.g., 7 days)
+    maxAge: 1000 * 60 * 60 * 24 * 7 
+  }
+}));
 
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+initializePassport(passport);
 
-app.listen(process.env.PORT, () =>
-  console.log(
+app.use("/", authRoutes);
+
+app.use(express.json()); 
+
+app.listen(
+  process.env.PORT,
+  () => console.log(
     `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`
   )
 );
