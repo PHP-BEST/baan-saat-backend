@@ -130,7 +130,7 @@ describe('Testing User Model ... ', () => {
 
   it('Create a user with the value in the field exceeds the specified constraint.', async () => {
     const alphabetNormal = 'a';
-    const nameExceed = alphabetNormal.repeat(101);
+    const nameExceed = alphabetNormal.repeat(151);
     await expect(
       User.create({
         name: nameExceed,
@@ -148,6 +148,13 @@ describe('Testing User Model ... ', () => {
     await expect(
       User.create({
         telNumber: telNumberExceed,
+      }),
+    ).rejects.toThrow();
+
+    const addressExceed = alphabetNormal.repeat(2001);
+    await expect(
+      User.create({
+        address: addressExceed,
       }),
     ).rejects.toThrow();
 

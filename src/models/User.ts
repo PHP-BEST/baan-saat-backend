@@ -49,7 +49,7 @@ const UserSchema = new Schema(
     name: {
       type: String,
       trim: true,
-      maxLength: 100,
+      maxLength: 150,
       default: '',
     },
     email: {
@@ -92,6 +92,7 @@ const UserSchema = new Schema(
     address: {
       type: String,
       trim: true,
+      maxLength: 2000,
       default: '',
     },
     lastLoginAt: {
