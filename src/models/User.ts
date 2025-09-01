@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import isEmail from 'validator/lib/isEmail';
-import isURL from 'validator/lib/isURL';
+import { isEmail, isURL } from 'validator';
 import { randomUUID } from 'node:crypto';
 
 const { Schema, model } = mongoose;
