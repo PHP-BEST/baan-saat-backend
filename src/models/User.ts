@@ -1,8 +1,6 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { isEmail, isURL } from 'validator';
 import { randomUUID } from 'node:crypto';
-
-const { Schema, model } = mongoose;
 
 const ProviderSchema = new Schema({
   title: {
