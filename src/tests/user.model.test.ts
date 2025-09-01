@@ -26,9 +26,9 @@ describe('Testing User Model ... ', () => {
     expect(user.lastLoginAt).toBeInstanceOf(Date);
     expect(Number.isNaN(user.lastLoginAt.getTime())).toBe(false);
     expect(user.createdAt).toBeInstanceOf(Date);
-    expect(Number.isNaN(user.lastLoginAt.getTime())).toBe(false);
+    expect(Number.isNaN(user.createdAt.getTime())).toBe(false);
     expect(user.updatedAt).toBeInstanceOf(Date);
-    expect(Number.isNaN(user.lastLoginAt.getTime())).toBe(false);
+    expect(Number.isNaN(user.updatedAt.getTime())).toBe(false);
     expect(user.providerProfile).toBeUndefined();
   });
 

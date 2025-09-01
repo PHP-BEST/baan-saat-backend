@@ -85,7 +85,7 @@ const UserSchema = new Schema(
       validate: {
         validator: (value: string) =>
           value === '' || (/^\d+$/.test(value) && value.startsWith('0')),
-        message: 'Please fill in a valid avatar URL.',
+        message: 'Please fill in a valid telephone number.',
       },
       default: '',
     },
