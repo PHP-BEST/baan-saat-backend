@@ -2,21 +2,21 @@ import { Profile } from "passport";
 import { VerifyCallback } from "passport-google-oauth20";
 import User from "../models/User";
 
-const findOrCreateUser = async (
+const findOrCreateNewUser = async (
     social: String, 
     profile: Profile,
     done: VerifyCallback
 ) => {
     try {
-        const userId = `${social}_${profile.id}`;
         /*
-        Use custom userId instead of MongoDB's auto-generated _id
+        Use custom userId instead of mongodb's auto-generated _id
         for social login identification
         */
+        const userId = `${social}_${profile.id}`;
         let user = await User.findOne({ userId: userId });
 
-        if (user) {
-            // User exists, return existing user
+        // User exists, return existing user
+        if (user != null) {
             return done(null, user);
         }
 
@@ -43,7 +43,7 @@ const socialVerify = (social: String) => {
         profile: Profile,
         done: VerifyCallback
     ) => {
-        await findOrCreateUser(social, profile, done);
+        await findOrCreateNewUser(social, profile, done);
     }
 }
 

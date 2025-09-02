@@ -11,7 +11,6 @@ const getUserSession = async (
             username: user.name,
             profileUrl: user.profileUrl
         })
-        req.user = user
     }
     else {
         res.status(401).send();

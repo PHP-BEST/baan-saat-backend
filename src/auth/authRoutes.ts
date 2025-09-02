@@ -1,6 +1,7 @@
-import { Router, Request, Response } from "express"
+import { Router } from "express"
 import passport from "passport";
 import { clientUrl } from "../configs/configs";
+import { logout } from "./authController";
 
 const router = Router();
 
@@ -24,12 +25,6 @@ const addSocialRoutes = (socials: string[]) => {
 
 addSocialRoutes(["google", "facebook", "line"])
 
-router.delete(
-    "/logout", 
-    (req: Request, res: Response) => {
-        req.logOut(error => console.error(error))
-        res.redirect(`${clientUrl}/login`)
-    }
-)
+router.delete("/logout", logout)
 
 export default router

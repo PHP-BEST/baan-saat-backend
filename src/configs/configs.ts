@@ -2,19 +2,10 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
-const clientUrl = "http://localhost:5173";
+export const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
-let mongoUri: string = "";
+export const serverUrl = process.env.SERVER_URL || "http://localhost:3000";
 
-if (process.env.NODE_ENV === "production") {
-    mongoUri = process.env.MONGO_URI_PROD || "";
-} 
-else {
-    mongoUri = process.env.MONGO_URI_DEV || "";
-}
-
-if (!mongoUri) {
-    throw new Error("MONGO_URI environment variable is not defined");
-}
-
-export { clientUrl, mongoUri };
+export const mongoUri = process.env.NODE_ENV === "production"
+    ? process.env.MONGO_URI_PROD || ""
+    : process.env.MONGO_URI_DEV || "";
