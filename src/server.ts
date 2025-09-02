@@ -44,7 +44,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-initializePassport(passport);
+initializePassport(passport)
 
 app.use("/", authRoutes);
 
