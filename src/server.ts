@@ -7,9 +7,12 @@ import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import { CipherKey } from "crypto";
 
-import { mongoUri } from "./configs";
+import { clientUrl, mongoUri } from "./configs";
 import initializePassport from "./auth/initializePassport";
-import authRoutes from "./auth/authRoutes";
+import useRoutes from "./routes";
+
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 dotenv.config();
 
@@ -20,16 +23,43 @@ const app: Application = express();
   await mongoose.connect(mongoUri);
 })()
 
-app.use(cors({
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (origin == clientUrl) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }),
+);
 
 const store = MongoStore.create({
   mongoUrl: mongoUri,
   collectionName: "sessions",
   ttl: 14 * 24 * 60 * 60 // Session TTL in seconds (14 days)
-});
+})
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Project Baan Saat API',
+      version: '1.0.0',
+      description: 'API documentation for Baan Saat',
+    },
+  },
+  apis: ['./src/routes/*.ts'],
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(session({
   secret: process.env.SESSION_SECRET as CipherKey,
@@ -49,7 +79,7 @@ initializePassport(passport)
 
 app.use(express.json()); 
 
-app.use("/", authRoutes);
+useRoutes(app)
 
 app.listen(
   process.env.PORT,
@@ -57,3 +87,5 @@ app.listen(
     `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`
   )
 );
+
+export default app;

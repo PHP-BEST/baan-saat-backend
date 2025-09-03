@@ -17,9 +17,9 @@
     "test": "jest src/tests --passWithNoTests",
     "dev": "nodemon --exec npx ts-node src/server.ts",
     "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "eslint --fix \"src/**/*.ts\"",
-    "format": "prettier --check \"src/**/*.ts\"",
-    "format:fix": "prettier --write \"src/**/*.ts\"",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "build": "tsc",
     "start": "node dist/server.js"
   },
@@ -43,8 +43,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@eslint/js": "^9.33.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
@@ -58,6 +58,7 @@
     "@types/supertest": "^6.0.3",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
+    "@types/validator": "^13.15.3",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@typescript-eslint/parser": "^8.40.0",
     "@vercel/node": "^5.3.13",

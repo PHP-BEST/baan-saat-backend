@@ -17,6 +17,8 @@ const findOrCreateNewUser = async (
 
         // User exists, return existing user
         if (user != null) {
+            user.lastLoginAt = new Date();
+            await user.save()
             return done(null, user);
         }
 
@@ -25,7 +27,7 @@ const findOrCreateNewUser = async (
             userId: userId,
             name: profile.displayName,
             email: profile.emails?.[0]?.value,
-            profileUrl: profile.photos?.[0]?.value,
+            avatarUrl: profile.photos?.[0]?.value,
         });
 
         await user.save();
