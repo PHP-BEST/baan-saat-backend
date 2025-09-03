@@ -5,8 +5,8 @@ import sampleRoutes from './sample/sampleRoutes';
 
 const useRoutes = (app: Application) => {
   app.use('/', authRoutes);
-  app.use('/api', userRoutes);
-  app.use('/samples', sampleRoutes);
+  app.use('/api/user', userRoutes);
+  app.use('/api/samples', sampleRoutes);
 };
 
 export default useRoutes;

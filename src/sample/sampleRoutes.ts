@@ -11,7 +11,7 @@ const router = Router();
 
 /**
  * @openapi
- * /samples:
+ * /api/samples:
  *   get:
  *     summary: Get all samples
  *     tags:
@@ -24,7 +24,7 @@ router.get('/', getSamples);
 
 /**
  * @openapi
- * /samples/{id}:
+ * /api/samples/{id}:
  *   get:
  *     summary: Get a sample by ID
  *     tags:
@@ -46,7 +46,7 @@ router.get('/:id', getSampleById);
 
 /**
  * @openapi
- * /samples:
+ * /api/samples:
  *   post:
  *     summary: Create a new sample
  *     tags:
@@ -72,7 +72,7 @@ router.post('/', addSample);
 
 /**
  * @openapi
- * /samples/{id}:
+ * /api/samples/{id}:
  *   put:
  *     summary: Update a sample by ID
  *     tags:
@@ -105,7 +105,7 @@ router.put('/:id', updateSample);
 
 /**
  * @openapi
- * /samples/{id}:
+ * /api/samples/{id}:
  *   delete:
  *     summary: Delete a sample by ID
  *     tags:
