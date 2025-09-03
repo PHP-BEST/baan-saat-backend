@@ -3,14 +3,12 @@ import express, { Application } from "express";
 import cors from "cors";
 import passport from "passport"
 import session from "express-session"
+import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import { CipherKey } from "crypto";
 
-import mongoose from "mongoose";
-import { mongoUri } from "./configs/configs";
-
+import { mongoUri } from "./configs";
 import initializePassport from "./auth/initializePassport";
-
 import authRoutes from "./auth/authRoutes";
 
 dotenv.config();
@@ -22,7 +20,10 @@ const app: Application = express();
   await mongoose.connect(mongoUri);
 })()
 
-app.use(cors());
+app.use(cors({
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 const store = MongoStore.create({
   mongoUrl: mongoUri,
@@ -46,9 +47,9 @@ app.use(passport.session());
 
 initializePassport(passport)
 
-app.use("/", authRoutes);
-
 app.use(express.json()); 
+
+app.use("/", authRoutes);
 
 app.listen(
   process.env.PORT,

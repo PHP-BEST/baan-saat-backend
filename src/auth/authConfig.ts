@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { serverUrl } from "../configs/configs";
+import { serverUrl } from "../configs";
 
 dotenv.config();
 

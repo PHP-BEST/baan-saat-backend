@@ -1,6 +1,6 @@
 import { Router } from "express"
 import passport from "passport";
-import { clientUrl } from "../configs/configs";
+import { clientUrl } from "../configs";
 import { logout } from "./authController";
 
 const router = Router();

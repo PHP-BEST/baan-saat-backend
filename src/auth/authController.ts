@@ -6,9 +6,9 @@ export const isAuthenticated = (
     next: NextFunction
 ) => {
     if (req.isAuthenticated()) {
-        return res.status(401).send()
+        next()
     }
-    next()
+    res.status(401).send()
 }
 
 export const logout = (
