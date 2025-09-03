@@ -1,6 +1,6 @@
-import { Router } from "express";
-import * as u from "./userController";
-import { isAuthenticated } from "../auth/authController";
+import { Router } from 'express';
+import * as u from './userController';
+import { isAuthenticated } from '../auth/authController';
 
 const router = Router();
 
@@ -21,9 +21,9 @@ const router = Router();
  *               example: sessionId=abc123; HttpOnly; Secure
  *       401:
  *         description: Unauthorized - Invalid or missing session cookie
-*/
+ */
 router.get('/user/session', u.getUserSession);
 
-router.use(isAuthenticated)
+router.use(isAuthenticated);
 
 export default router;

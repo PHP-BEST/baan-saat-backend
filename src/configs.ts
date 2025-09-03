@@ -1,13 +1,14 @@
-import dotenv from "dotenv"
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
 const PORT = process.env.PORT;
 
-export const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+export const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
 export const serverUrl = process.env.SERVER_URL || `http://localhost:${PORT}`;
 
-export const mongoUri = process.env.NODE_ENV === "production"
-    ? process.env.MONGO_URI_PROD || ""
-    : process.env.MONGO_URI_DEV || "";
+export const mongoUri =
+  process.env.NODE_ENV === 'production'
+    ? process.env.MONGO_URI_PROD || ''
+    : process.env.MONGO_URI_DEV || '';

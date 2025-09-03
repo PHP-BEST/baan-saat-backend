@@ -1,12 +1,14 @@
-const { createDefaultPreset } = require('ts-jest');
+import { createDefaultPreset } from 'ts-jest';
+import type { Config } from 'jest';
 
 const tsJestTransformCfg = createDefaultPreset().transform;
 
-/** @type {import("jest").Config} **/
-module.exports = {
+const config: Config = {
   testEnvironment: 'node',
   transform: {
     ...tsJestTransformCfg,
   },
   setupFiles: ['dotenv/config'],
 };
+
+export default config;

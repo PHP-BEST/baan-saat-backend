@@ -1,15 +1,15 @@
-import dotenv from "dotenv";
-import express, { Application } from "express";
-import cors from "cors";
-import passport from "passport"
-import session from "express-session"
-import mongoose from "mongoose";
-import MongoStore from "connect-mongo";
-import { CipherKey } from "crypto";
+import dotenv from 'dotenv';
+import express, { Application } from 'express';
+import cors from 'cors';
+import passport from 'passport';
+import session from 'express-session';
+import mongoose from 'mongoose';
+import MongoStore from 'connect-mongo';
+import { CipherKey } from 'crypto';
 
-import { clientUrl, mongoUri } from "./configs";
-import initializePassport from "./auth/initializePassport";
-import initializeRoutes from "./routes";
+import { clientUrl, mongoUri } from './configs';
+import initializePassport from './auth/initializePassport';
+import initializeRoutes from './routes';
 
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -18,10 +18,10 @@ dotenv.config();
 
 const app: Application = express();
 
-(async() => {
-  mongoose.set("strictQuery", true);
+(async () => {
+  mongoose.set('strictQuery', true);
   await mongoose.connect(mongoUri);
-})()
+})();
 
 app.use(
   cors({
@@ -57,37 +57,38 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const store = MongoStore.create({
   mongoUrl: mongoUri,
-  collectionName: "sessions",
-  ttl: 14 * 24 * 60 * 60 // Session TTL in seconds (14 days)
-})
+  collectionName: 'sessions',
+  ttl: 14 * 24 * 60 * 60, // Session TTL in seconds (14 days)
+});
 
-app.use(session({
-  secret: process.env.SESSION_SECRET as CipherKey,
-  resave: false,
-  saveUninitialized: false,
-  store: store,
-  cookie: {
-    // Cookie expiration in milliseconds (e.g., 7 days)
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true, // Prevent XSS attacks
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET as CipherKey,
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+    cookie: {
+      // Cookie expiration in milliseconds (e.g., 7 days)
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true, // Prevent XSS attacks
+    },
+  }),
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-initializePassport(passport)
+initializePassport(passport);
 
-app.use(express.json()); 
+app.use(express.json());
 
-initializeRoutes(app)
+initializeRoutes(app);
 
-app.listen(
-  process.env.PORT,
-  () => console.log(
-    `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`
-  )
+app.listen(process.env.PORT, () =>
+  console.log(
+    `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`,
+  ),
 );
 
 export default app;
