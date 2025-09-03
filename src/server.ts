@@ -48,7 +48,7 @@ const swaggerOptions = {
       description: 'API documentation for Baan Saat',
     },
   },
-  apis: ['./src/user/userRoutes.ts'],
+  apis: ['./src/**/*Routes.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
