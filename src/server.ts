@@ -9,7 +9,7 @@ import { CipherKey } from "crypto";
 
 import { clientUrl, mongoUri } from "./configs";
 import initializePassport from "./auth/initializePassport";
-import useRoutes from "./routes";
+import initializeRoutes from "./routes";
 
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -39,12 +39,6 @@ app.use(
   }),
 );
 
-const store = MongoStore.create({
-  mongoUrl: mongoUri,
-  collectionName: "sessions",
-  ttl: 14 * 24 * 60 * 60 // Session TTL in seconds (14 days)
-})
-
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -54,12 +48,18 @@ const swaggerOptions = {
       description: 'API documentation for Baan Saat',
     },
   },
-  apis: ['./src/routes/*.ts'],
+  apis: ['./src/user/userRoutes.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+const store = MongoStore.create({
+  mongoUrl: mongoUri,
+  collectionName: "sessions",
+  ttl: 14 * 24 * 60 * 60 // Session TTL in seconds (14 days)
+})
 
 app.use(session({
   secret: process.env.SESSION_SECRET as CipherKey,
@@ -68,7 +68,9 @@ app.use(session({
   store: store,
   cookie: {
     // Cookie expiration in milliseconds (e.g., 7 days)
-    maxAge: 1000 * 60 * 60 * 24 * 7 
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true, // Prevent XSS attacks
   }
 }));
 
@@ -79,7 +81,7 @@ initializePassport(passport)
 
 app.use(express.json()); 
 
-useRoutes(app)
+initializeRoutes(app)
 
 app.listen(
   process.env.PORT,

@@ -1,18 +1,18 @@
-import { IUser } from "../models/User";
 import { Request, Response } from "express";
 
-const getUserSession = async (
+export const getUserSession = async (
     req: Request,
     res: Response
 ) => {
     if (req.user) {
-        const user = (req.user as IUser)
+        const user = (req.user as any)
+        console.log(user)
         res.json({
             username: user.name,
-            profileUrl: user.profileUrl
+            avatarUrl: user.avatarUrl
         })
     }
     else {
-        res.status(401).send();
+        res.send()
     }
 }

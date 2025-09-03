@@ -17,7 +17,11 @@ const initializePassport = (
     passport.use(new LineStrategy(lineConfig, socialVerify("line")))
 
     passport.serializeUser((user: any, done) => done(null, user.id))
-    passport.deserializeUser((id, done) => done(null, User.findById({ id: id })))
+    passport.deserializeUser(async (id, done) => {
+        await User.findById(id)
+            .then(user => done(null, user))
+            .catch(error => done(error, null))
+    })
 };
 
 export default initializePassport;
