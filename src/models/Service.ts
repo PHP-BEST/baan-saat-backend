@@ -10,8 +10,7 @@ const ServiceSchema = new Schema(
       default: randomUUID,
     },
     customerId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
       required: true,
     },
     title: {
