@@ -101,6 +101,7 @@ describe('Testing User Model ... ', () => {
     'http://google.com',
     'https://google.com',
     'https://google.com/image.png',
+    'https://example.com/avatar.jpg',
     '  https://www.youtube.com/watch?v=blah&list=blah&index=1   ',
   ])('Create a user with a valid avatar URL: %s', async (avatarUrl) => {
     const user = await User.create({
