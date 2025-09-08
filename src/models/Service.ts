@@ -1,16 +1,10 @@
 import { Schema, model } from 'mongoose';
-import { randomUUID } from 'node:crypto';
 
 const ServiceSchema = new Schema(
   {
-    serviceId: {
-      type: String,
-      required: true,
-      unique: true,
-      default: randomUUID,
-    },
     customerId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     title: {

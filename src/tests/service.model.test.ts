@@ -18,12 +18,12 @@ describe('Testing Service Model ... ', () => {
   it('Create a service with default values', async () => {
     const user = await User.create({});
     const service = await Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Test Service',
       date: new Date(),
     });
-    expect(service.serviceId).toBeTruthy();
-    expect(service.customerId).toEqual(user.userId);
+    expect(service._id).toBeTruthy();
+    expect(service.customerId).toEqual(user._id);
     expect(service.title).toBe('Test Service');
     expect(service.description).toBe('');
     expect(service.budget).toBe(0);
@@ -41,7 +41,7 @@ describe('Testing Service Model ... ', () => {
   it('Create a service with custom values', async () => {
     const user = await User.create({});
     const service = await Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Custom Service',
       description: 'This is a custom service.',
       budget: 100,
@@ -50,8 +50,8 @@ describe('Testing Service Model ... ', () => {
       tags: ['houseCleaning'],
       date: new Date(),
     });
-    expect(service.serviceId).toBeTruthy();
-    expect(service.customerId).toEqual(user.userId);
+    expect(service._id).toBeTruthy();
+    expect(service.customerId).toEqual(user._id);
     expect(service.title).toBe('Custom Service');
     expect(service.description).toBe('This is a custom service.');
     expect(service.budget).toBe(100);
@@ -73,7 +73,7 @@ describe('Testing Service Model ... ', () => {
       const user = await User.create({});
       await expect(
         Service.create({
-          customerId: user.userId,
+          customerId: user._id,
           title: 'Invalid Service',
           budget,
           date: new Date(),
@@ -89,7 +89,7 @@ it.each([[0], [0.1], [20], [100.99], [99999999.99]])(
   async (budget) => {
     const user = await User.create({});
     const service = await Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Valid Service',
       budget,
       date: new Date(),
@@ -114,7 +114,7 @@ it.each([
   const user = await User.create({});
   await expect(
     Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Invalid Service',
       telNumber,
       date: new Date(),
@@ -128,7 +128,7 @@ it.each([['0123456789'], ['0987654321'], ['0123465789']])(
   async (telNumber) => {
     const user = await User.create({});
     const service = await Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Valid Service',
       telNumber,
       date: new Date(),
@@ -152,7 +152,7 @@ it.each([
   const user = await User.create({});
   await expect(
     Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Invalid Service',
       tags,
       date: new Date(),
@@ -169,7 +169,7 @@ it.each([
   const user = await User.create({});
   await expect(
     Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Invalid Service',
       tags,
       date: new Date(),
@@ -190,7 +190,7 @@ it.each([
 ])('Create a service with valid tags %s', async (tags) => {
   const user = await User.create({});
   const service = await Service.create({
-    customerId: user.userId,
+    customerId: user._id,
     title: 'Valid Service',
     tags,
     date: new Date(),
@@ -208,7 +208,7 @@ it.each([
 ])('Create a service with valid multiple tags %s', async (tags) => {
   const user = await User.create({});
   const service = await Service.create({
-    customerId: user.userId,
+    customerId: user._id,
     title: 'Valid Service',
     tags,
     date: new Date(),
@@ -222,7 +222,7 @@ it('Create a service with title value exceeds the limit', async () => {
   const user = await User.create({});
   await expect(
     Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'a'.repeat(201),
       date: new Date(),
     }),
@@ -234,7 +234,7 @@ it('Create a service with description value exceeds the limit', async () => {
   const user = await User.create({});
   await expect(
     Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Valid Service',
       description: 'a'.repeat(2001),
       date: new Date(),
@@ -247,7 +247,7 @@ it('Create a service with telephone value exceeds the limit', async () => {
   const user = await User.create({});
   await expect(
     Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Valid Service',
       telNumber: '1234567890123456',
       date: new Date(),
@@ -260,7 +260,7 @@ it('Create a service with location value exceeds the limit', async () => {
   const user = await User.create({});
   await expect(
     Service.create({
-      customerId: user.userId,
+      customerId: user._id,
       title: 'Valid Service',
       location: 'a'.repeat(2001),
       date: new Date(),
