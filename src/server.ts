@@ -44,7 +44,7 @@ app.use(
 );
 
 app.use('/samples', sampleRouter);
-app.use('/api/services', serviceRouter);
+app.use('/services', serviceRouter);
 
 const swaggerOptions = {
   definition: {
