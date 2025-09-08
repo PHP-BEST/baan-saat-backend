@@ -27,30 +27,6 @@ serviceRouter.get('/', getServices);
 
 /**
  * @openapi
- * /services/{id}:
- *   get:
- *     summary: Get a service by ID
- *     tags:
- *       - Services
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The service ID
- *     responses:
- *       200:
- *         description: Returns the service
- *       404:
- *         description: Service not found
- *       500:
- *         description: Failed to fetch service
- */
-serviceRouter.get('/:id', getServiceById);
-
-/**
- * @openapi
  * /services/search:
  *   get:
  *     summary: Search services
@@ -109,6 +85,30 @@ serviceRouter.get('/:id', getServiceById);
  *         description: Failed to fetch services
  */
 serviceRouter.get('/search', searchServices);
+
+/**
+ * @openapi
+ * /services/{id}:
+ *   get:
+ *     summary: Get a service by ID
+ *     tags:
+ *       - Services
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The service ID
+ *     responses:
+ *       200:
+ *         description: Returns the service
+ *       404:
+ *         description: Service not found
+ *       500:
+ *         description: Failed to fetch service
+ */
+serviceRouter.get('/:id', getServiceById);
 
 /**
  * @openapi

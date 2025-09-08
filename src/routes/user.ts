@@ -18,7 +18,7 @@ const userRouter = express.Router();
  *      - Users
  *     responses:
  *       200:
- *         description: A list of users
+ *         description: Returns a list of all users
  *       500:
  *         description: Failed to fetch users
  */
