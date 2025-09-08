@@ -16,7 +16,7 @@ afterAll(async () => {
 describe('Testing User Model ... ', () => {
   it('Create a user with default values', async () => {
     const user = await User.create({});
-    expect(user.userId).toBeTruthy();
+    expect(user._id).toBeTruthy();
     expect(user.role).toBe('customer');
     expect(user.name).toBe('');
     expect(user.email).toBe('');
@@ -37,7 +37,7 @@ describe('Testing User Model ... ', () => {
       role: 'provider',
       providerProfile: {},
     });
-    expect(user.userId).toBeTruthy();
+    expect(user._id).toBeTruthy();
     expect(user.role).toBe('provider');
     expect(user.providerProfile).toBeDefined();
     expect(user.providerProfile?.title).toBe('');

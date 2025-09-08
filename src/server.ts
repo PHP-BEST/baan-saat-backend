@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Application, Request, Response } from 'express';
 import sampleRouter from './routes/sample';
+// import userRouter from './routes/user';
 import serviceRouter from './routes/service';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -44,6 +45,7 @@ app.use(
 );
 
 app.use('/samples', sampleRouter);
+// app.use('/users', userRouter);
 app.use('/services', serviceRouter);
 
 const swaggerOptions = {

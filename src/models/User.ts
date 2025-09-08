@@ -1,6 +1,5 @@
 import { Schema, model } from 'mongoose';
 import { isEmail, isURL } from 'validator';
-import { randomUUID } from 'node:crypto';
 
 const ProviderSchema = new Schema({
   title: {
@@ -32,12 +31,6 @@ const ProviderSchema = new Schema({
 
 const UserSchema = new Schema(
   {
-    userId: {
-      type: String,
-      required: true,
-      unique: true,
-      default: randomUUID,
-    },
     role: {
       type: String,
       required: true,
