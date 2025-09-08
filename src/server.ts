@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express, { Application, Request, Response } from 'express';
 import sampleRouter from './routes/sample';
+import serviceRouter from './routes/service';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import helmet from 'helmet';
@@ -43,6 +44,7 @@ app.use(
 );
 
 app.use('/samples', sampleRouter);
+app.use('/api/services', serviceRouter);
 
 const swaggerOptions = {
   definition: {
