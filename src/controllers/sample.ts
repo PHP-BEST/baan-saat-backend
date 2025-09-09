@@ -51,3 +51,8 @@ export const deleteSample = async (req: Request, res: Response) => {
   }
   res.status(200).json({ success: true, data: deletedSample });
 };
+
+export const deleteAllSamples = async (req: Request, res: Response) => {
+  await Sample.deleteMany({});
+  res.status(200).json({ success: true, message: 'All samples deleted' });
+};

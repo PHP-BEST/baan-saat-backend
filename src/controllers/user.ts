@@ -56,13 +56,29 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const user = await User.findByIdAndUpdate(id, req.body, { new: true });
+    const user = await User.findById(id);
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: 'User not found' });
     }
-    res.status(200).json({ success: true, data: user });
+    if (req.body.role) {
+      if (req.body.role === 'customer' && req.body.providerProfile) {
+        return res.status(400).json({
+          success: false,
+          message: "Customer can't update provider profile",
+        });
+      }
+    } else {
+      if (user.role === 'customer' && req.body.providerProfile) {
+        return res.status(400).json({
+          success: false,
+          message: "Customer can't update provider profile",
+        });
+      }
+    }
+    const newUser = await User.findByIdAndUpdate(id, req.body, { new: true });
+    res.status(200).json({ success: true, data: newUser });
   } catch (error) {
     res
       .status(400)
@@ -89,5 +105,16 @@ export const deleteUser = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ success: false, message: 'Failed to delete user', error });
+  }
+};
+
+export const deleteAllUsers = async (req: Request, res: Response) => {
+  try {
+    await User.deleteMany({});
+    res.status(200).json({ success: true, message: 'All users deleted' });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to delete users', error });
   }
 };

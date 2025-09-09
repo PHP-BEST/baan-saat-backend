@@ -5,6 +5,7 @@ import {
   getUserById,
   updateUser,
   deleteUser,
+  deleteAllUsers,
 } from '../controllers/user';
 
 const userRouter = express.Router();
@@ -52,7 +53,7 @@ userRouter.get('/:id', getUserById);
  * @openapi
  * /users:
  *   post:
- *     summary: Create a new user
+ *     summary: Create a new user (Customer can't have provider profile)
  *     tags:
  *       - Users
  *     requestBody:
@@ -66,7 +67,7 @@ userRouter.get('/:id', getUserById);
  *                 type: string
  *                 enum: [customer, provider]
  *                 default: customer
- *                 example: customer
+ *                 example: provider
  *               name:
  *                 type: string
  *                 maxLength: 150
@@ -216,5 +217,20 @@ userRouter.put('/:id', updateUser);
  *         description: Failed to delete user
  */
 userRouter.delete('/:id', deleteUser);
+
+/**
+ * @openapi
+ * /users:
+ *   delete:
+ *     summary: Delete all users (Use with caution)
+ *     tags:
+ *      - Users
+ *     responses:
+ *       200:
+ *         description: All users deleted
+ *       500:
+ *         description: Failed to delete users
+ */
+userRouter.delete('/', deleteAllUsers);
 
 export default userRouter;
