@@ -21,7 +21,7 @@ describe('Testing User Model ... ', () => {
     expect(user.name).toBe('');
     expect(user.email).toBe('');
     expect(user.avatarUrl).toBe('');
-    expect(user.telNumber).toBe('');
+    expect(user.telNumber).toBe('000000000');
     expect(user.address).toBe('');
     expect(user.lastLoginAt).toBeInstanceOf(Date);
     expect(Number.isNaN(user.lastLoginAt.getTime())).toBe(false);
@@ -129,8 +129,8 @@ describe('Testing User Model ... ', () => {
     },
   );
 
-  it.each(['0812345678', '021234567'])(
-    'Create a user with a valid phone numberl: %s',
+  it.each(['0812345678', '021234567', '000000000'])(
+    'Create a user with a valid phone number: %s',
     async (telNumber) => {
       const user = await User.create({
         telNumber,

@@ -157,9 +157,10 @@ serviceRouter.get('/:id', getServiceById);
  *                 example: http://example.com/photo.jpg
  *               telNumber:
  *                 type: string
- *                 description: Must be 10 digits and start with '0' or be empty string
+ *                 description: Must be 9-10 digits and start with '0' or be empty string
+ *                 minLength: 9
  *                 maxLength: 10
- *                 default: ''
+ *                 default: '000000000'
  *                 example: '0123456789'
  *               location:
  *                 type: string
@@ -229,7 +230,7 @@ serviceRouter.post('/', createService);
  *                 example: 750.75
  *               telNumber:
  *                 type: string
- *                 description: Must be 10 digits and start with '0' or be empty string
+ *                 description: Must be 9-10 digits and start with '0' or be empty string
  *                 example: '0987654321'
  *               location:
  *                 type: string

@@ -46,13 +46,15 @@ const ServiceSchema = new Schema(
     },
     telNumber: {
       type: String,
+      minLength: 9,
       maxLength: 10,
-      validate: {
-        validator: (value: string) =>
-          value === '' || (/^\d+$/.test(value) && value.startsWith('0')),
-        message: 'Please fill in a valid telephone number.',
+      default: '000000000',
+      validate: (value: string) => {
+        if (value === null) return false;
+        const s = String(value).trim();
+        return /^(0\d{8,9}|)$/.test(s);
       },
-      default: '',
+      message: 'Please fill in a valid telephone number.',
     },
     location: {
       type: String,

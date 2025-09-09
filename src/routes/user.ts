@@ -86,8 +86,10 @@ userRouter.get('/:id', getUserById);
  *                 example: https://example.com/avatar.jpg
  *               telNumber:
  *                 type: string
+ *                 description: Must be 9-10 digits and start with '0' or be empty string
+ *                 minLength: 9
  *                 maxLength: 10
- *                 default: ''
+ *                 default: '000000000'
  *                 example: '0812345678'
  *               address:
  *                 type: string
@@ -161,7 +163,9 @@ userRouter.post('/', createUser);
  *                 example: https://example.com/avatar2.jpg
  *               telNumber:
  *                 type: string
+ *                 minLength: 9
  *                 maxLength: 10
+ *                 default: '000000000'
  *                 example: 0898765432
  *               address:
  *                 type: string

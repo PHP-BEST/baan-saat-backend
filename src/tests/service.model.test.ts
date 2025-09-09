@@ -27,7 +27,7 @@ describe('Testing Service Model ... ', () => {
     expect(service.title).toBe('Test Service');
     expect(service.description).toBe('');
     expect(service.budget).toBe(0);
-    expect(service.telNumber).toBe('');
+    expect(service.telNumber).toBe('000000000');
     expect(service.location).toBe('');
     expect(service.tags).toEqual([]);
     expect(service.date).toBeInstanceOf(Date);
@@ -157,6 +157,8 @@ it.each([
   ['123456789a'],
   ['1234568790'],
   ['7890123456'],
+  ['+66012345678'],
+  ['025274'],
   [null],
 ])('Create a service with invalid telephone number %s', async (telNumber) => {
   const user = await User.create({});
@@ -171,20 +173,23 @@ it.each([
 });
 
 //valid telephone number
-it.each([['0123456789'], ['0987654321'], ['0123465789']])(
-  'Create a service with valid telephone number %s',
-  async (telNumber) => {
-    const user = await User.create({});
-    const service = await Service.create({
-      customerId: user._id,
-      title: 'Valid Service',
-      telNumber,
-      date: new Date(),
-    });
-    expect(service).toBeTruthy();
-    expect(service.telNumber).toBe(telNumber);
-  },
-);
+it.each([
+  ['0123456789'],
+  ['0987654321'],
+  ['0123465789'],
+  ['000000000'],
+  ['025731352'],
+])('Create a service with valid telephone number %s', async (telNumber) => {
+  const user = await User.create({});
+  const service = await Service.create({
+    customerId: user._id,
+    title: 'Valid Service',
+    telNumber,
+    date: new Date(),
+  });
+  expect(service).toBeTruthy();
+  expect(service.telNumber).toBe(telNumber);
+});
 
 //invalid tags
 it.each([
