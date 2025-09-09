@@ -6,7 +6,7 @@ import {
   searchServices,
   updateService,
   deleteService,
-  deleteAllServices,
+  // deleteAllServices,
 } from '../controllers/service';
 
 const serviceRouter = express.Router();
@@ -41,6 +41,8 @@ serviceRouter.get('/', getServices);
  *         description: Title to search for (partial match)
  *       - in: query
  *         name: tags
+ *         style: form
+ *         explode: false
  *         schema:
  *           type: array
  *           items:
@@ -228,7 +230,7 @@ serviceRouter.post('/', createService);
  *               telNumber:
  *                 type: string
  *                 description: Must be 10 digits and start with '0' or be empty string
- *                 example: 0987654321, ''
+ *                 example: '0987654321'
  *               location:
  *                 type: string
  *                 maxLength: 2000
@@ -285,19 +287,19 @@ serviceRouter.put('/:id', updateService);
  */
 serviceRouter.delete('/:id', deleteService);
 
-/**
- * @openapi
- * /services:
- *   delete:
- *     summary: Delete all services (Use with caution)
- *     tags:
- *       - Services
- *     responses:
- *       200:
- *         description: All services deleted successfully
- *       500:
- *         description: Failed to delete services
- */
-serviceRouter.delete('/', deleteAllServices);
+// /**
+//  * @openapi
+//  * /services:
+//  *   delete:
+//  *     summary: Delete all services (Use with caution)
+//  *     tags:
+//  *       - Services
+//  *     responses:
+//  *       200:
+//  *         description: All services deleted successfully
+//  *       500:
+//  *         description: Failed to delete services
+//  */
+// serviceRouter.delete('/', deleteAllServices);
 
 export default serviceRouter;

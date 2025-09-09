@@ -88,7 +88,7 @@ userRouter.get('/:id', getUserById);
  *                 type: string
  *                 maxLength: 10
  *                 default: ''
- *                 example: "0812345678"
+ *                 example: '0812345678'
  *               address:
  *                 type: string
  *                 maxLength: 2000

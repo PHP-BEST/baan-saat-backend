@@ -79,6 +79,7 @@ export const updateUser = async (req: Request, res: Response) => {
       }
     }
     const newUser = await User.findByIdAndUpdate(id, req.body, { new: true });
+    await newUser?.validate();
     res.status(200).json({ success: true, data: newUser });
   } catch (error) {
     res

@@ -115,6 +115,7 @@ export const updateService = async (req: Request, res: Response) => {
         .status(404)
         .json({ success: false, message: 'Service not found' });
     }
+    await service.validate();
     res.status(200).json({ success: true, data: service });
   } catch (error) {
     res
@@ -143,13 +144,13 @@ export const deleteService = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteAllServices = async (req: Request, res: Response) => {
-  try {
-    await Service.deleteMany({});
-    res.status(200).json({ success: true, message: 'All services deleted' });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: 'Failed to delete services', error });
-  }
-};
+// export const deleteAllServices = async (req: Request, res: Response) => {
+//   try {
+//     await Service.deleteMany({});
+//     res.status(200).json({ success: true, message: 'All services deleted' });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ success: false, message: 'Failed to delete services', error });
+//   }
+// };
