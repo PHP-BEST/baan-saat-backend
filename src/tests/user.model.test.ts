@@ -29,7 +29,9 @@ describe('Testing User Model ... ', () => {
     expect(Number.isNaN(user.createdAt.getTime())).toBe(false);
     expect(user.updatedAt).toBeInstanceOf(Date);
     expect(Number.isNaN(user.updatedAt.getTime())).toBe(false);
-    expect(user.providerProfile).toBeUndefined();
+    expect(user.providerProfile?.title).toBe('');
+    expect(user.providerProfile?.skills).toEqual([]);
+    expect(user.providerProfile?.description).toBe('');
   });
 
   it('Create a provider with default values', async () => {
@@ -38,7 +40,6 @@ describe('Testing User Model ... ', () => {
     });
     expect(user._id).toBeTruthy();
     expect(user.role).toBe('provider');
-    expect(user.providerProfile).toBeDefined();
     expect(user.providerProfile?.title).toBe('');
     expect(user.providerProfile?.skills).toEqual([]);
     expect(user.providerProfile?.description).toBe('');
@@ -48,17 +49,6 @@ describe('Testing User Model ... ', () => {
     await expect(
       User.create({
         role: 'stranger',
-      }),
-    ).rejects.toThrow();
-  });
-
-  it('Reject a customer with a provider profile', async () => {
-    await expect(
-      User.create({
-        providerProfile: {
-          role: 'customer',
-          title: 'test',
-        },
       }),
     ).rejects.toThrow();
   });

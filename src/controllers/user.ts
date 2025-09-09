@@ -57,30 +57,14 @@ export const createUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const user = await User.findById(id);
+    const user = await User.findByIdAndUpdate(id, req.body, { new: true });
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: 'User not found' });
     }
-    if (req.body.role) {
-      if (req.body.role === 'customer' && req.body.providerProfile) {
-        return res.status(400).json({
-          success: false,
-          message: "Customer can't update provider profile",
-        });
-      }
-    } else {
-      if (user.role === 'customer' && req.body.providerProfile) {
-        return res.status(400).json({
-          success: false,
-          message: "Customer can't update provider profile",
-        });
-      }
-    }
-    const newUser = await User.findByIdAndUpdate(id, req.body, { new: true });
-    await newUser?.validate();
-    res.status(200).json({ success: true, data: newUser });
+    await user.validate();
+    res.status(200).json({ success: true, data: user });
   } catch (error) {
     res
       .status(400)

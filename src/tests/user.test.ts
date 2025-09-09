@@ -76,11 +76,16 @@ describe('Testing User API...', () => {
       .send({
         name: name,
         role: 'customer',
-        providerProfile: { title: 'Invalid' },
+        providerProfile: { title: 'Valid' },
       });
-    expect(res.statusCode).toBe(400);
-    expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Failed to create user');
+    expect(res.statusCode).toBe(201);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty('_id');
+    expect(res.body.data.name).toBe(name);
+    expect(res.body.data.role).toBe('customer');
+    expect(res.body.data.providerProfile).toEqual(
+      expect.objectContaining({ title: 'Valid' }),
+    );
   });
 
   it('Add user with invalid value', async () => {
@@ -98,7 +103,7 @@ describe('Testing User API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(3);
+    expect(res.body.data.length).toBe(4);
   });
 
   it('Get user by ID', async () => {
@@ -168,5 +173,50 @@ describe('Testing User API...', () => {
     expect(res.body.data.telNumber).toBe(newTelNumber);
     expect(res.body.data.address).toBe(newAddress);
     expect(res.body.data.avatarUrl).toBe(newAvatarUrl);
+  });
+
+  it('Update user role from customer to provider', async () => {
+    const newRole = 'provider';
+    const providerProfile = {
+      title: 'New Provider Title',
+      skills: ['plumbing', 'electrical'],
+      description: 'Experienced provider in plumbing and electrical work.',
+    };
+    const res = await request(app).put(`/users/${firstUserId}`).send({
+      role: newRole,
+      providerProfile: providerProfile,
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty('_id', firstUserId);
+    expect(res.body.data.role).toBe(newRole);
+    expect(res.body.data.providerProfile).toEqual(
+      expect.objectContaining(providerProfile),
+    );
+  });
+
+  it('Delete user by ID', async () => {
+    const res = await request(app).delete(`/users/${firstUserId}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.message).toBe(
+      'User and his/her services deleted successfully',
+    );
+  });
+
+  it('Delete user with invalid ID', async () => {
+    const userId = '64b64c4f4f4f4f4f4f4f4f4f';
+    const res = await request(app).delete(`/users/${userId}`);
+    expect(res.statusCode).toBe(404);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe('User not found');
+  });
+
+  it('Get all users after deletion', async () => {
+    const res = await request(app).get('/users');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
   });
 });

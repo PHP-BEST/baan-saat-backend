@@ -53,7 +53,7 @@ userRouter.get('/:id', getUserById);
  * @openapi
  * /users:
  *   post:
- *     summary: Create a new user (Customer can't have provider profile)
+ *     summary: Create a new user
  *     tags:
  *       - Users
  *     requestBody:
