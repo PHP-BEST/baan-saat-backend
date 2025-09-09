@@ -5,7 +5,7 @@ import {
   getUserById,
   updateUser,
   deleteUser,
-  deleteAllUsers,
+  // deleteAllUsers,
 } from '../controllers/user';
 
 const userRouter = express.Router();
@@ -218,19 +218,19 @@ userRouter.put('/:id', updateUser);
  */
 userRouter.delete('/:id', deleteUser);
 
-/**
- * @openapi
- * /users:
- *   delete:
- *     summary: Delete all users (Use with caution)
- *     tags:
- *      - Users
- *     responses:
- *       200:
- *         description: All users deleted
- *       500:
- *         description: Failed to delete users
- */
-userRouter.delete('/', deleteAllUsers);
+// /**
+//  * @openapi
+//  * /users:
+//  *   delete:
+//  *     summary: Delete all users (Use with caution)
+//  *     tags:
+//  *      - Users
+//  *     responses:
+//  *       200:
+//  *         description: All users deleted
+//  *       500:
+//  *         description: Failed to delete users
+//  */
+// userRouter.delete('/', deleteAllUsers);
 
 export default userRouter;
