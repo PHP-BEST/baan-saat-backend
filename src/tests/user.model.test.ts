@@ -35,7 +35,6 @@ describe('Testing User Model ... ', () => {
   it('Create a provider with default values', async () => {
     const user = await User.create({
       role: 'provider',
-      providerProfile: {},
     });
     expect(user._id).toBeTruthy();
     expect(user.role).toBe('provider');
@@ -49,6 +48,17 @@ describe('Testing User Model ... ', () => {
     await expect(
       User.create({
         role: 'stranger',
+      }),
+    ).rejects.toThrow();
+  });
+
+  it('Reject a customer with a provider profile', async () => {
+    await expect(
+      User.create({
+        providerProfile: {
+          role: 'customer',
+          title: 'test',
+        },
       }),
     ).rejects.toThrow();
   });
