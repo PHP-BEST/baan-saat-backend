@@ -6,6 +6,7 @@ import {
   searchServices,
   updateService,
   deleteService,
+  deleteAllServices,
 } from '../controllers/service';
 
 const serviceRouter = express.Router();
@@ -147,6 +148,11 @@ serviceRouter.get('/:id', getServiceById);
  *                 maximum: 99999999.99
  *                 default: 0
  *                 example: 555.55
+ *               coverPhotoUrl:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/photo.jpg
  *               telNumber:
  *                 type: string
  *                 description: Must be 10 digits and start with '0' or be empty string
@@ -278,5 +284,20 @@ serviceRouter.put('/:id', updateService);
  *         description: Failed to delete service
  */
 serviceRouter.delete('/:id', deleteService);
+
+/**
+ * @openapi
+ * /services:
+ *   delete:
+ *     summary: Delete all services (Use with caution)
+ *     tags:
+ *       - Services
+ *     responses:
+ *       200:
+ *         description: All services deleted successfully
+ *       500:
+ *         description: Failed to delete services
+ */
+serviceRouter.delete('/', deleteAllServices);
 
 export default serviceRouter;

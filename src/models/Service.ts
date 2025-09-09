@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { isURL } from 'validator';
 
 const ServiceSchema = new Schema(
   {
@@ -25,6 +26,22 @@ const ServiceSchema = new Schema(
       validate: {
         validator: (v: number) => /^\d+(\.\d{1,2})?$/.test(String(v)),
         message: 'Budget must have at most 2 decimal places.',
+      },
+    },
+    coverPhotoUrl: {
+      type: String,
+      trim: true,
+      default: '',
+      validate: {
+        validator: (value: string) =>
+          value === '' ||
+          isURL(value, {
+            require_protocol: false,
+            require_host: true,
+            require_tld: true,
+            max_allowed_length: 2000,
+          }),
+        message: 'Please fill in a valid cover photo URL.',
       },
     },
     telNumber: {

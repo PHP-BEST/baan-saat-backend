@@ -99,6 +99,54 @@ it.each([[0], [0.1], [20], [100.99], [99999999.99]])(
   },
 );
 
+//invalid cover photo URL
+it.each([
+  ['htp://example.com'],
+  ['http//example.com'],
+  ['http:/example.com'],
+  ['://example.com'],
+  ['http://'],
+  ['example'],
+  ['http://exa mple.com'],
+  ['http://example_.com'],
+  ['http://example.c'],
+  ['a'.repeat(2001) + '.com'],
+])(
+  'Create a service with invalid cover photo URL %s',
+  async (coverPhotoUrl) => {
+    const user = await User.create({});
+    await expect(
+      Service.create({
+        customerId: user._id,
+        title: 'Invalid Service',
+        coverPhotoUrl,
+        date: new Date(),
+      }),
+    ).rejects.toThrow();
+  },
+);
+
+//valid cover photo URL
+it.each([
+  ['http://example.com'],
+  ['https://example.com'],
+  ['http://www.example.com'],
+  ['https://www.example.com'],
+  ['http://sub.example.com'],
+  ['google.com'],
+  ['www.google.com'],
+])('Create a service with valid cover photo URL %s', async (coverPhotoUrl) => {
+  const user = await User.create({});
+  const service = await Service.create({
+    customerId: user._id,
+    title: 'Valid Service',
+    coverPhotoUrl,
+    date: new Date(),
+  });
+  expect(service).toBeTruthy();
+  expect(service.coverPhotoUrl).toBe(coverPhotoUrl);
+});
+
 //invalid telephone number
 it.each([
   ['123456789'],

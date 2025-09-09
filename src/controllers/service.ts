@@ -142,3 +142,14 @@ export const deleteService = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Failed to delete service', error });
   }
 };
+
+export const deleteAllServices = async (req: Request, res: Response) => {
+  try {
+    await Service.deleteMany({});
+    res.status(200).json({ success: true, message: 'All services deleted' });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to delete services', error });
+  }
+};

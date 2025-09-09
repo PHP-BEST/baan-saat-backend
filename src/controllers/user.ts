@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import User from '../models/User';
+import Service from '../models/Service';
 
 //desc Get all users
 //route GET /api/users
@@ -98,9 +99,11 @@ export const deleteUser = async (req: Request, res: Response) => {
         .status(404)
         .json({ success: false, message: 'User not found' });
     }
-    res
-      .status(200)
-      .json({ success: true, message: 'User deleted successfully' });
+    await Service.deleteMany({ customerId: id });
+    res.status(200).json({
+      success: true,
+      message: 'User and his/her services deleted successfully',
+    });
   } catch (error) {
     res
       .status(500)
