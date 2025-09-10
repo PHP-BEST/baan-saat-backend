@@ -111,6 +111,15 @@ describe('Testing User API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('_id', firstUserId);
+    expect(res.body.data.name).toBe('User name 1');
+    expect(res.body.data.role).toBe('customer');
+    expect(res.body.data.email).toBe('');
+    expect(res.body.data.telNumber).toBe('000000000');
+    expect(res.body.data.address).toBe('');
+    expect(res.body.data.avatarUrl).toBe('');
+    expect(res.body.data.providerProfile?.title).toBe('');
+    expect(res.body.data.providerProfile?.skills).toEqual([]);
+    expect(res.body.data.providerProfile?.description).toBe('');
   });
 
   it('Get user by invalid ID', async () => {
@@ -130,6 +139,14 @@ describe('Testing User API...', () => {
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('_id', firstUserId);
     expect(res.body.data.name).toBe(newName);
+  });
+
+  it('Get updated user by ID', async () => {
+    const res = await request(app).get(`/users/${firstUserId}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty('_id', firstUserId);
+    expect(res.body.data.name).toBe('Updated User Name');
   });
 
   it('Update user with invalid ID', async () => {
@@ -195,6 +212,13 @@ describe('Testing User API...', () => {
     );
   });
 
+  it('Get user by ID before deletion', async () => {
+    const res = await request(app).get(`/users/${firstUserId}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty('_id', firstUserId);
+  });
+
   it('Delete user by ID', async () => {
     const res = await request(app).delete(`/users/${firstUserId}`);
     expect(res.statusCode).toBe(200);
@@ -202,6 +226,13 @@ describe('Testing User API...', () => {
     expect(res.body.message).toBe(
       'User and his/her services deleted successfully',
     );
+  });
+
+  it('Get deleted user by ID', async () => {
+    const res = await request(app).get(`/users/${firstUserId}`);
+    expect(res.statusCode).toBe(404);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe('User not found');
   });
 
   it('Delete user with invalid ID', async () => {

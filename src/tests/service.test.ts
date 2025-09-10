@@ -359,14 +359,12 @@ describe('Testing Service API...', () => {
   });
 
   it('Search services by many filters (tags, budget, date)', async () => {
-    const res = await request(app)
-      .get('/services/search')
-      .query({
-        tags: 'houseCleaning',
-        maxBudget: 1500,
-        startDate: '2025-08-01',
-        endDate: '2025-08-31',
-      });
+    const res = await request(app).get('/services/search').query({
+      tags: 'houseCleaning',
+      maxBudget: 1500,
+      startDate: '2025-08-01',
+      endDate: '2025-08-31',
+    });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
@@ -374,15 +372,13 @@ describe('Testing Service API...', () => {
   });
 
   it('Search services by many filters (title, tags, budget, date)', async () => {
-    const res = await request(app)
-      .get('/services/search')
-      .query({
-        title: 'Deluxe',
-        tags: 'painting',
-        minBudget: 1600,
-        startDate: '2025-09-01',
-        endDate: '2025-09-30',
-      });
+    const res = await request(app).get('/services/search').query({
+      title: 'Deluxe',
+      tags: 'painting',
+      minBudget: 1600,
+      startDate: '2025-09-01',
+      endDate: '2025-09-30',
+    });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
@@ -462,11 +458,25 @@ describe('Testing Service API...', () => {
     expect(res.body.message).toBe('Failed to update service');
   });
 
+  it('Get service by ID before deletion', async () => {
+    const res = await request(app).get(`/services/${firstServiceId}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty('_id', firstServiceId);
+  });
+
   it('Delete service by ID', async () => {
     const res = await request(app).delete(`/services/${firstServiceId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.message).toBe('Service deleted successfully');
+  });
+
+  it('Get deleted service by ID', async () => {
+    const res = await request(app).get(`/services/${firstServiceId}`);
+    expect(res.statusCode).toBe(404);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe('Service not found');
   });
 
   it('Delete service by invalid ID', async () => {
