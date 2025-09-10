@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import { CipherKey } from 'crypto';
 
-import { clientUrl, mongoUri } from './configs';
+import { clientUrl, mongoUri, serverUrl } from './configs';
 import initializePassport from './auth/initializePassport';
 import initializeRoutes from './routes';
 
@@ -27,7 +27,7 @@ app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      if (origin == clientUrl) {
+      if (origin == clientUrl || origin == serverUrl) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));

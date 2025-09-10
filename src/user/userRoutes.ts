@@ -22,7 +22,7 @@ const router = Router();
  *       401:
  *         description: Unauthorized - Invalid or missing session cookie
  */
-router.get('/user/session', u.getUserSession);
+router.get('/session', u.getUserSession);
 
 router.use(isAuthenticated);
 
