@@ -2,6 +2,7 @@ import express from 'express';
 import {
   addSample,
   deleteSample,
+  // deleteAllSamples,
   getSampleById,
   getSamples,
   updateSample,
@@ -124,5 +125,18 @@ sampleRouter.put('/:id', updateSample);
  *         description: Sample not found
  */
 sampleRouter.delete('/:id', deleteSample);
+
+// /**
+//  * @openapi
+//  * /samples:
+//  *   delete:
+//  *     summary: Delete all samples (Use with caution)
+//  *     tags:
+//  *       - Samples
+//  *     responses:
+//  *       200:
+//  *         description: All samples deleted
+//  */
+// sampleRouter.delete('/', deleteAllSamples);
 
 export default sampleRouter;

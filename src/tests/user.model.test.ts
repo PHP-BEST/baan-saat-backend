@@ -16,12 +16,12 @@ afterAll(async () => {
 describe('Testing User Model ... ', () => {
   it('Create a user with default values', async () => {
     const user = await User.create({});
-    expect(user.userId).toBeTruthy();
+    expect(user._id).toBeTruthy();
     expect(user.role).toBe('customer');
     expect(user.name).toBe('');
     expect(user.email).toBe('');
     expect(user.avatarUrl).toBe('');
-    expect(user.telNumber).toBe('');
+    expect(user.telNumber).toBe('000000000');
     expect(user.address).toBe('');
     expect(user.lastLoginAt).toBeInstanceOf(Date);
     expect(Number.isNaN(user.lastLoginAt.getTime())).toBe(false);
@@ -29,17 +29,17 @@ describe('Testing User Model ... ', () => {
     expect(Number.isNaN(user.createdAt.getTime())).toBe(false);
     expect(user.updatedAt).toBeInstanceOf(Date);
     expect(Number.isNaN(user.updatedAt.getTime())).toBe(false);
-    expect(user.providerProfile).toBeUndefined();
+    expect(user.providerProfile?.title).toBe('');
+    expect(user.providerProfile?.skills).toEqual([]);
+    expect(user.providerProfile?.description).toBe('');
   });
 
   it('Create a provider with default values', async () => {
     const user = await User.create({
       role: 'provider',
-      providerProfile: {},
     });
-    expect(user.userId).toBeTruthy();
+    expect(user._id).toBeTruthy();
     expect(user.role).toBe('provider');
-    expect(user.providerProfile).toBeDefined();
     expect(user.providerProfile?.title).toBe('');
     expect(user.providerProfile?.skills).toEqual([]);
     expect(user.providerProfile?.description).toBe('');
@@ -101,6 +101,7 @@ describe('Testing User Model ... ', () => {
     'http://google.com',
     'https://google.com',
     'https://google.com/image.png',
+    'https://example.com/avatar.jpg',
     '  https://www.youtube.com/watch?v=blah&list=blah&index=1   ',
   ])('Create a user with a valid avatar URL: %s', async (avatarUrl) => {
     const user = await User.create({
@@ -118,8 +119,8 @@ describe('Testing User Model ... ', () => {
     },
   );
 
-  it.each(['0812345678', '021234567'])(
-    'Create a user with a valid phone numberl: %s',
+  it.each(['0812345678', '021234567', '000000000'])(
+    'Create a user with a valid phone number: %s',
     async (telNumber) => {
       const user = await User.create({
         telNumber,

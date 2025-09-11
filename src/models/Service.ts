@@ -1,14 +1,8 @@
 import { Schema, model } from 'mongoose';
-import { randomUUID } from 'node:crypto';
+import { isURL } from 'validator';
 
 const ServiceSchema = new Schema(
   {
-    serviceId: {
-      type: String,
-      required: true,
-      unique: true,
-      default: randomUUID,
-    },
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -34,15 +28,33 @@ const ServiceSchema = new Schema(
         message: 'Budget must have at most 2 decimal places.',
       },
     },
-    telNumber: {
+    coverPhotoUrl: {
       type: String,
-      maxLength: 10,
+      trim: true,
+      default: '',
       validate: {
         validator: (value: string) =>
-          value === '' || (/^\d+$/.test(value) && value.startsWith('0')),
-        message: 'Please fill in a valid telephone number.',
+          value === '' ||
+          isURL(value, {
+            require_protocol: false,
+            require_host: true,
+            require_tld: true,
+            max_allowed_length: 2000,
+          }),
+        message: 'Please fill in a valid cover photo URL.',
       },
-      default: '',
+    },
+    telNumber: {
+      type: String,
+      minLength: 9,
+      maxLength: 10,
+      default: '000000000',
+      validate: (value: string) => {
+        if (value === null) return false;
+        const s = String(value).trim();
+        return /^(0\d{8,9}|)$/.test(s);
+      },
+      message: 'Please fill in a valid telephone number.',
     },
     location: {
       type: String,
