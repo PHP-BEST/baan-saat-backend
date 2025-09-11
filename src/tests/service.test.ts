@@ -228,9 +228,9 @@ describe('Testing Service API...', () => {
     expect(res.body.message).toBe('Service not found');
   });
 
-  it('Search services by title (Basic)', async () => {
+  it('Filter services by title (Basic)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ title: 'Basic' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -238,9 +238,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search service by title (Deluxe)', async () => {
+  it('Filter service by title (Deluxe)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ title: 'Deluxe' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -248,9 +248,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by budget range (400 to 1600)', async () => {
+  it('Filter services by budget range (400 to 1600)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ minBudget: 400, maxBudget: 1600 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -258,9 +258,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(4);
   });
 
-  it('Search services by budget range equal to less than 400', async () => {
+  it('Filter services by budget range equal to less than 400', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ maxBudget: 400 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -268,9 +268,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(2);
   });
 
-  it('Search services by budget range equal to more than 1000', async () => {
+  it('Filter services by budget range equal to more than 1000', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ minBudget: 1000 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -278,9 +278,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by tags (houseCleaning)', async () => {
+  it('Filter services by tags (houseCleaning)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ tags: 'houseCleaning' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -288,9 +288,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by tags (plumbing, electrical)', async () => {
+  it('Filter services by tags (plumbing, electrical)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ tags: 'plumbing,electrical' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -298,9 +298,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by tags (houseCleaning, others)', async () => {
+  it('Filter services by tags (houseCleaning, others)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ tags: 'houseCleaning,others' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -308,9 +308,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Search services by date range (2025-08-01 to 2025-08-31)', async () => {
+  it('Filter services by date range (2025-08-01 to 2025-08-31)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ startDate: '2025-08-01', endDate: '2025-08-31' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -318,9 +318,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by date range (up to 2025-08-15)', async () => {
+  it('Filter services by date range (up to 2025-08-15)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ endDate: '2025-08-15' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -328,9 +328,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(2);
   });
 
-  it('Search services by date range (starting from 2025-09-05)', async () => {
+  it('Filter services by date range (starting from 2025-09-05)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ startDate: '2025-09-05' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -338,9 +338,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(2);
   });
 
-  it('Search services by many filters (title, budget)', async () => {
+  it('Filter services by many filters (title, budget)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ title: 'Basic', minBudget: 1000, maxBudget: 5000 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -348,9 +348,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Search services by many filters (title, tags, budget)', async () => {
+  it('Filter services by many filters (title, tags, budget)', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/services/filter')
       .query({ title: 'Deluxe', tags: 'plumbing,electrical', minBudget: 1600 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -358,8 +358,8 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(1);
   });
 
-  it('Search services by many filters (tags, budget, date)', async () => {
-    const res = await request(app).get('/services/search').query({
+  it('Filter services by many filters (tags, budget, date)', async () => {
+    const res = await request(app).get('/services/filter').query({
       tags: 'houseCleaning',
       maxBudget: 1500,
       startDate: '2025-08-01',
@@ -371,8 +371,8 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(1);
   });
 
-  it('Search services by many filters (title, tags, budget, date)', async () => {
-    const res = await request(app).get('/services/search').query({
+  it('Filter services by many filters (title, tags, budget, date)', async () => {
+    const res = await request(app).get('/services/filter').query({
       title: 'Deluxe',
       tags: 'painting',
       minBudget: 1600,

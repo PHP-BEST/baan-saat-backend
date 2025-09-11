@@ -3,7 +3,7 @@ import {
   createService,
   getServices,
   getServiceById,
-  searchServices,
+  filterServices,
   updateService,
   deleteService,
   // deleteAllServices,
@@ -28,9 +28,9 @@ serviceRouter.get('/', getServices);
 
 /**
  * @openapi
- * /services/search:
+ * /services/filter:
  *   get:
- *     summary: Search services
+ *     summary: Filter services
  *     tags:
  *       - Services
  *     parameters:
@@ -87,7 +87,7 @@ serviceRouter.get('/', getServices);
  *       500:
  *         description: Failed to fetch services
  */
-serviceRouter.get('/search', searchServices);
+serviceRouter.get('/filter', filterServices);
 
 /**
  * @openapi

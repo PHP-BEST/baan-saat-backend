@@ -51,9 +51,9 @@ export const createService = async (req: Request, res: Response) => {
 };
 
 //desc Search services
-//route GET /api/services/search
+//route GET /api/services/filter
 //access Public
-export const searchServices = async (req: Request, res: Response) => {
+export const filterServices = async (req: Request, res: Response) => {
   const { title, tags, minBudget, maxBudget, startDate, endDate } = req.query;
 
   interface ServiceFilter {
