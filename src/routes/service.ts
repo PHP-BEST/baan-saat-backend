@@ -3,9 +3,10 @@ import {
   createService,
   getServices,
   getServiceById,
-  searchServices,
+  filterServices,
   updateService,
   deleteService,
+  searchServices,
   // deleteAllServices,
 } from '../controllers/service';
 
@@ -31,6 +32,30 @@ serviceRouter.get('/', getServices);
  * /services/search:
  *   get:
  *     summary: Search services
+ *     tags:
+ *       - Services
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The search query
+ *         example: house cleaning
+ *     responses:
+ *       200:
+ *         description: Returns a list of services matching the search criteria
+ *       500:
+ *         description: Failed to search services
+ *
+ */
+serviceRouter.get('/search', searchServices);
+
+/**
+ * @openapi
+ * /services/filter:
+ *   get:
+ *     summary: Filter services
  *     tags:
  *       - Services
  *     parameters:
@@ -87,7 +112,7 @@ serviceRouter.get('/', getServices);
  *       500:
  *         description: Failed to fetch services
  */
-serviceRouter.get('/search', searchServices);
+serviceRouter.get('/filter', filterServices);
 
 /**
  * @openapi
