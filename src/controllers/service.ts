@@ -50,7 +50,37 @@ export const createService = async (req: Request, res: Response) => {
   }
 };
 
-//desc Search services
+// desc Search services
+// route GET /api/services/search?query=your_query
+// access Public
+export const searchServices = async (req: Request, res: Response) => {
+  const { query } = req.query;
+  if (!query || typeof query !== 'string') {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Query parameter is required' });
+  }
+
+  try {
+    const services = await Service.find({
+      $or: [
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { budget: isNaN(Number(query)) ? -1 : Number(query) },
+        { location: { $regex: query, $options: 'i' } },
+        { telNumber: { $regex: query, $options: 'i' } },
+        { tags: { $regex: query, $options: 'i' } },
+      ],
+    });
+    res.status(200).json({ success: true, data: services });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to search services', error });
+  }
+};
+
+//desc Filter services
 //route GET /api/services/filter
 //access Public
 export const filterServices = async (req: Request, res: Response) => {

@@ -6,6 +6,7 @@ import {
   filterServices,
   updateService,
   deleteService,
+  searchServices,
   // deleteAllServices,
 } from '../controllers/service';
 
@@ -25,6 +26,30 @@ const serviceRouter = express.Router();
  *        description: Failed to fetch services
  */
 serviceRouter.get('/', getServices);
+
+/**
+ * @openapi
+ * /services/search:
+ *   get:
+ *     summary: Search services
+ *     tags:
+ *       - Services
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The search query
+ *         example: house cleaning
+ *     responses:
+ *       200:
+ *         description: Returns a list of services matching the search criteria
+ *       500:
+ *         description: Failed to search services
+ *
+ */
+serviceRouter.get('/search', searchServices);
 
 /**
  * @openapi
