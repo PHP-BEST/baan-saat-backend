@@ -6,11 +6,11 @@ const userRouter = Router();
 
 /**
  * @openapi
- * /api/user/session:
+ * /api/users/session:
  *   get:
  *     summary: Get user session
  *     tags:
- *       - User
+ *       - Users
  *     responses:
  *       200:
  *         description: Returns current user session information and sets session cookies
@@ -26,7 +26,7 @@ userRouter.get('/session', u.getUserSession);
 
 /**
  * @openapi
- * /users:
+ * /api/users:
  *   get:
  *     summary: Get all users
  *     tags:
@@ -41,7 +41,7 @@ userRouter.get('/', u.getUsers);
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID
  *     tags:
@@ -65,7 +65,7 @@ userRouter.get('/:id', u.getUserById);
 
 /**
  * @openapi
- * /users:
+ * /api/users:
  *   post:
  *     summary: Create a new user
  *     tags:
@@ -139,7 +139,7 @@ userRouter.post('/', u.createUser);
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *   put:
  *     summary: Update a user by ID
  *     tags:
@@ -214,7 +214,7 @@ userRouter.put('/:id', u.updateUser);
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *   delete:
  *     summary: Delete a user by ID
  *     tags:
@@ -238,7 +238,7 @@ userRouter.delete('/:id', u.deleteUser);
 
 // /**
 //  * @openapi
-//  * /users:
+//  * /api/users:
 //  *   delete:
 //  *     summary: Delete all users (Use with caution)
 //  *     tags:

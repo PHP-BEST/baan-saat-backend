@@ -1,19 +1,11 @@
 import express from 'express';
-import {
-  createService,
-  getServices,
-  getServiceById,
-  searchServices,
-  updateService,
-  deleteService,
-  // deleteAllServices,
-} from './serviceController';
+import * as s from './serviceController';
 
 const serviceRouter = express.Router();
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   get:
  *     summary: Get all services
  *     tags:
@@ -24,11 +16,11 @@ const serviceRouter = express.Router();
  *       500:
  *        description: Failed to fetch services
  */
-serviceRouter.get('/', getServices);
+serviceRouter.get('/', s.getServices);
 
 /**
  * @openapi
- * /services/search:
+ * /api/services/search:
  *   get:
  *     summary: Search services
  *     tags:
@@ -87,11 +79,11 @@ serviceRouter.get('/', getServices);
  *       500:
  *         description: Failed to fetch services
  */
-serviceRouter.get('/search', searchServices);
+serviceRouter.get('/search', s.searchServices);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   get:
  *     summary: Get a service by ID
  *     tags:
@@ -111,11 +103,11 @@ serviceRouter.get('/search', searchServices);
  *       500:
  *         description: Failed to fetch service
  */
-serviceRouter.get('/:id', getServiceById);
+serviceRouter.get('/:id', s.getServiceById);
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   post:
  *     summary: Create a new service
  *     tags:
@@ -192,11 +184,11 @@ serviceRouter.get('/:id', getServiceById);
  *       400:
  *         description: Failed to create service
  */
-serviceRouter.post('/', createService);
+serviceRouter.post('/', s.createService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   put:
  *     summary: Update a service by ID
  *     tags:
@@ -262,11 +254,11 @@ serviceRouter.post('/', createService);
  *       404:
  *         description: Service not found
  */
-serviceRouter.put('/:id', updateService);
+serviceRouter.put('/:id', s.updateService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   delete:
  *     summary: Delete a service by ID
  *     tags:
@@ -286,11 +278,11 @@ serviceRouter.put('/:id', updateService);
  *       500:
  *         description: Failed to delete service
  */
-serviceRouter.delete('/:id', deleteService);
+serviceRouter.delete('/:id', s.deleteService);
 
 // /**
 //  * @openapi
-//  * /services:
+//  * /api/services:
 //  *   delete:
 //  *     summary: Delete all services (Use with caution)
 //  *     tags:
