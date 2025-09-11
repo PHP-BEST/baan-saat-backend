@@ -314,6 +314,16 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
+  it('Search services by "User 2"', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: 'User 2' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
   it('Filter services by title (Basic)', async () => {
     const res = await request(app)
       .get('/services/filter')

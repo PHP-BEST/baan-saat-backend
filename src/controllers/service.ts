@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 
 import Service from '../models/Service';
+import User from '../models/User';
 
 //desc Get all services
 //route GET /api/services
@@ -76,6 +77,25 @@ export const searchServices = async (req: Request, res: Response) => {
   }
 
   try {
+    const matchingUsers = await User.find({
+      $or: [
+        { name: { $regex: trimmedQuery, $options: 'i' } },
+        { email: { $regex: trimmedQuery, $options: 'i' } },
+        { telNumber: { $regex: trimmedQuery, $options: 'i' } },
+        { address: { $regex: trimmedQuery, $options: 'i' } },
+        { 'providerProfile.title': { $regex: trimmedQuery, $options: 'i' } },
+        { 'providerProfile.skills': { $regex: trimmedQuery, $options: 'i' } },
+        {
+          'providerProfile.description': {
+            $regex: trimmedQuery,
+            $options: 'i',
+          },
+        },
+      ],
+    }).select('_id');
+
+    const userIds = matchingUsers.map((user) => user._id);
+
     const services = await Service.find({
       $or: [
         { title: { $regex: trimmedQuery, $options: 'i' } },
@@ -84,8 +104,13 @@ export const searchServices = async (req: Request, res: Response) => {
         { location: { $regex: trimmedQuery, $options: 'i' } },
         { telNumber: { $regex: trimmedQuery, $options: 'i' } },
         { tags: { $regex: trimmedQuery, $options: 'i' } },
+        { customerId: { $in: userIds } },
       ],
-    });
+    }).populate(
+      'customerId',
+      'name email telNumber address role providerProfile',
+    );
+
     res.status(200).json({ success: true, data: services });
   } catch (error) {
     res
