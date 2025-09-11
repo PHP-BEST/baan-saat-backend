@@ -55,21 +55,35 @@ export const createService = async (req: Request, res: Response) => {
 // access Public
 export const searchServices = async (req: Request, res: Response) => {
   const { query } = req.query;
-  if (!query || typeof query !== 'string') {
+  if (!query) {
     return res
       .status(400)
       .json({ success: false, message: 'Query parameter is required' });
   }
 
+  if (typeof query !== 'string') {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Query parameter must be a string' });
+  }
+
+  const trimmedQuery = query.trim();
+  if (trimmedQuery.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Query parameter cannot be whitespace',
+    });
+  }
+
   try {
     const services = await Service.find({
       $or: [
-        { title: { $regex: query, $options: 'i' } },
-        { description: { $regex: query, $options: 'i' } },
-        { budget: isNaN(Number(query)) ? -1 : Number(query) },
-        { location: { $regex: query, $options: 'i' } },
-        { telNumber: { $regex: query, $options: 'i' } },
-        { tags: { $regex: query, $options: 'i' } },
+        { title: { $regex: trimmedQuery, $options: 'i' } },
+        { description: { $regex: trimmedQuery, $options: 'i' } },
+        { budget: isNaN(Number(trimmedQuery)) ? -1 : Number(trimmedQuery) },
+        { location: { $regex: trimmedQuery, $options: 'i' } },
+        { telNumber: { $regex: trimmedQuery, $options: 'i' } },
+        { tags: { $regex: trimmedQuery, $options: 'i' } },
       ],
     });
     res.status(200).json({ success: true, data: services });

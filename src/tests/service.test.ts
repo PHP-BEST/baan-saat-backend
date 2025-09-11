@@ -228,6 +228,92 @@ describe('Testing Service API...', () => {
     expect(res.body.message).toBe('Service not found');
   });
 
+  it('Search services by "" (empty string)', async () => {
+    const res = await request(app).get('/services/search').query({ query: '' });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe('Query parameter is required');
+  });
+
+  it('Search services by "       "', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: '       ' });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe('Query parameter cannot be whitespace');
+  });
+
+  it('Search services by "Basic"', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: 'Basic' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
+  it('Search services by "    Basic "', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: '    Basic ' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
+  it('Search services by "baSiC"', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: 'baSiC' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
+  it('Search services by "house"', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: 'house' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(4);
+  });
+
+  it('Search services by "s"', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: 's' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(6);
+  });
+
+  it('Search services by "1500"', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: '1500' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(1);
+  });
+
+  it('Search services by "4"', async () => {
+    const res = await request(app)
+      .get('/services/search')
+      .query({ query: '4' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(0);
+  });
+
   it('Filter services by title (Basic)', async () => {
     const res = await request(app)
       .get('/services/filter')
