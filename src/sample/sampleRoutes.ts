@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   addSample,
   deleteSample,
+  // deleteAllSamples,
   getSampleById,
   getSamples,
   updateSample,
