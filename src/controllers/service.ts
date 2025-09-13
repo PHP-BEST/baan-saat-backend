@@ -81,16 +81,6 @@ export const searchServices = async (req: Request, res: Response) => {
       $or: [
         { name: { $regex: trimmedQuery, $options: 'i' } },
         { email: { $regex: trimmedQuery, $options: 'i' } },
-        { telNumber: { $regex: trimmedQuery, $options: 'i' } },
-        { address: { $regex: trimmedQuery, $options: 'i' } },
-        { 'providerProfile.title': { $regex: trimmedQuery, $options: 'i' } },
-        { 'providerProfile.skills': { $regex: trimmedQuery, $options: 'i' } },
-        {
-          'providerProfile.description': {
-            $regex: trimmedQuery,
-            $options: 'i',
-          },
-        },
       ],
     }).select('_id');
 
@@ -102,7 +92,6 @@ export const searchServices = async (req: Request, res: Response) => {
         { description: { $regex: trimmedQuery, $options: 'i' } },
         { budget: isNaN(Number(trimmedQuery)) ? -1 : Number(trimmedQuery) },
         { location: { $regex: trimmedQuery, $options: 'i' } },
-        { telNumber: { $regex: trimmedQuery, $options: 'i' } },
         { tags: { $regex: trimmedQuery, $options: 'i' } },
         { customerId: { $in: userIds } },
       ],
