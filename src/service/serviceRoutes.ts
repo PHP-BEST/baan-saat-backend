@@ -27,55 +27,11 @@ serviceRouter.get('/', s.getServices);
  *       - Services
  *     parameters:
  *       - in: query
- *         name: title
- *         schema:
- *           type: string
- *         description: Title to search for (partial match)
- *       - in: query
- *         name: tags
- *         style: form
- *         explode: false
- *         schema:
- *           type: array
- *           items:
- *             type: string
- *             enum:
- *               - houseCleaning
- *               - houseRepair
- *               - plumbing
- *               - electrical
- *               - hvac
- *               - painting
- *               - landscaping
- *               - others
- *         description: Tags to filter by (exact match)
- *       - in: query
- *         name: minBudget
- *         schema:
- *           type: number
- *           minimum: 0
- *         description: Minimum budget to filter by
- *       - in: query
- *         name: maxBudget
- *         schema:
- *           type: number
- *           minimum: 0
- *         description: Maximum budget to filter by
- *       - in: query
- *         name: startDate
- *         schema:
- *           type: string
- *           format: date-time
- *         description: Start date to filter by (inclusive)
- *       - in: query
- *         name: endDate
- *         schema:
- *           type: string
- *           format: date-time
- *         description: End date to filter by (inclusive)
+ *         name: query
+ *         required: true
  *     responses:
  *       200:
- *         description: Returns a list of services matching the search criteria
+ *         description: Returns a list of services
  *       500:
  *         description: Failed to fetch services
  */
