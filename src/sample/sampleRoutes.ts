@@ -1,4 +1,4 @@
-import express from 'express';
+import { Router } from 'express';
 import {
   addSample,
   deleteSample,
@@ -6,13 +6,13 @@ import {
   getSampleById,
   getSamples,
   updateSample,
-} from '../controllers/sample';
+} from './sampleController';
 
-const sampleRouter = express.Router();
+const router = Router();
 
 /**
  * @openapi
- * /samples:
+ * /api/samples:
  *   get:
  *     summary: Get all samples
  *     tags:
@@ -21,11 +21,11 @@ const sampleRouter = express.Router();
  *       200:
  *         description: Returns a list of all samples
  */
-sampleRouter.get('/', getSamples);
+router.get('/', getSamples);
 
 /**
  * @openapi
- * /samples/{id}:
+ * /api/samples/{id}:
  *   get:
  *     summary: Get a sample by ID
  *     tags:
@@ -43,11 +43,11 @@ sampleRouter.get('/', getSamples);
  *       404:
  *         description: Sample not found
  */
-sampleRouter.get('/:id', getSampleById);
+router.get('/:id', getSampleById);
 
 /**
  * @openapi
- * /samples:
+ * /api/samples:
  *   post:
  *     summary: Create a new sample
  *     tags:
@@ -69,11 +69,11 @@ sampleRouter.get('/:id', getSampleById);
  *       400:
  *         description: Failed to create sample
  */
-sampleRouter.post('/', addSample);
+router.post('/', addSample);
 
 /**
  * @openapi
- * /samples/{id}:
+ * /api/samples/{id}:
  *   put:
  *     summary: Update a sample by ID
  *     tags:
@@ -102,11 +102,11 @@ sampleRouter.post('/', addSample);
  *       404:
  *         description: Sample not found
  */
-sampleRouter.put('/:id', updateSample);
+router.put('/:id', updateSample);
 
 /**
  * @openapi
- * /samples/{id}:
+ * /api/samples/{id}:
  *   delete:
  *     summary: Delete a sample by ID
  *     tags:
@@ -124,19 +124,6 @@ sampleRouter.put('/:id', updateSample);
  *       404:
  *         description: Sample not found
  */
-sampleRouter.delete('/:id', deleteSample);
+router.delete('/:id', deleteSample);
 
-// /**
-//  * @openapi
-//  * /samples:
-//  *   delete:
-//  *     summary: Delete all samples (Use with caution)
-//  *     tags:
-//  *       - Samples
-//  *     responses:
-//  *       200:
-//  *         description: All samples deleted
-//  */
-// sampleRouter.delete('/', deleteAllSamples);
-
-export default sampleRouter;
+export default router;

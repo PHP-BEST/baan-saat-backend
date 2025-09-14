@@ -1,6 +1,6 @@
 import request from 'supertest';
 import express, { Application } from 'express';
-import userRouter from '../routes/user';
+import userRouter from '../user/userRoutes';
 import mongoose from 'mongoose';
 
 // Set up Express app for testing

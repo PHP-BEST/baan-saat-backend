@@ -165,15 +165,16 @@ export const filterServices = async (req: Request, res: Response) => {
 export const updateService = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
+    // Option 1: Use runValidators in findByIdAndUpdate
     const service = await Service.findByIdAndUpdate(id, req.body, {
       new: true,
+      runValidators: true, // This ensures validation runs before saving
     });
     if (!service) {
       return res
         .status(404)
         .json({ success: false, message: 'Service not found' });
     }
-    await service.validate();
     res.status(200).json({ success: true, data: service });
   } catch (error) {
     res

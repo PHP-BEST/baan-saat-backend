@@ -1,20 +1,11 @@
 import express from 'express';
-import {
-  createService,
-  getServices,
-  getServiceById,
-  filterServices,
-  updateService,
-  deleteService,
-  searchServices,
-  // deleteAllServices,
-} from '../controllers/service';
+import * as s from './serviceController';
 
 const serviceRouter = express.Router();
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   get:
  *     summary: Get all services
  *     tags:
@@ -25,35 +16,74 @@ const serviceRouter = express.Router();
  *       500:
  *        description: Failed to fetch services
  */
-serviceRouter.get('/', getServices);
+serviceRouter.get('/', s.getServices);
 
 /**
  * @openapi
- * /services/search:
+ * /api/services/search:
  *   get:
  *     summary: Search services
  *     tags:
  *       - Services
  *     parameters:
  *       - in: query
- *         name: query
- *         required: true
+ *         name: title
  *         schema:
  *           type: string
- *         description: The search query
- *         example: house cleaning
+ *         description: Title to search for (partial match)
+ *       - in: query
+ *         name: tags
+ *         style: form
+ *         explode: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *             enum:
+ *               - houseCleaning
+ *               - houseRepair
+ *               - plumbing
+ *               - electrical
+ *               - hvac
+ *               - painting
+ *               - landscaping
+ *               - others
+ *         description: Tags to filter by (exact match)
+ *       - in: query
+ *         name: minBudget
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Minimum budget to filter by
+ *       - in: query
+ *         name: maxBudget
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Maximum budget to filter by
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Start date to filter by (inclusive)
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: End date to filter by (inclusive)
  *     responses:
  *       200:
  *         description: Returns a list of services matching the search criteria
  *       500:
- *         description: Failed to search services
- *
+ *         description: Failed to fetch services
  */
-serviceRouter.get('/search', searchServices);
+serviceRouter.get('/search', s.searchServices);
 
 /**
  * @openapi
- * /services/filter:
+ * /api/services/filter:
  *   get:
  *     summary: Filter services
  *     tags:
@@ -112,11 +142,11 @@ serviceRouter.get('/search', searchServices);
  *       500:
  *         description: Failed to fetch services
  */
-serviceRouter.get('/filter', filterServices);
+serviceRouter.get('/filter', s.filterServices);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   get:
  *     summary: Get a service by ID
  *     tags:
@@ -136,11 +166,11 @@ serviceRouter.get('/filter', filterServices);
  *       500:
  *         description: Failed to fetch service
  */
-serviceRouter.get('/:id', getServiceById);
+serviceRouter.get('/:id', s.getServiceById);
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   post:
  *     summary: Create a new service
  *     tags:
@@ -217,11 +247,11 @@ serviceRouter.get('/:id', getServiceById);
  *       400:
  *         description: Failed to create service
  */
-serviceRouter.post('/', createService);
+serviceRouter.post('/', s.createService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   put:
  *     summary: Update a service by ID
  *     tags:
@@ -287,11 +317,11 @@ serviceRouter.post('/', createService);
  *       404:
  *         description: Service not found
  */
-serviceRouter.put('/:id', updateService);
+serviceRouter.put('/:id', s.updateService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   delete:
  *     summary: Delete a service by ID
  *     tags:
@@ -311,11 +341,11 @@ serviceRouter.put('/:id', updateService);
  *       500:
  *         description: Failed to delete service
  */
-serviceRouter.delete('/:id', deleteService);
+serviceRouter.delete('/:id', s.deleteService);
 
 // /**
 //  * @openapi
-//  * /services:
+//  * /api/services:
 //  *   delete:
 //  *     summary: Delete all services (Use with caution)
 //  *     tags:

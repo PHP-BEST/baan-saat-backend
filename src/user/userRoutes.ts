@@ -1,18 +1,32 @@
-import express from 'express';
-import {
-  createUser,
-  getUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
-  // deleteAllUsers,
-} from '../controllers/user';
+import { Router } from 'express';
+import * as u from './userController';
+import { isAuthenticated } from '../auth/authController';
 
-const userRouter = express.Router();
+const userRouter = Router();
 
 /**
  * @openapi
- * /users:
+ * /api/users/session:
+ *   get:
+ *     summary: Get user session
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: Returns current user session information and sets session cookies
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: sessionId=abc123; HttpOnly; Secure
+ *       401:
+ *         description: Unauthorized - Invalid or missing session cookie
+ */
+userRouter.get('/session', u.getUserSession);
+
+/**
+ * @openapi
+ * /api/users:
  *   get:
  *     summary: Get all users
  *     tags:
@@ -23,11 +37,11 @@ const userRouter = express.Router();
  *       500:
  *         description: Failed to fetch users
  */
-userRouter.get('/', getUsers);
+userRouter.get('/', u.getUsers);
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID
  *     tags:
@@ -47,11 +61,11 @@ userRouter.get('/', getUsers);
  *       500:
  *         description: Failed to fetch user
  */
-userRouter.get('/:id', getUserById);
+userRouter.get('/:id', u.getUserById);
 
 /**
  * @openapi
- * /users:
+ * /api/users:
  *   post:
  *     summary: Create a new user
  *     tags:
@@ -121,11 +135,11 @@ userRouter.get('/:id', getUserById);
  *       400:
  *         description: Failed to create user
  */
-userRouter.post('/', createUser);
+userRouter.post('/', u.createUser);
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *   put:
  *     summary: Update a user by ID
  *     tags:
@@ -196,11 +210,11 @@ userRouter.post('/', createUser);
  *       404:
  *         description: User not found
  */
-userRouter.put('/:id', updateUser);
+userRouter.put('/:id', u.updateUser);
 
 /**
  * @openapi
- * /users/{id}:
+ * /api/users/{id}:
  *   delete:
  *     summary: Delete a user by ID
  *     tags:
@@ -220,11 +234,11 @@ userRouter.put('/:id', updateUser);
  *       500:
  *         description: Failed to delete user
  */
-userRouter.delete('/:id', deleteUser);
+userRouter.delete('/:id', u.deleteUser);
 
 // /**
 //  * @openapi
-//  * /users:
+//  * /api/users:
 //  *   delete:
 //  *     summary: Delete all users (Use with caution)
 //  *     tags:
@@ -236,5 +250,7 @@ userRouter.delete('/:id', deleteUser);
 //  *         description: Failed to delete users
 //  */
 // userRouter.delete('/', deleteAllUsers);
+
+userRouter.use(isAuthenticated);
 
 export default userRouter;

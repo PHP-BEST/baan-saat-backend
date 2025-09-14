@@ -1,14 +1,11 @@
-// For testing sample.ts
-
 import request from 'supertest';
 import express, { Application } from 'express';
-import sampleRouter from '../routes/sample';
+import sampleRoutes from '../sample/sampleRoutes';
 import mongoose from 'mongoose';
 
-// Set up Express app for testing
 const app: Application = express();
 app.use(express.json());
-app.use('/samples', sampleRouter);
+app.use('/samples', sampleRoutes);
 
 beforeAll(async () => {
   const mongo_uri = process.env.MONGO_URI_TEST || '';

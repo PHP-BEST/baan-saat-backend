@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express, { Application } from 'express';
-import serviceRouter from '../routes/service';
-import userRouter from '../routes/user';
+import serviceRouter from '../service/serviceRoutes';
+import userRouter from '../user/userRoutes';
 import mongoose from 'mongoose';
 
 // Set up Express app for testing
@@ -548,7 +548,7 @@ describe('Testing Service API...', () => {
   it('Update service with invalid cover image', async () => {
     const res = await request(app)
       .put(`/services/${secondServiceId}`)
-      .send({ coverImage: 'invalid-url.rpg' });
+      .send({ coverPhotoUrl: 'invalid-url' });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('Failed to update service');

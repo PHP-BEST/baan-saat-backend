@@ -1,38 +1,33 @@
 import dotenv from 'dotenv';
-import express, { Application, Request, Response } from 'express';
-import sampleRouter from './routes/sample';
-import userRouter from './routes/user';
-import serviceRouter from './routes/service';
+import express, { Application } from 'express';
+import cors from 'cors';
+import passport from 'passport';
+import session from 'express-session';
+import mongoose from 'mongoose';
+import MongoStore from 'connect-mongo';
+import { CipherKey } from 'crypto';
+
+import { clientUrl, mongoUri, serverUrl } from './configs';
+import initializePassport from './auth/initializePassport';
+import initializeRoutes from './routes';
+
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import helmet from 'helmet';
-import { xss } from 'express-xss-sanitizer';
-import rateLimit from 'express-rate-limit';
-import hpp from 'hpp';
-import cors from 'cors';
-import connectDB from './configs/mongodb';
-import { allowedOrigins } from './configs/cors';
 
 dotenv.config();
-connectDB();
 
 const app: Application = express();
 
-app.use(express.json());
-app.use(helmet());
-app.use(xss());
-app.use(
-  rateLimit({
-    windowMs: 10 * 60 * 1000,
-    max: 100,
-  }),
-);
-app.use(hpp());
+(async () => {
+  mongoose.set('strictQuery', true);
+  await mongoose.connect(mongoUri);
+})();
+
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+      if (origin == clientUrl || origin == serverUrl) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
@@ -44,10 +39,6 @@ app.use(
   }),
 );
 
-app.use('/samples', sampleRouter);
-app.use('/users', userRouter);
-app.use('/services', serviceRouter);
-
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -57,28 +48,47 @@ const swaggerOptions = {
       description: 'API documentation for Baan Saat',
     },
   },
-  apis: ['./src/routes/*.ts'],
+  apis: ['./src/**/*Routes.ts'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-app.get('/', (req: Request, res: Response) => {
-  res.status(200).json({
-    success: true,
-    data: `${process.env.NODE_ENV}: Connection Successful!`,
-  });
-});
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Export the app for Vercel
-export default app;
+const store = MongoStore.create({
+  mongoUrl: mongoUri,
+  collectionName: 'sessions',
+  ttl: 14 * 24 * 60 * 60, // Session TTL in seconds (14 days)
+});
 
-// Only listen when running locally
-if (require.main === module) {
-  app.listen(process.env.PORT, () =>
-    console.log(
-      `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`,
-    ),
-  );
-}
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET as CipherKey,
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+    cookie: {
+      // Cookie expiration in milliseconds (e.g., 7 days)
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true, // Prevent XSS attacks
+    },
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+initializePassport(passport);
+
+app.use(express.json());
+
+initializeRoutes(app);
+
+app.listen(process.env.PORT, () =>
+  console.log(
+    `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`,
+  ),
+);
+
+export default app;
