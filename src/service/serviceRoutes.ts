@@ -5,7 +5,7 @@ const serviceRouter = express.Router();
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   get:
  *     summary: Get all services
  *     tags:
@@ -20,33 +20,9 @@ serviceRouter.get('/', s.getServices);
 
 /**
  * @openapi
- * /services/search:
+ * /api/services/search:
  *   get:
  *     summary: Search services
- *     tags:
- *       - Services
- *     parameters:
- *       - in: query
- *         name: query
- *         required: true
- *         schema:
- *           type: string
- *         description: The search query
- *         example: house cleaning
- *     responses:
- *       200:
- *         description: Returns a list of services matching the search criteria
- *       500:
- *         description: Failed to search services
- *
- */
-serviceRouter.get('/search', s.searchServices);
-
-/**
- * @openapi
- * /services/filter:
- *   get:
- *     summary: Filter services
  *     tags:
  *       - Services
  *     parameters:
@@ -103,11 +79,11 @@ serviceRouter.get('/search', s.searchServices);
  *       500:
  *         description: Failed to fetch services
  */
-serviceRouter.get('/filter', s.filterServices);
+serviceRouter.get('/search', s.searchServices);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   get:
  *     summary: Get a service by ID
  *     tags:
@@ -131,7 +107,7 @@ serviceRouter.get('/:id', s.getServiceById);
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   post:
  *     summary: Create a new service
  *     tags:
@@ -182,7 +158,7 @@ serviceRouter.get('/:id', s.getServiceById);
  *                 type: string
  *                 maxLength: 2000
  *                 default: ''
- *                 example: 123 Main St, s.City, s.Country
+ *                 example: 123 Main St, City, Country
  *               tags:
  *                 type: array
  *                 items:
@@ -197,7 +173,7 @@ serviceRouter.get('/:id', s.getServiceById);
  *                     - landscaping
  *                     - others
  *                 default: []
- *                 example: ['houseCleaning', s.'plumbing']
+ *                 example: ['houseCleaning', 'plumbing']
  *               date:
  *                 type: string
  *                 format: date-time
@@ -212,7 +188,7 @@ serviceRouter.post('/', s.createService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   put:
  *     summary: Update a service by ID
  *     tags:
@@ -251,7 +227,7 @@ serviceRouter.post('/', s.createService);
  *               location:
  *                 type: string
  *                 maxLength: 2000
- *                 example: 456 Another St, s.City, s.Country
+ *                 example: 456 Another St, City, Country
  *               tags:
  *                 type: array
  *                 items:
@@ -265,7 +241,7 @@ serviceRouter.post('/', s.createService);
  *                     - painting
  *                     - landscaping
  *                     - others
- *                 example: ['electrical', s.'hvac']
+ *                 example: ['electrical', 'hvac']
  *               date:
  *                 type: string
  *                 format: date-time
@@ -282,7 +258,7 @@ serviceRouter.put('/:id', s.updateService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   delete:
  *     summary: Delete a service by ID
  *     tags:
@@ -306,7 +282,7 @@ serviceRouter.delete('/:id', s.deleteService);
 
 // /**
 //  * @openapi
-//  * /services:
+//  * /api/services:
 //  *   delete:
 //  *     summary: Delete all services (Use with caution)
 //  *     tags:
@@ -317,6 +293,6 @@ serviceRouter.delete('/:id', s.deleteService);
 //  *       500:
 //  *         description: Failed to delete services
 //  */
-// serviceRouter.delete('/', s.deleteAllServices);
+// serviceRouter.delete('/', deleteAllServices);
 
 export default serviceRouter;

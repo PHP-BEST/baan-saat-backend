@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 
 import Service from '../models/Service';
-import User from '../models/User';
 
 //desc Get all services
 //route GET /api/services
@@ -51,67 +50,10 @@ export const createService = async (req: Request, res: Response) => {
   }
 };
 
-// desc Search services
-// route GET /api/services/search?query=your_query
-// access Public
-export const searchServices = async (req: Request, res: Response) => {
-  const { query } = req.query;
-  if (!query) {
-    return res
-      .status(400)
-      .json({ success: false, message: 'Query parameter is required' });
-  }
-
-  if (typeof query !== 'string') {
-    return res
-      .status(400)
-      .json({ success: false, message: 'Query parameter must be a string' });
-  }
-
-  const trimmedQuery = query.trim();
-  if (trimmedQuery.length === 0) {
-    return res.status(400).json({
-      success: false,
-      message: 'Query parameter cannot be whitespace',
-    });
-  }
-
-  try {
-    const matchingUsers = await User.find({
-      $or: [
-        { name: { $regex: trimmedQuery, $options: 'i' } },
-        { email: { $regex: trimmedQuery, $options: 'i' } },
-      ],
-    }).select('_id');
-
-    const userIds = matchingUsers.map((user) => user._id);
-
-    const services = await Service.find({
-      $or: [
-        { title: { $regex: trimmedQuery, $options: 'i' } },
-        { description: { $regex: trimmedQuery, $options: 'i' } },
-        { budget: isNaN(Number(trimmedQuery)) ? -1 : Number(trimmedQuery) },
-        { location: { $regex: trimmedQuery, $options: 'i' } },
-        { tags: { $regex: trimmedQuery, $options: 'i' } },
-        { customerId: { $in: userIds } },
-      ],
-    }).populate(
-      'customerId',
-      'name email telNumber address role providerProfile',
-    );
-
-    res.status(200).json({ success: true, data: services });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: 'Failed to search services', error });
-  }
-};
-
-//desc Filter services
-//route GET /api/services/filter
+//desc Search services
+//route GET /api/services/search
 //access Public
-export const filterServices = async (req: Request, res: Response) => {
+export const searchServices = async (req: Request, res: Response) => {
   const { title, tags, minBudget, maxBudget, startDate, endDate } = req.query;
 
   interface ServiceFilter {
