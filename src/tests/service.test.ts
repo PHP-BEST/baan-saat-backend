@@ -340,6 +340,34 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
+  it('Filter services without any filter', async () => {
+    const res = await request(app).get('/services/filter');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(6);
+  });
+
+  it("Filter services by userId of User 1's services", async () => {
+    const res = await request(app)
+      .get('/services/filter')
+      .query({ userId: user1_id });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
+  it("Filter services by userId of User 2's services", async () => {
+    const res = await request(app)
+      .get('/services/filter')
+      .query({ userId: user2_id });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
   it('Filter services by title (Basic)', async () => {
     const res = await request(app)
       .get('/services/filter')

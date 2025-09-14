@@ -46,6 +46,11 @@ serviceRouter.get('/search', s.searchServices);
  *       - Services
  *     parameters:
  *       - in: query
+ *         name: userId
+ *         schema:
+ *           type: string
+ *         description: User ID to filter services by (exact match)
+ *       - in: query
  *         name: title
  *         schema:
  *           type: string

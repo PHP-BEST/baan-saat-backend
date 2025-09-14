@@ -127,9 +127,11 @@ export const searchServices = async (req: Request, res: Response) => {
 //route GET /api/services/filter
 //access Public
 export const filterServices = async (req: Request, res: Response) => {
-  const { title, tags, minBudget, maxBudget, startDate, endDate } = req.query;
+  const { userId, title, tags, minBudget, maxBudget, startDate, endDate } =
+    req.query;
 
   interface ServiceFilter {
+    customerId?: string;
     title?: { $regex: string; $options: string };
     tags?: { $all: string[] };
     budget?: { $gte?: number; $lte?: number };
@@ -139,6 +141,9 @@ export const filterServices = async (req: Request, res: Response) => {
   const filter: ServiceFilter = {};
 
   try {
+    if (userId) {
+      filter.customerId = userId as string;
+    }
     if (title) {
       filter.title = { $regex: title as string, $options: 'i' };
     }
