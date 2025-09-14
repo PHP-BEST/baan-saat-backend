@@ -8,6 +8,7 @@ const config: Config = {
   transform: {
     ...tsJestTransformCfg,
   },
+  maxWorkers: 1,
   setupFiles: ['dotenv/config'],
 };
 
