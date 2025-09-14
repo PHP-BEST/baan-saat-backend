@@ -27,18 +27,57 @@ serviceRouter.get('/', s.getServices);
  *       - Services
  *     parameters:
  *       - in: query
- *         name: query
- *         required: true
+ *         name: title
  *         schema:
  *           type: string
- *         description: The search query
- *         example: house cleaning
+ *         description: Title to search for (partial match)
+ *       - in: query
+ *         name: tags
+ *         style: form
+ *         explode: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *             enum:
+ *               - houseCleaning
+ *               - houseRepair
+ *               - plumbing
+ *               - electrical
+ *               - hvac
+ *               - painting
+ *               - landscaping
+ *               - others
+ *         description: Tags to filter by (exact match)
+ *       - in: query
+ *         name: minBudget
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Minimum budget to filter by
+ *       - in: query
+ *         name: maxBudget
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Maximum budget to filter by
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Start date to filter by (inclusive)
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: End date to filter by (inclusive)
  *     responses:
  *       200:
  *         description: Returns a list of services matching the search criteria
  *       500:
- *         description: Failed to search services
- *
+ *         description: Failed to fetch services
  */
 serviceRouter.get('/search', s.searchServices);
 
@@ -182,7 +221,7 @@ serviceRouter.get('/:id', s.getServiceById);
  *                 type: string
  *                 maxLength: 2000
  *                 default: ''
- *                 example: 123 Main St, s.City, s.Country
+ *                 example: 123 Main St, City, Country
  *               tags:
  *                 type: array
  *                 items:
@@ -197,7 +236,7 @@ serviceRouter.get('/:id', s.getServiceById);
  *                     - landscaping
  *                     - others
  *                 default: []
- *                 example: ['houseCleaning', s.'plumbing']
+ *                 example: ['houseCleaning', 'plumbing']
  *               date:
  *                 type: string
  *                 format: date-time
@@ -251,7 +290,7 @@ serviceRouter.post('/', s.createService);
  *               location:
  *                 type: string
  *                 maxLength: 2000
- *                 example: 456 Another St, s.City, s.Country
+ *                 example: 456 Another St, City, Country
  *               tags:
  *                 type: array
  *                 items:
@@ -265,7 +304,7 @@ serviceRouter.post('/', s.createService);
  *                     - painting
  *                     - landscaping
  *                     - others
- *                 example: ['electrical', s.'hvac']
+ *                 example: ['electrical', 'hvac']
  *               date:
  *                 type: string
  *                 format: date-time
@@ -317,6 +356,6 @@ serviceRouter.delete('/:id', s.deleteService);
 //  *       500:
 //  *         description: Failed to delete services
 //  */
-// serviceRouter.delete('/', s.deleteAllServices);
+// serviceRouter.delete('/', deleteAllServices);
 
 export default serviceRouter;
