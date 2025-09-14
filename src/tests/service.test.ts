@@ -452,7 +452,7 @@ describe('Testing Service API...', () => {
   it('Update service with invalid cover image', async () => {
     const res = await request(app)
       .put(`/services/${secondServiceId}`)
-      .send({ coverImage: 'invalid-url.rpg' });
+      .send({ coverPhotoUrl: 'invalid-url' });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('Failed to update service');
