@@ -220,6 +220,22 @@ describe('Testing Service API...', () => {
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-25'));
   });
 
+  it('Get All Services of User 1', async () => {
+    const res = await request(app).get(`/services/user/${user1_id}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
+  it('Get All Services of User 2', async () => {
+    const res = await request(app).get(`/services/user/${user2_id}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
   it('Get a service with invalid id', async () => {
     const serviceId = '64d4c0f531d4f2b1a1a1a1a1';
     const res = await request(app).get(`/services/${serviceId}`);

@@ -126,6 +126,30 @@ serviceRouter.get('/:id', s.getServiceById);
 
 /**
  * @openapi
+ * /api/services/user/{userId}:
+ *   get:
+ *     summary: Get services by User ID
+ *     tags:
+ *       - Services
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: Returns a list of services for the user
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Failed to fetch services
+ */
+serviceRouter.get('/user/:userId', s.getServicesByUserId);
+
+/**
+ * @openapi
  * /api/services:
  *   post:
  *     summary: Create a new service

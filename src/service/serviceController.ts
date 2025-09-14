@@ -37,6 +37,21 @@ export const getServiceById = async (req: Request, res: Response) => {
   }
 };
 
+//desc Get services by User ID
+//route GET /api/services/user/:userId
+//access Public
+export const getServicesByUserId = async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  try {
+    const services = await Service.find({ customerId: userId });
+    res.status(200).json({ success: true, data: services });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to fetch services', error });
+  }
+};
+
 //desc Create a new service
 //route POST /api/services
 //access Public
