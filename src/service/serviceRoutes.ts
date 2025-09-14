@@ -5,7 +5,7 @@ const serviceRouter = express.Router();
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   get:
  *     summary: Get all services
  *     tags:
@@ -20,7 +20,7 @@ serviceRouter.get('/', s.getServices);
 
 /**
  * @openapi
- * /services/search:
+ * /api/services/search:
  *   get:
  *     summary: Search services
  *     tags:
@@ -44,7 +44,7 @@ serviceRouter.get('/search', s.searchServices);
 
 /**
  * @openapi
- * /services/filter:
+ * /api/services/filter:
  *   get:
  *     summary: Filter services
  *     tags:
@@ -107,7 +107,7 @@ serviceRouter.get('/filter', s.filterServices);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   get:
  *     summary: Get a service by ID
  *     tags:
@@ -131,7 +131,7 @@ serviceRouter.get('/:id', s.getServiceById);
 
 /**
  * @openapi
- * /services:
+ * /api/services:
  *   post:
  *     summary: Create a new service
  *     tags:
@@ -212,7 +212,7 @@ serviceRouter.post('/', s.createService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   put:
  *     summary: Update a service by ID
  *     tags:
@@ -282,7 +282,7 @@ serviceRouter.put('/:id', s.updateService);
 
 /**
  * @openapi
- * /services/{id}:
+ * /api/services/{id}:
  *   delete:
  *     summary: Delete a service by ID
  *     tags:
@@ -306,7 +306,7 @@ serviceRouter.delete('/:id', s.deleteService);
 
 // /**
 //  * @openapi
-//  * /services:
+//  * /api/services:
 //  *   delete:
 //  *     summary: Delete all services (Use with caution)
 //  *     tags:
