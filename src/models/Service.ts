@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { isURL } from 'validator';
+// import { isURL } from 'validator';
 
 const ServiceSchema = new Schema(
   {
@@ -32,17 +32,17 @@ const ServiceSchema = new Schema(
       type: String,
       trim: true,
       default: '',
-      validate: {
-        validator: (value: string) =>
-          value === '' ||
-          isURL(value, {
-            require_protocol: false,
-            require_host: true,
-            require_tld: true,
-            max_allowed_length: 2000,
-          }),
-        message: 'Please fill in a valid cover photo URL.',
-      },
+      // validate: {
+      //   validator: (value: string) =>
+      //     value === '' ||
+      //     isURL(value, {
+      //       require_protocol: false,
+      //       require_host: true,
+      //       require_tld: true,
+      //       max_allowed_length: 2000,
+      //     }),
+      //   message: 'Please fill in a valid cover photo URL.',
+      // },
     },
     telNumber: {
       type: String,
