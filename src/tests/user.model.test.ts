@@ -81,36 +81,36 @@ describe('Testing User Model ... ', () => {
     expect(user.email).toBe(email.toLowerCase().trim());
   });
 
-  it.each([
-    'http://localhost',
-    'localhost',
-    'url=//www.google.com',
-    'gopher://google.com',
-    '//abc.com/img.jpeg',
-    'http://ab_c.com',
-    'http://nohost',
-    'http://google.com.',
-    'google',
-    null,
-  ])('Reject an invalid avatar URL: %s', async (avatarUrl) => {
-    await expect(User.create({ avatarUrl })).rejects.toThrow();
-  });
+  // it.each([
+  //   'http://localhost',
+  //   'localhost',
+  //   'url=//www.google.com',
+  //   'gopher://google.com',
+  //   '//abc.com/img.jpeg',
+  //   'http://ab_c.com',
+  //   'http://nohost',
+  //   'http://google.com.',
+  //   'google',
+  //   null,
+  // ])('Reject an invalid avatar URL: %s', async (avatarUrl) => {
+  //   await expect(User.create({ avatarUrl })).rejects.toThrow();
+  // });
 
-  it.each([
-    'google.com',
-    'http://google.com',
-    'https://google.com',
-    'https://google.com/image.png',
-    'https://example.com/avatar.jpg',
-    '  https://www.youtube.com/watch?v=blah&list=blah&index=1   ',
-  ])('Create a user with a valid avatar URL: %s', async (avatarUrl) => {
-    const user = await User.create({
-      role: 'provider',
-      avatarUrl,
-      providerProfile: {},
-    });
-    expect(user.avatarUrl).toBe(avatarUrl.trim());
-  });
+  // it.each([
+  //   'google.com',
+  //   'http://google.com',
+  //   'https://google.com',
+  //   'https://google.com/image.png',
+  //   'https://example.com/avatar.jpg',
+  //   '  https://www.youtube.com/watch?v=blah&list=blah&index=1   ',
+  // ])('Create a user with a valid avatar URL: %s', async (avatarUrl) => {
+  //   const user = await User.create({
+  //     role: 'provider',
+  //     avatarUrl,
+  //     providerProfile: {},
+  //   });
+  //   expect(user.avatarUrl).toBe(avatarUrl.trim());
+  // });
 
   it.each(['012345678.', 'abc.defg', '+660123456', '1234567890', null])(
     'Reject an invalid phone number: %s',

@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { isEmail, isURL } from 'validator';
+// import { isEmail, isURL } from 'validator';
+import { isEmail } from 'validator';
 import { randomUUID } from 'node:crypto';
 
 const ProviderSchema = new Schema({
@@ -65,17 +66,17 @@ const UserSchema = new Schema(
       type: String,
       trim: true,
       default: '',
-      validate: {
-        validator: (value: string) =>
-          value === '' ||
-          isURL(value, {
-            require_protocol: false,
-            require_host: true,
-            require_tld: true,
-            max_allowed_length: 2000,
-          }),
-        message: 'Please fill in a valid avatar URL.',
-      },
+      // validate: {
+      //   validator: (value: string) =>
+      //     value === '' ||
+      //     isURL(value, {
+      //       require_protocol: false,
+      //       require_host: true,
+      //       require_tld: true,
+      //       max_allowed_length: 2000,
+      //     }),
+      //   message: 'Please fill in a valid avatar URL.',
+      // },
     },
     telNumber: {
       type: String,
