@@ -224,7 +224,7 @@ describe('Testing User API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.message).toBe(
-      'User and his/her services deleted successfully',
+      'User and his/her posts deleted successfully',
     );
   });
 

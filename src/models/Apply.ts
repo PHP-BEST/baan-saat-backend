@@ -1,21 +1,21 @@
 import { Schema, model } from 'mongoose';
 
-interface IOffer {
-  serviceId: Schema.Types.ObjectId;
+interface IApply {
+  postId: Schema.Types.ObjectId;
   providerId: Schema.Types.ObjectId;
   customerId: Schema.Types.ObjectId;
   description?: string;
-  offeredPrice?: number;
+  appliedPrice?: number;
   date: Date;
   status?: 'Pending' | 'Accepted' | 'Rejected';
 }
 
-const OfferSchema = new Schema(
+const ApplySchema = new Schema(
   {
     // งานที่ Customer แปะไว้
-    serviceId: {
+    postId: {
       type: Schema.Types.ObjectId,
-      ref: 'Service',
+      ref: 'Post',
       required: true,
     },
     // คนเสนอตัวทำงาน
@@ -35,7 +35,7 @@ const OfferSchema = new Schema(
       maxLength: 2000,
       default: '',
     },
-    offeredPrice: {
+    appliedPrice: {
       type: Number,
       default: 0,
       min: 0,
@@ -62,27 +62,27 @@ const OfferSchema = new Schema(
   },
 );
 
-OfferSchema.virtual('service', {
-  ref: 'Service',
-  localField: 'serviceId',
+ApplySchema.virtual('post', {
+  ref: 'Post',
+  localField: 'postId',
   foreignField: '_id',
   justOne: true,
 });
 
-OfferSchema.virtual('provider', {
+ApplySchema.virtual('provider', {
   ref: 'User',
   localField: 'providerId',
   foreignField: '_id',
   justOne: true,
 });
 
-OfferSchema.virtual('customer', {
+ApplySchema.virtual('customer', {
   ref: 'User',
   localField: 'customerId',
   foreignField: '_id',
   justOne: true,
 });
 
-const Offer = model<IOffer>('Offer', OfferSchema);
+const Apply = model<IApply>('Apply', ApplySchema);
 
-export default Offer;
+export default Apply;

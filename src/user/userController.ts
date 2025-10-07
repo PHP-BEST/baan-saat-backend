@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/User';
-import Service from '../models/Service';
+import Post from '../models/Post';
 
 export const getUserSession = async (req: Request, res: Response) => {
   if (req.user) {
@@ -91,10 +91,10 @@ export const deleteUser = async (req: Request, res: Response) => {
         .status(404)
         .json({ success: false, message: 'User not found' });
     }
-    await Service.deleteMany({ customerId: id });
+    await Post.deleteMany({ customerId: id });
     res.status(200).json({
       success: true,
-      message: 'User and his/her services deleted successfully',
+      message: 'User and his/her posts deleted successfully',
     });
   } catch (error) {
     res

@@ -1,54 +1,54 @@
 import express from 'express';
-import * as o from './offerController';
+import * as a from './applyController';
 
-const offerRouter = express.Router();
+const applyRouter = express.Router();
 
 /**
  * @openapi
- * /api/offers:
+ * /api/applys:
  *   get:
- *     summary: Get all offers
+ *     summary: Get all applys
  *     tags:
- *       - Offers
+ *       - Applys
  *     responses:
  *       200:
- *         description: Returns a list of all offers
+ *         description: Returns a list of all applys
  *       500:
- *         description: Failed to fetch offers
+ *         description: Failed to fetch applys
  */
-offerRouter.get('/', o.getOffers);
+applyRouter.get('/', a.getApplys);
 
 /**
  * @openapi
- * /api/offers/{id}:
+ * /api/applys/{id}:
  *   get:
- *     summary: Get an offer by ID
+ *     summary: Get an apply by ID
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The offer ID
+ *         description: The apply ID
  *     responses:
  *       200:
- *         description: Returns the offer
+ *         description: Returns the apply
  *       404:
- *         description: Offer not found
+ *         description: Apply not found
  *       500:
- *         description: Failed to fetch offer
+ *         description: Failed to fetch apply
  */
-offerRouter.get('/:id', o.getOfferById);
+applyRouter.get('/:id', a.getApplyById);
 
 /**
  * @openapi
- * /api/offers/customer/{customerId}:
+ * /api/applys/customer/{customerId}:
  *   get:
- *     summary: Get offers by Customer ID
+ *     summary: Get applys by Customer ID
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
  *         name: customerId
@@ -58,19 +58,19 @@ offerRouter.get('/:id', o.getOfferById);
  *         description: The customer ID
  *     responses:
  *       200:
- *         description: Returns a list of offers for the customer
+ *         description: Returns a list of applys for the customer
  *       500:
- *         description: Failed to fetch offers
+ *         description: Failed to fetch applys
  */
-offerRouter.get('/customer/:customerId', o.getOffersByCustomerId);
+applyRouter.get('/customer/:customerId', a.getApplysByCustomerId);
 
 /**
  * @openapi
- * /api/offers/provider/{providerId}:
+ * /api/applys/provider/{providerId}:
  *   get:
- *     summary: Get offers by Provider ID
+ *     summary: Get applys by Provider ID
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
  *         name: providerId
@@ -80,19 +80,19 @@ offerRouter.get('/customer/:customerId', o.getOffersByCustomerId);
  *         description: The provider ID
  *     responses:
  *       200:
- *         description: Returns a list of offers for the provider
+ *         description: Returns a list of applys for the provider
  *       500:
- *         description: Failed to fetch offers
+ *         description: Failed to fetch applys
  */
-offerRouter.get('/provider/:providerId', o.getOffersByProviderId);
+applyRouter.get('/provider/:providerId', a.getApplysByProviderId);
 
 /**
  * @openapi
- * /api/offers/provider/{providerId}/detail:
+ * /api/applys/provider/{providerId}/detail:
  *   get:
- *     summary: Get detailed offers by Provider ID
+ *     summary: Get detailed applys by Provider ID
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
  *         name: providerId
@@ -102,41 +102,41 @@ offerRouter.get('/provider/:providerId', o.getOffersByProviderId);
  *         description: The provider ID
  *     responses:
  *       200:
- *         description: Returns a list of detailed offers for the provider
+ *         description: Returns a list of detailed applys for the provider
  *       500:
- *         description: Failed to fetch offers
+ *         description: Failed to fetch applys
  */
-offerRouter.get('/provider/:providerId/detail', o.getDetailedOfferByProviderId);
+applyRouter.get('/provider/:providerId/detail', a.getDetailedApplyByProviderId);
 
 /**
  * @openapi
- * /api/offers/service/{serviceId}:
+ * /api/applys/post/{postId}:
  *   get:
- *     summary: Get offers by Service ID
+ *     summary: Get applys by Post ID
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
- *         name: serviceId
+ *         name: postId
  *         required: true
  *         schema:
  *           type: string
- *         description: The service ID
+ *         description: The post ID
  *     responses:
  *       200:
- *         description: Returns a list of offers for the service
+ *         description: Returns a list of applys for the post
  *       500:
- *         description: Failed to fetch offers
+ *         description: Failed to fetch applys
  */
-offerRouter.get('/service/:serviceId', o.getOffersByServiceId);
+applyRouter.get('/post/:postId', a.getApplysByPostId);
 
 /**
  * @openapi
- * /api/offers/check/{providerId}/{serviceId}:
+ * /api/applys/check/{providerId}/{postId}:
  *   get:
- *     summary: Check if a provider has already made an offer for a specific service
+ *     summary: Check if a provider has already made an apply for a specific post
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
  *         name: providerId
@@ -145,26 +145,26 @@ offerRouter.get('/service/:serviceId', o.getOffersByServiceId);
  *           type: string
  *         description: The provider ID
  *       - in: path
- *         name: serviceId
+ *         name: postId
  *         required: true
  *         schema:
  *           type: string
- *         description: The service ID
+ *         description: The post ID
  *     responses:
  *       200:
- *         description: Returns true if an offer exists, false otherwise
+ *         description: Returns true if an apply exists, false otherwise
  *       500:
- *         description: Failed to check offer
+ *         description: Failed to check apply
  */
-offerRouter.get('/check/:providerId/:serviceId', o.checkProviderOfferService);
+applyRouter.get('/check/:providerId/:postId', a.checkProviderApplyPost);
 
 /**
  * @openapi
- * /api/offers:
+ * /api/applys:
  *   post:
- *     summary: Create a new offer
+ *     summary: Create a new apply
  *     tags:
- *       - Offers
+ *       - Applys
  *     requestBody:
  *       required: true
  *       content:
@@ -172,29 +172,29 @@ offerRouter.get('/check/:providerId/:serviceId', o.checkProviderOfferService);
  *           schema:
  *             type: object
  *             required:
- *               - serviceId
+ *               - postId
  *               - providerId
  *               - customerId
  *               - date
  *             properties:
- *               serviceId:
+ *               postId:
  *                 type: string
- *                 description: The ID of the service being requested
+ *                 description: The ID of the post being requested
  *                 example: 64a7b2f5e4b0c8a1d2f3g4h5
  *               providerId:
  *                 type: string
- *                 description: The ID of the provider offering the service
+ *                 description: The ID of the provider applying the post
  *                 example: 64a7b2f5e4b0c8a1d2f3g4h6
  *               customerId:
  *                 type: string
- *                 description: The ID of the customer requesting the service
+ *                 description: The ID of the customer requesting the post
  *                 example: 64a7b2f5e4b0c8a1d2f3g4h7
  *               description:
  *                 type: string
  *                 maxLength: 2000
  *                 default: ''
  *                 example: I can help clean your house with my expertise
- *               offeredPrice:
+ *               applyedPrice:
  *                 type: number
  *                 minimum: 0
  *                 maximum: 99999999.99
@@ -211,26 +211,26 @@ offerRouter.get('/check/:providerId/:serviceId', o.checkProviderOfferService);
  *                 example: Pending
  *     responses:
  *       201:
- *         description: Returns the created offer
+ *         description: Returns the created apply
  *       400:
- *         description: Failed to create offer
+ *         description: Failed to create apply
  */
-offerRouter.post('/', o.createOffer);
+applyRouter.post('/', a.createApply);
 
 /**
  * @openapi
- * /api/offers/{id}:
+ * /api/applys/{id}:
  *   put:
- *     summary: Update an offer by ID
+ *     summary: Update an apply by ID
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The service request ID
+ *         description: The post request ID
  *     requestBody:
  *       required: true
  *       content:
@@ -241,8 +241,8 @@ offerRouter.post('/', o.createOffer);
  *               description:
  *                 type: string
  *                 maxLength: 2000
- *                 example: Updated offer details
- *               offeredPrice:
+ *                 example: Updated apply details
+ *               applyedPrice:
  *                 type: number
  *                 minimum: 0
  *                 maximum: 99999999.99
@@ -257,36 +257,36 @@ offerRouter.post('/', o.createOffer);
  *                 example: Accepted
  *     responses:
  *       200:
- *         description: Returns the updated service request
+ *         description: Returns the updated post request
  *       400:
- *         description: Failed to update service request
+ *         description: Failed to update post request
  *       404:
- *         description: Service request not found
+ *         description: Post request not found
  */
-offerRouter.put('/:id', o.updateOffer);
+applyRouter.put('/:id', a.updateApply);
 
 /**
  * @openapi
- * /api/offers/{id}:
+ * /api/applys/{id}:
  *   delete:
- *     summary: Delete an offer by ID
+ *     summary: Delete an apply by ID
  *     tags:
- *       - Offers
+ *       - Applys
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The offer ID
+ *         description: The apply ID
  *     responses:
  *       200:
- *         description: Returns the deleted offer
+ *         description: Returns the deleted apply
  *       404:
- *         description: Offer not found
+ *         description: Apply not found
  *       500:
- *         description: Failed to delete offer
+ *         description: Failed to delete apply
  */
-offerRouter.delete('/:id', o.deleteOffer);
+applyRouter.delete('/:id', a.deleteApply);
 
-export default offerRouter;
+export default applyRouter;

@@ -1,75 +1,75 @@
 import { Request, Response } from 'express';
 
-import Service from '../models/Service';
+import Post from '../models/Post';
 import User from '../models/User';
 
-//desc Get all services
-//route GET /api/services
+//desc Get all posts
+//route GET /api/posts
 //access Public
-export const getServices = async (req: Request, res: Response) => {
+export const getPosts = async (req: Request, res: Response) => {
   try {
-    const services = await Service.find();
-    res.status(200).json({ success: true, data: services });
+    const posts = await Post.find();
+    res.status(200).json({ success: true, data: posts });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to fetch services', error });
+      .json({ success: false, message: 'Failed to fetch posts', error });
   }
 };
 
-//desc Get a service by ID
-//route GET /api/services/:id
+//desc Get a post by ID
+//route GET /api/posts/:id
 //access Public
-export const getServiceById = async (req: Request, res: Response) => {
+export const getPostById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const service = await Service.findById(id);
-    if (!service) {
+    const post = await Post.findById(id);
+    if (!post) {
       return res
         .status(404)
-        .json({ success: false, message: 'Service not found' });
+        .json({ success: false, message: 'Post not found' });
     }
-    res.status(200).json({ success: true, data: service });
+    res.status(200).json({ success: true, data: post });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to fetch service', error });
+      .json({ success: false, message: 'Failed to fetch post', error });
   }
 };
 
-//desc Get services by User ID
-//route GET /api/services/user/:userId
+//desc Get posts by User ID
+//route GET /api/posts/user/:userId
 //access Public
-export const getServicesByUserId = async (req: Request, res: Response) => {
+export const getPostsByUserId = async (req: Request, res: Response) => {
   const { userId } = req.params;
   try {
-    const services = await Service.find({ customerId: userId });
-    res.status(200).json({ success: true, data: services });
+    const posts = await Post.find({ customerId: userId });
+    res.status(200).json({ success: true, data: posts });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to fetch services', error });
+      .json({ success: false, message: 'Failed to fetch posts', error });
   }
 };
 
-//desc Create a new service
-//route POST /api/services
+//desc Create a new post
+//route POST /api/posts
 //access Public
-export const createService = async (req: Request, res: Response) => {
+export const createPost = async (req: Request, res: Response) => {
   try {
-    const service = await Service.create(req.body);
-    res.status(201).json({ success: true, data: service });
+    const post = await Post.create(req.body);
+    res.status(201).json({ success: true, data: post });
   } catch (error) {
     res
       .status(400)
-      .json({ success: false, message: 'Failed to create service', error });
+      .json({ success: false, message: 'Failed to create post', error });
   }
 };
 
-// desc Search services
-// route GET /api/services/search?query=your_query
+// desc Search posts
+// route GET /api/posts/search?query=your_query
 // access Public
-export const searchServices = async (req: Request, res: Response) => {
+export const searchPosts = async (req: Request, res: Response) => {
   const { query } = req.query;
   if (!query) {
     return res
@@ -101,7 +101,7 @@ export const searchServices = async (req: Request, res: Response) => {
 
     const userIds = matchingUsers.map((user) => user._id);
 
-    const services = await Service.find({
+    const posts = await Post.find({
       $or: [
         { title: { $regex: trimmedQuery, $options: 'i' } },
         { description: { $regex: trimmedQuery, $options: 'i' } },
@@ -115,22 +115,22 @@ export const searchServices = async (req: Request, res: Response) => {
       'name email telNumber address role providerProfile',
     );
 
-    res.status(200).json({ success: true, data: services });
+    res.status(200).json({ success: true, data: posts });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to search services', error });
+      .json({ success: false, message: 'Failed to search posts', error });
   }
 };
 
-//desc Filter services
-//route GET /api/services/filter
+//desc Filter posts
+//route GET /api/posts/filter
 //access Public
-export const filterServices = async (req: Request, res: Response) => {
+export const filterPosts = async (req: Request, res: Response) => {
   const { userId, title, tags, minBudget, maxBudget, startDate, endDate } =
     req.query;
 
-  interface ServiceFilter {
+  interface PostFilter {
     customerId?: string;
     title?: { $regex: string; $options: string };
     tags?: { $all: string[] };
@@ -138,7 +138,7 @@ export const filterServices = async (req: Request, res: Response) => {
     date?: { $gte?: Date; $lte?: Date };
   }
 
-  const filter: ServiceFilter = {};
+  const filter: PostFilter = {};
 
   try {
     if (userId) {
@@ -170,70 +170,70 @@ export const filterServices = async (req: Request, res: Response) => {
       }
     }
 
-    const services = await Service.find(filter);
-    res.status(200).json({ success: true, data: services });
+    const posts = await Post.find(filter);
+    res.status(200).json({ success: true, data: posts });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to search services', error });
+      .json({ success: false, message: 'Failed to search posts', error });
   }
 };
 
-//@desc Update a service by ID
-//@route PUT /api/services/:id
+//@desc Update a post by ID
+//@route PUT /api/posts/:id
 //@access Public
-export const updateService = async (req: Request, res: Response) => {
+export const updatePost = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     // Option 1: Use runValidators in findByIdAndUpdate
-    const service = await Service.findByIdAndUpdate(id, req.body, {
+    const post = await Post.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true, // This ensures validation runs before saving
     });
-    if (!service) {
+    if (!post) {
       return res
         .status(404)
-        .json({ success: false, message: 'Service not found' });
+        .json({ success: false, message: 'Post not found' });
     }
-    res.status(200).json({ success: true, data: service });
+    res.status(200).json({ success: true, data: post });
   } catch (error) {
     res
       .status(400)
-      .json({ success: false, message: 'Failed to update service', error });
+      .json({ success: false, message: 'Failed to update post', error });
   }
 };
 
-//@desc Delete a service by ID
-//@route DELETE /api/services/:id
+//@desc Delete a post by ID
+//@route DELETE /api/posts/:id
 //@access Public
-export const deleteService = async (req: Request, res: Response) => {
+export const deletePost = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const service = await Service.findByIdAndDelete(id);
-    if (!service) {
+    const post = await Post.findByIdAndDelete(id);
+    if (!post) {
       return res
         .status(404)
-        .json({ success: false, message: 'Service not found' });
+        .json({ success: false, message: 'Post not found' });
     }
     res.status(200).json({
       success: true,
-      data: service,
-      message: 'Service deleted successfully',
+      data: post,
+      message: 'Post deleted successfully',
     });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to delete service', error });
+      .json({ success: false, message: 'Failed to delete post', error });
   }
 };
 
-// export const deleteAllServices = async (req: Request, res: Response) => {
+// export const deleteAllPosts = async (req: Request, res: Response) => {
 //   try {
-//     await Service.deleteMany({});
-//     res.status(200).json({ success: true, message: 'All services deleted' });
+//     await Post.deleteMany({});
+//     res.status(200).json({ success: true, message: 'All posts deleted' });
 //   } catch (error) {
 //     res
 //       .status(500)
-//       .json({ success: false, message: 'Failed to delete services', error });
+//       .json({ success: false, message: 'Failed to delete posts', error });
 //   }
 // };

@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 // import { isURL } from 'validator';
 
-const ServiceSchema = new Schema(
+const PostSchema = new Schema(
   {
     customerId: {
       type: Schema.Types.ObjectId,
@@ -85,6 +85,6 @@ const ServiceSchema = new Schema(
   { timestamps: true },
 );
 
-const Service = model('Service', ServiceSchema);
+const Post = model('Post', PostSchema);
 
-export default Service;
+export default Post;

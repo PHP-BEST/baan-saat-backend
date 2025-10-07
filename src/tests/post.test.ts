@@ -1,13 +1,13 @@
 import request from 'supertest';
 import express, { Application } from 'express';
-import serviceRouter from '../service/serviceRoutes';
+import postRouter from '../post/postRoutes';
 import userRouter from '../user/userRoutes';
 import mongoose from 'mongoose';
 
 // Set up Express app for testing
 const app: Application = express();
 app.use(express.json());
-app.use('/services', serviceRouter);
+app.use('/posts', postRouter);
 app.use('/users', userRouter);
 
 beforeAll(async () => {
@@ -22,9 +22,9 @@ afterAll(async () => {
   await mongoose.disconnect();
 });
 
-describe('Testing Service API...', () => {
-  let firstServiceId: string;
-  let secondServiceId: string;
+describe('Testing Post API...', () => {
+  let firstPostId: string;
+  let secondPostId: string;
   let user1_id: string;
   let user2_id: string;
 
@@ -36,18 +36,18 @@ describe('Testing Service API...', () => {
     user2_id = res2.body.data._id;
   });
 
-  it('Get all services', async () => {
-    const res = await request(app).get('/services');
+  it('Get all posts', async () => {
+    const res = await request(app).get('/posts');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Add the first service', async () => {
-    const title = 'Basic Service 1';
+  it('Add the first post', async () => {
+    const title = 'Basic Post 1';
     const res = await request(app)
-      .post('/services')
+      .post('/posts')
       .send({
         title: title,
         customerId: user1_id,
@@ -62,13 +62,13 @@ describe('Testing Service API...', () => {
     expect(res.body.data.budget).toBe(300);
     expect(res.body.data.tags).toEqual(['plumbing', 'electrical']);
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
-    firstServiceId = res.body.data._id;
+    firstPostId = res.body.data._id;
   });
 
-  it('Add the second service', async () => {
-    const title = 'Basic Service 2';
+  it('Add the second post', async () => {
+    const title = 'Basic Post 2';
     const res = await request(app)
-      .post('/services')
+      .post('/posts')
       .send({
         title: title,
         customerId: user1_id,
@@ -83,13 +83,13 @@ describe('Testing Service API...', () => {
     expect(res.body.data.budget).toBe(500);
     expect(res.body.data.tags).toEqual(['houseCleaning']);
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-25'));
-    secondServiceId = res.body.data._id;
+    secondPostId = res.body.data._id;
   });
 
-  it('Add the third service', async () => {
-    const title = 'Basic Service 3';
+  it('Add the third post', async () => {
+    const title = 'Basic Post 3';
     const res = await request(app)
-      .post('/services')
+      .post('/posts')
       .send({
         title: title,
         customerId: user2_id,
@@ -106,10 +106,10 @@ describe('Testing Service API...', () => {
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-15'));
   });
 
-  it('Add the fourth service', async () => {
-    const title = 'Deluxe Service 1';
+  it('Add the fourth post', async () => {
+    const title = 'Deluxe Post 1';
     const res = await request(app)
-      .post('/services')
+      .post('/posts')
       .send({
         title: title,
         customerId: user2_id,
@@ -126,10 +126,10 @@ describe('Testing Service API...', () => {
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-02'));
   });
 
-  it('Add the fifth service', async () => {
-    const title = 'Deluxe Service 2';
+  it('Add the fifth post', async () => {
+    const title = 'Deluxe Post 2';
     const res = await request(app)
-      .post('/services')
+      .post('/posts')
       .send({
         title: title,
         customerId: user1_id,
@@ -151,10 +151,10 @@ describe('Testing Service API...', () => {
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-12'));
   });
 
-  it('Add the sixth service', async () => {
-    const title = 'Deluxe Service 3';
+  it('Add the sixth post', async () => {
+    const title = 'Deluxe Post 3';
     const res = await request(app)
-      .post('/services')
+      .post('/posts')
       .send({
         title: title,
         customerId: user2_id,
@@ -176,9 +176,9 @@ describe('Testing Service API...', () => {
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-05'));
   });
 
-  it('Add the invalid service (missing title)', async () => {
+  it('Add the invalid post (missing title)', async () => {
     const res = await request(app)
-      .post('/services')
+      .post('/posts')
       .send({
         customerId: user2_id,
         budget: 1500,
@@ -187,82 +187,82 @@ describe('Testing Service API...', () => {
       });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Failed to create service');
+    expect(res.body.message).toBe('Failed to create post');
   });
 
-  it('Get all services again', async () => {
-    const res = await request(app).get('/services');
+  it('Get all posts again', async () => {
+    const res = await request(app).get('/posts');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(6);
   });
 
-  it('Get the first service by id', async () => {
-    const res = await request(app).get(`/services/${firstServiceId}`);
+  it('Get the first post by id', async () => {
+    const res = await request(app).get(`/posts/${firstPostId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data).toHaveProperty('_id', firstServiceId);
-    expect(res.body.data.title).toBe('Basic Service 1');
+    expect(res.body.data).toHaveProperty('_id', firstPostId);
+    expect(res.body.data.title).toBe('Basic Post 1');
     expect(res.body.data.budget).toBe(300);
     expect(res.body.data.tags).toEqual(['plumbing', 'electrical']);
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
   });
 
-  it('Get the second service by id', async () => {
-    const res = await request(app).get(`/services/${secondServiceId}`);
+  it('Get the second post by id', async () => {
+    const res = await request(app).get(`/posts/${secondPostId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data).toHaveProperty('_id', secondServiceId);
-    expect(res.body.data.title).toBe('Basic Service 2');
+    expect(res.body.data).toHaveProperty('_id', secondPostId);
+    expect(res.body.data.title).toBe('Basic Post 2');
     expect(res.body.data.budget).toBe(500);
     expect(res.body.data.tags).toEqual(['houseCleaning']);
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-25'));
   });
 
-  it('Get All Services of User 1', async () => {
-    const res = await request(app).get(`/services/user/${user1_id}`);
+  it('Get All Posts of User 1', async () => {
+    const res = await request(app).get(`/posts/user/${user1_id}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Get All Services of User 2', async () => {
-    const res = await request(app).get(`/services/user/${user2_id}`);
+  it('Get All Posts of User 2', async () => {
+    const res = await request(app).get(`/posts/user/${user2_id}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Get a service with invalid id', async () => {
-    const serviceId = '64d4c0f531d4f2b1a1a1a1a1';
-    const res = await request(app).get(`/services/${serviceId}`);
+  it('Get a post with invalid id', async () => {
+    const postId = '64d4c0f531d4f2b1a1a1a1a1';
+    const res = await request(app).get(`/posts/${postId}`);
     expect(res.statusCode).toBe(404);
     expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Service not found');
+    expect(res.body.message).toBe('Post not found');
   });
 
-  it('Search services by "" (empty string)', async () => {
-    const res = await request(app).get('/services/search').query({ query: '' });
+  it('Search posts by "" (empty string)', async () => {
+    const res = await request(app).get('/posts/search').query({ query: '' });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('Query parameter is required');
   });
 
-  it('Search services by "       "', async () => {
+  it('Search posts by "       "', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/posts/search')
       .query({ query: '       ' });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('Query parameter cannot be whitespace');
   });
 
-  it('Search services by "Basic"', async () => {
+  it('Search posts by "Basic"', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/posts/search')
       .query({ query: 'Basic' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -270,9 +270,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by "    Basic "', async () => {
+  it('Search posts by "    Basic "', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/posts/search')
       .query({ query: '    Basic ' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -280,9 +280,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by "baSiC"', async () => {
+  it('Search posts by "baSiC"', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/posts/search')
       .query({ query: 'baSiC' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -290,9 +290,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Search services by "house"', async () => {
+  it('Search posts by "house"', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/posts/search')
       .query({ query: 'house' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -300,19 +300,17 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(4);
   });
 
-  it('Search services by "s"', async () => {
-    const res = await request(app)
-      .get('/services/search')
-      .query({ query: 's' });
+  it('Search posts by "s"', async () => {
+    const res = await request(app).get('/posts/search').query({ query: 's' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(6);
   });
 
-  it('Search services by "1500"', async () => {
+  it('Search posts by "1500"', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/posts/search')
       .query({ query: '1500' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -320,19 +318,17 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(1);
   });
 
-  it('Search services by "4"', async () => {
-    const res = await request(app)
-      .get('/services/search')
-      .query({ query: '4' });
+  it('Search posts by "4"', async () => {
+    const res = await request(app).get('/posts/search').query({ query: '4' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Search services by "User 2"', async () => {
+  it('Search posts by "User 2"', async () => {
     const res = await request(app)
-      .get('/services/search')
+      .get('/posts/search')
       .query({ query: 'User 2' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -340,17 +336,17 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter services without any filter', async () => {
-    const res = await request(app).get('/services/filter');
+  it('Filter posts without any filter', async () => {
+    const res = await request(app).get('/posts/filter');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(6);
   });
 
-  it("Filter services by userId of User 1's services", async () => {
+  it("Filter posts by userId of User 1's posts", async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ userId: user1_id });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -358,9 +354,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it("Filter services by userId of User 2's services", async () => {
+  it("Filter posts by userId of User 2's posts", async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ userId: user2_id });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -368,9 +364,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter services by title (Basic)', async () => {
+  it('Filter posts by title (Basic)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ title: 'Basic' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -378,9 +374,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter service by title (Deluxe)', async () => {
+  it('Filter post by title (Deluxe)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ title: 'Deluxe' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -388,9 +384,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter services by budget range (400 to 1600)', async () => {
+  it('Filter posts by budget range (400 to 1600)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ minBudget: 400, maxBudget: 1600 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -398,9 +394,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(4);
   });
 
-  it('Filter services by budget range equal to less than 400', async () => {
+  it('Filter posts by budget range equal to less than 400', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ maxBudget: 400 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -408,9 +404,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(2);
   });
 
-  it('Filter services by budget range equal to more than 1000', async () => {
+  it('Filter posts by budget range equal to more than 1000', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ minBudget: 1000 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -418,9 +414,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter services by tags (houseCleaning)', async () => {
+  it('Filter posts by tags (houseCleaning)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ tags: 'houseCleaning' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -428,9 +424,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter services by tags (plumbing, electrical)', async () => {
+  it('Filter posts by tags (plumbing, electrical)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ tags: 'plumbing,electrical' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -438,9 +434,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter services by tags (houseCleaning, others)', async () => {
+  it('Filter posts by tags (houseCleaning, others)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ tags: 'houseCleaning,others' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -448,9 +444,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Filter services by date range (2025-08-01 to 2025-08-31)', async () => {
+  it('Filter posts by date range (2025-08-01 to 2025-08-31)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ startDate: '2025-08-01', endDate: '2025-08-31' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -458,9 +454,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(3);
   });
 
-  it('Filter services by date range (up to 2025-08-15)', async () => {
+  it('Filter posts by date range (up to 2025-08-15)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ endDate: '2025-08-15' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -468,9 +464,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(2);
   });
 
-  it('Filter services by date range (starting from 2025-09-05)', async () => {
+  it('Filter posts by date range (starting from 2025-09-05)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ startDate: '2025-09-05' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -478,9 +474,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(2);
   });
 
-  it('Filter services by many filters (title, budget)', async () => {
+  it('Filter posts by many filters (title, budget)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ title: 'Basic', minBudget: 1000, maxBudget: 5000 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -488,9 +484,9 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Filter services by many filters (title, tags, budget)', async () => {
+  it('Filter posts by many filters (title, tags, budget)', async () => {
     const res = await request(app)
-      .get('/services/filter')
+      .get('/posts/filter')
       .query({ title: 'Deluxe', tags: 'plumbing,electrical', minBudget: 1600 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
@@ -498,8 +494,8 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(1);
   });
 
-  it('Filter services by many filters (tags, budget, date)', async () => {
-    const res = await request(app).get('/services/filter').query({
+  it('Filter posts by many filters (tags, budget, date)', async () => {
+    const res = await request(app).get('/posts/filter').query({
       tags: 'houseCleaning',
       maxBudget: 1500,
       startDate: '2025-08-01',
@@ -511,8 +507,8 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(1);
   });
 
-  it('Filter services by many filters (title, tags, budget, date)', async () => {
-    const res = await request(app).get('/services/filter').query({
+  it('Filter posts by many filters (title, tags, budget, date)', async () => {
+    const res = await request(app).get('/posts/filter').query({
       title: 'Deluxe',
       tags: 'painting',
       minBudget: 1600,
@@ -525,10 +521,10 @@ describe('Testing Service API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Update service by ID', async () => {
-    const newTitle = 'Premium Service 1';
+  it('Update post by ID', async () => {
+    const newTitle = 'Premium Post 1';
     const res = await request(app)
-      .put(`/services/${firstServiceId}`)
+      .put(`/posts/${firstPostId}`)
       .send({
         title: newTitle,
         budget: 4000,
@@ -545,7 +541,7 @@ describe('Testing Service API...', () => {
       });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data).toHaveProperty('_id', firstServiceId);
+    expect(res.body.data).toHaveProperty('_id', firstPostId);
     expect(res.body.data.title).toBe(newTitle);
     expect(res.body.data.budget).toBe(4000);
     expect(res.body.data.tags).toEqual([
@@ -561,91 +557,91 @@ describe('Testing Service API...', () => {
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
   });
 
-  it('Update service with invalid ID', async () => {
-    const serviceId = '64d4c0f531d4f2b1a1a1a1a1';
+  it('Update post with invalid ID', async () => {
+    const postId = '64d4c0f531d4f2b1a1a1a1a1';
     const res = await request(app)
-      .put(`/services/${serviceId}`)
+      .put(`/posts/${postId}`)
       .send({ budget: 3500 });
     expect(res.statusCode).toBe(404);
     expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Service not found');
+    expect(res.body.message).toBe('Post not found');
   });
 
-  it('Update service with invalid budget', async () => {
+  it('Update post with invalid budget', async () => {
     const res = await request(app)
-      .put(`/services/${secondServiceId}`)
+      .put(`/posts/${secondPostId}`)
       .send({ budget: -100 });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Failed to update service');
+    expect(res.body.message).toBe('Failed to update post');
   });
 
-  it('Update service with invalid tags', async () => {
+  it('Update post with invalid tags', async () => {
     const res = await request(app)
-      .put(`/services/${secondServiceId}`)
+      .put(`/posts/${secondPostId}`)
       .send({ tags: ['premium', 'fast'] });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Failed to update service');
+    expect(res.body.message).toBe('Failed to update post');
   });
 
-  // it('Update service with invalid cover image', async () => {
+  // it('Update post with invalid cover image', async () => {
   //   const res = await request(app)
-  //     .put(`/services/${secondServiceId}`)
+  //     .put(`/posts/${secondPostId}`)
   //     .send({ coverPhotoUrl: 'invalid-url' });
   //   expect(res.statusCode).toBe(400);
   //   expect(res.body.success).toBe(false);
-  //   expect(res.body.message).toBe('Failed to update service');
+  //   expect(res.body.message).toBe('Failed to update post');
   // });
 
-  it('Get service by ID before deletion', async () => {
-    const res = await request(app).get(`/services/${firstServiceId}`);
+  it('Get post by ID before deletion', async () => {
+    const res = await request(app).get(`/posts/${firstPostId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data).toHaveProperty('_id', firstServiceId);
+    expect(res.body.data).toHaveProperty('_id', firstPostId);
   });
 
-  it('Delete service by ID', async () => {
-    const res = await request(app).delete(`/services/${firstServiceId}`);
+  it('Delete post by ID', async () => {
+    const res = await request(app).delete(`/posts/${firstPostId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.message).toBe('Service deleted successfully');
+    expect(res.body.message).toBe('Post deleted successfully');
   });
 
-  it('Get deleted service by ID', async () => {
-    const res = await request(app).get(`/services/${firstServiceId}`);
+  it('Get deleted post by ID', async () => {
+    const res = await request(app).get(`/posts/${firstPostId}`);
     expect(res.statusCode).toBe(404);
     expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Service not found');
+    expect(res.body.message).toBe('Post not found');
   });
 
-  it('Delete service by invalid ID', async () => {
-    const serviceId = '64d4c0f531d4f2b1a1a1a1a1';
-    const res = await request(app).delete(`/services/${serviceId}`);
+  it('Delete post by invalid ID', async () => {
+    const postId = '64d4c0f531d4f2b1a1a1a1a1';
+    const res = await request(app).delete(`/posts/${postId}`);
     expect(res.statusCode).toBe(404);
     expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Service not found');
+    expect(res.body.message).toBe('Post not found');
   });
 
-  it('Get all services', async () => {
-    const res = await request(app).get('/services');
+  it('Get all posts', async () => {
+    const res = await request(app).get('/posts');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
     expect(res.body.data.length).toBe(5);
   });
 
-  it('Delete all services belonging to a user', async () => {
+  it('Delete all posts belonging to a user', async () => {
     const res = await request(app).delete(`/users/${user2_id}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.message).toBe(
-      'User and his/her services deleted successfully',
+      'User and his/her posts deleted successfully',
     );
   });
 
-  it('Get all services', async () => {
-    const res = await request(app).get('/services');
+  it('Get all posts', async () => {
+    const res = await request(app).get('/posts');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
