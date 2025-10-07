@@ -108,6 +108,7 @@ export const searchPosts = async (req: Request, res: Response) => {
         { budget: isNaN(Number(trimmedQuery)) ? -1 : Number(trimmedQuery) },
         { location: { $regex: trimmedQuery, $options: 'i' } },
         { tags: { $regex: trimmedQuery, $options: 'i' } },
+        { others: { $regex: trimmedQuery, $options: 'i' } },
         { customerId: { $in: userIds } },
       ],
     }).populate(
@@ -133,7 +134,8 @@ export const filterPosts = async (req: Request, res: Response) => {
   interface PostFilter {
     customerId?: string;
     title?: { $regex: string; $options: string };
-    tags?: { $all: string[] };
+    tags?: { $in: string[] };
+    others?: string;
     budget?: { $gte?: number; $lte?: number };
     date?: { $gte?: Date; $lte?: Date };
   }
@@ -149,7 +151,8 @@ export const filterPosts = async (req: Request, res: Response) => {
     }
     if (tags) {
       const tagsArray = (tags as string).split(',').map((tag) => tag.trim());
-      filter.tags = { $all: tagsArray };
+      //remove others tag if have in tagsArray and then add string in others to tags
+      filter.tags = { $in: tagsArray };
     }
     if (minBudget || maxBudget) {
       filter.budget = {};

@@ -4,26 +4,6 @@ import { isEmail } from 'validator';
 import { randomUUID } from 'node:crypto';
 
 const ProviderSchema = new Schema({
-  title: {
-    type: String,
-    maxLength: 200,
-    default: '',
-  },
-  skills: [
-    {
-      type: String,
-      enum: [
-        'houseCleaning',
-        'houseRepair',
-        'plumbing',
-        'electrical',
-        'hvac',
-        'painting',
-        'landscaping',
-        'others',
-      ],
-    },
-  ],
   description: {
     type: String,
     maxLength: 2000,

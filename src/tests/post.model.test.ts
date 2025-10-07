@@ -29,7 +29,8 @@ describe('Testing Post Model ... ', () => {
     expect(post.budget).toBe(0);
     expect(post.telNumber).toBe('000000000');
     expect(post.location).toBe('');
-    expect(post.tags).toEqual([]);
+    expect(post.tags).toEqual('');
+    expect(post.others).toBe('');
     expect(post.date).toBeInstanceOf(Date);
     expect(Number.isNaN(post.date.getTime())).toBe(false);
     expect(post.createdAt).toBeInstanceOf(Date);
@@ -47,7 +48,7 @@ describe('Testing Post Model ... ', () => {
       budget: 100,
       telNumber: '0123456789',
       location: 'Custom Location',
-      tags: ['houseCleaning'],
+      tags: 'houseCleaning',
       date: new Date(),
     });
     expect(post._id).toBeTruthy();
@@ -57,13 +58,46 @@ describe('Testing Post Model ... ', () => {
     expect(post.budget).toBe(100);
     expect(post.telNumber).toBe('0123456789');
     expect(post.location).toBe('Custom Location');
-    expect(post.tags).toEqual(['houseCleaning']);
+    expect(post.tags).toEqual('houseCleaning');
+    expect(post.others).toBe('');
     expect(post.date).toBeInstanceOf(Date);
     expect(Number.isNaN(post.date.getTime())).toBe(false);
     expect(post.createdAt).toBeInstanceOf(Date);
     expect(Number.isNaN(post.createdAt.getTime())).toBe(false);
     expect(post.updatedAt).toBeInstanceOf(Date);
     expect(Number.isNaN(post.updatedAt.getTime())).toBe(false);
+  });
+
+  it('Create a post with others tag and non-empty others field', async () => {
+    const user = await User.create({});
+    const post = await Post.create({
+      customerId: user._id,
+      title: 'Other Tag Post',
+      tags: 'others',
+      others: 'Custom Tag',
+      date: new Date(),
+    });
+    expect(post._id).toBeTruthy();
+    expect(post.customerId).toEqual(user._id);
+    expect(post.title).toBe('Other Tag Post');
+    expect(post.tags).toEqual('others');
+    expect(post.others).toBe('Custom Tag');
+  });
+
+  it('Create a post with non-others tag and non-empty others field', async () => {
+    const user = await User.create({});
+    const post = await Post.create({
+      customerId: user._id,
+      title: 'Invalid other Tag Post',
+      tags: 'plumbing',
+      others: 'Custom Tag',
+      date: new Date(),
+    });
+    expect(post._id).toBeTruthy();
+    expect(post.customerId).toEqual(user._id);
+    expect(post.title).toBe('Invalid other Tag Post');
+    expect(post.tags).toEqual('plumbing');
+    expect(post.others).toBe(''); // others field should be cleared
   });
 
   //Invalid budget
@@ -213,33 +247,16 @@ it.each([
   ).rejects.toThrow();
 });
 
-//invalid multiple tags
-it.each([
-  [['houseCleaning', 'landsliding']],
-  [['houseRepair', 'electron']],
-  [['plumbing', 'jumping', 'otherPost']],
-])('Create a post with invalid multiple tags %s', async (tags) => {
-  const user = await User.create({});
-  await expect(
-    Post.create({
-      customerId: user._id,
-      title: 'Invalid Post',
-      tags,
-      date: new Date(),
-    }),
-  ).rejects.toThrow();
-});
-
 //valid tags
 it.each([
-  [['houseCleaning']],
-  [['houseRepair']],
-  [['plumbing']],
-  [['electrical']],
-  [['hvac']],
-  [['painting']],
-  [['landscaping']],
-  [['others']],
+  ['houseCleaning'],
+  ['houseRepair'],
+  ['plumbing'],
+  ['electrical'],
+  ['hvac'],
+  ['painting'],
+  ['landscaping'],
+  ['others'],
 ])('Create a post with valid tags %s', async (tags) => {
   const user = await User.create({});
   const post = await Post.create({
@@ -249,25 +266,7 @@ it.each([
     date: new Date(),
   });
   expect(post).toBeTruthy();
-  expect(post.tags).toEqual(expect.arrayContaining(tags));
-});
-
-//valid multiple tags
-it.each([
-  [['houseCleaning', 'houseRepair']],
-  [['plumbing', 'electrical']],
-  [['hvac', 'painting', 'landscaping']],
-  [['others']],
-])('Create a post with valid multiple tags %s', async (tags) => {
-  const user = await User.create({});
-  const post = await Post.create({
-    customerId: user._id,
-    title: 'Valid Post',
-    tags,
-    date: new Date(),
-  });
-  expect(post).toBeTruthy();
-  expect(post.tags).toEqual(expect.arrayContaining(tags));
+  expect(post.tags).toBe(tags);
 });
 
 //title value exceeds

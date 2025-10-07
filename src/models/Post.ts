@@ -1,5 +1,20 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 // import { isURL } from 'validator';
+
+interface IPost extends Document {
+  customerId: Schema.Types.ObjectId;
+  title: string;
+  description: string;
+  budget: number;
+  coverPhotoUrl: string;
+  telNumber: string;
+  location: string;
+  tags: string;
+  others: string;
+  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const PostSchema = new Schema(
   {
@@ -61,22 +76,26 @@ const PostSchema = new Schema(
       maxLength: 2000,
       default: '',
     },
-    tags: [
-      {
-        type: String,
-        enum: [
-          'houseCleaning',
-          'houseRepair',
-          'plumbing',
-          'electrical',
-          'hvac',
-          'painting',
-          'landscaping',
-          'others',
-        ],
-        default: [],
-      },
-    ],
+    tags: {
+      type: String,
+      enum: [
+        '',
+        'houseCleaning',
+        'houseRepair',
+        'plumbing',
+        'electrical',
+        'hvac',
+        'painting',
+        'landscaping',
+        'others',
+      ],
+      default: '',
+    },
+    others: {
+      type: String,
+      maxLength: 200,
+      default: '',
+    },
     date: {
       type: Date,
       required: true,
@@ -85,6 +104,13 @@ const PostSchema = new Schema(
   { timestamps: true },
 );
 
-const Post = model('Post', PostSchema);
+PostSchema.pre('save', function (next) {
+  if (this.others && this.others.trim() !== '' && this.tags !== 'others') {
+    this.others = '';
+  }
+  next();
+});
+
+const Post = model<IPost>('Post', PostSchema);
 
 export default Post;
