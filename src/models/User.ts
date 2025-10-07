@@ -88,6 +88,7 @@ const UserSchema = new Schema(
     connectId: {
       type: String,
       required: true,
+      default: randomUUID,
     },
   },
   {
