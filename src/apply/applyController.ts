@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
 import Apply from '../models/Apply';
 
-export const getApplys = async (req: Request, res: Response) => {
+export const getApplies = async (req: Request, res: Response) => {
   try {
-    const applys = await Apply.find();
-    res.status(200).json({ success: true, data: applys });
+    const applies = await Apply.find();
+    res.status(200).json({ success: true, data: applies });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch applys',
+      message: 'Failed to fetch applies',
       error,
     });
   }
@@ -33,32 +33,32 @@ export const getApplyById = async (req: Request, res: Response) => {
   }
 };
 
-export const getApplysByCustomerId = async (req: Request, res: Response) => {
+export const getAppliesByCustomerId = async (req: Request, res: Response) => {
   const { customerId } = req.params;
   try {
-    const applys = await Apply.find({
+    const applies = await Apply.find({
       customerId: customerId,
     });
 
-    res.status(200).json({ success: true, data: applys });
+    res.status(200).json({ success: true, data: applies });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to fetch applys', error });
+      .json({ success: false, message: 'Failed to fetch applies', error });
   }
 };
 
-export const getApplysByProviderId = async (req: Request, res: Response) => {
+export const getAppliesByProviderId = async (req: Request, res: Response) => {
   const { providerId } = req.params;
   try {
-    const applys = await Apply.find({
+    const applies = await Apply.find({
       providerId: providerId,
     });
-    res.status(200).json({ success: true, data: applys });
+    res.status(200).json({ success: true, data: applies });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to fetch applys', error });
+      .json({ success: false, message: 'Failed to fetch applies', error });
   }
 };
 
@@ -68,28 +68,28 @@ export const getDetailedApplyByProviderId = async (
 ) => {
   const { providerId } = req.params;
   try {
-    const applys = await Apply.find({ providerId: providerId })
+    const applies = await Apply.find({ providerId: providerId })
       .populate('post')
       .populate('customer')
       .populate('provider');
 
-    res.status(200).json({ success: true, data: applys });
+    res.status(200).json({ success: true, data: applies });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to fetch applys', error });
+      .json({ success: false, message: 'Failed to fetch applies', error });
   }
 };
 
-export const getApplysByPostId = async (req: Request, res: Response) => {
+export const getAppliesByPostId = async (req: Request, res: Response) => {
   const { postId } = req.params;
   try {
-    const applys = await Apply.find({ postId: postId });
-    res.status(200).json({ success: true, data: applys });
+    const applies = await Apply.find({ postId: postId });
+    res.status(200).json({ success: true, data: applies });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'Failed to fetch applys', error });
+      .json({ success: false, message: 'Failed to fetch applies', error });
   }
 };
 

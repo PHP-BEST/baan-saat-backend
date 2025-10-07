@@ -57,16 +57,14 @@ describe('Testing User API...', () => {
       .send({
         name: name,
         role: 'provider',
-        providerProfile: { title: 'Valid' },
+        providerProfile: { description: 'Valid' },
       });
     expect(res.statusCode).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.name).toBe(name);
     expect(res.body.data.role).toBe('provider');
-    expect(res.body.data.providerProfile).toEqual(
-      expect.objectContaining({ title: 'Valid' }),
-    );
+    expect(res.body.data.providerProfile?.description).toBe('Valid');
   });
 
   it('Add customer with provider profile', async () => {
@@ -76,16 +74,14 @@ describe('Testing User API...', () => {
       .send({
         name: name,
         role: 'customer',
-        providerProfile: { title: 'Valid' },
+        providerProfile: { description: 'Valid' },
       });
     expect(res.statusCode).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.name).toBe(name);
     expect(res.body.data.role).toBe('customer');
-    expect(res.body.data.providerProfile).toEqual(
-      expect.objectContaining({ title: 'Valid' }),
-    );
+    expect(res.body.data.providerProfile?.description).toBe('');
   });
 
   it('Add user with invalid value', async () => {
@@ -117,8 +113,6 @@ describe('Testing User API...', () => {
     expect(res.body.data.telNumber).toBe('000000000');
     expect(res.body.data.address).toBe('');
     expect(res.body.data.avatarUrl).toBe('');
-    expect(res.body.data.providerProfile?.title).toBe('');
-    expect(res.body.data.providerProfile?.skills).toEqual([]);
     expect(res.body.data.providerProfile?.description).toBe('');
   });
 
@@ -195,8 +189,6 @@ describe('Testing User API...', () => {
   it('Update user role from customer to provider', async () => {
     const newRole = 'provider';
     const providerProfile = {
-      title: 'New Provider Title',
-      skills: ['plumbing', 'electrical'],
       description: 'Experienced provider in plumbing and electrical work.',
     };
     const res = await request(app).put(`/users/${firstUserId}`).send({

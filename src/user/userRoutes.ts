@@ -113,17 +113,6 @@ userRouter.get('/:id', u.getUserById);
  *               providerProfile:
  *                 type: object
  *                 properties:
- *                   title:
- *                     type: string
- *                     maxLength: 200
- *                     default: ''
- *                     example: Plumber
- *                   skills:
- *                     type: array
- *                     items:
- *                       type: string
- *                       enum: [houseCleaning, houseRepair, plumbing, electrical, hvac, painting, landscaping, others]
- *                     example: [houseCleaning, houseRepair]
  *                   description:
  *                     type: string
  *                     maxLength: 2000
@@ -188,16 +177,6 @@ userRouter.post('/', u.createUser);
  *               providerProfile:
  *                 type: object
  *                 properties:
- *                   title:
- *                     type: string
- *                     maxLength: 200
- *                     example: Electrician
- *                   skills:
- *                     type: array
- *                     items:
- *                       type: string
- *                       enum: [houseCleaning, houseRepair, plumbing, electrical, hvac, painting, landscaping, others]
- *                     example: [electrical, hvac]
  *                   description:
  *                     type: string
  *                     maxLength: 2000

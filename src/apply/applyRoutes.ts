@@ -5,26 +5,26 @@ const applyRouter = express.Router();
 
 /**
  * @openapi
- * /api/applys:
+ * /api/applies:
  *   get:
- *     summary: Get all applys
+ *     summary: Get all applies
  *     tags:
- *       - Applys
+ *       - Applies
  *     responses:
  *       200:
- *         description: Returns a list of all applys
+ *         description: Returns a list of all applies
  *       500:
- *         description: Failed to fetch applys
+ *         description: Failed to fetch applies
  */
-applyRouter.get('/', a.getApplys);
+applyRouter.get('/', a.getApplies);
 
 /**
  * @openapi
- * /api/applys/{id}:
+ * /api/applies/{id}:
  *   get:
  *     summary: Get an apply by ID
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: id
@@ -44,11 +44,11 @@ applyRouter.get('/:id', a.getApplyById);
 
 /**
  * @openapi
- * /api/applys/customer/{customerId}:
+ * /api/applies/customer/{customerId}:
  *   get:
- *     summary: Get applys by Customer ID
+ *     summary: Get applies by Customer ID
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: customerId
@@ -58,19 +58,19 @@ applyRouter.get('/:id', a.getApplyById);
  *         description: The customer ID
  *     responses:
  *       200:
- *         description: Returns a list of applys for the customer
+ *         description: Returns a list of applies for the customer
  *       500:
- *         description: Failed to fetch applys
+ *         description: Failed to fetch applies
  */
-applyRouter.get('/customer/:customerId', a.getApplysByCustomerId);
+applyRouter.get('/customer/:customerId', a.getAppliesByCustomerId);
 
 /**
  * @openapi
- * /api/applys/provider/{providerId}:
+ * /api/applies/provider/{providerId}:
  *   get:
- *     summary: Get applys by Provider ID
+ *     summary: Get applies by Provider ID
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: providerId
@@ -80,19 +80,19 @@ applyRouter.get('/customer/:customerId', a.getApplysByCustomerId);
  *         description: The provider ID
  *     responses:
  *       200:
- *         description: Returns a list of applys for the provider
+ *         description: Returns a list of applies for the provider
  *       500:
- *         description: Failed to fetch applys
+ *         description: Failed to fetch applies
  */
-applyRouter.get('/provider/:providerId', a.getApplysByProviderId);
+applyRouter.get('/provider/:providerId', a.getAppliesByProviderId);
 
 /**
  * @openapi
- * /api/applys/provider/{providerId}/detail:
+ * /api/applies/provider/{providerId}/detail:
  *   get:
- *     summary: Get detailed applys by Provider ID
+ *     summary: Get detailed applies by Provider ID
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: providerId
@@ -102,19 +102,19 @@ applyRouter.get('/provider/:providerId', a.getApplysByProviderId);
  *         description: The provider ID
  *     responses:
  *       200:
- *         description: Returns a list of detailed applys for the provider
+ *         description: Returns a list of detailed applies for the provider
  *       500:
- *         description: Failed to fetch applys
+ *         description: Failed to fetch applies
  */
 applyRouter.get('/provider/:providerId/detail', a.getDetailedApplyByProviderId);
 
 /**
  * @openapi
- * /api/applys/post/{postId}:
+ * /api/applies/post/{postId}:
  *   get:
- *     summary: Get applys by Post ID
+ *     summary: Get applies by Post ID
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: postId
@@ -124,19 +124,19 @@ applyRouter.get('/provider/:providerId/detail', a.getDetailedApplyByProviderId);
  *         description: The post ID
  *     responses:
  *       200:
- *         description: Returns a list of applys for the post
+ *         description: Returns a list of applies for the post
  *       500:
- *         description: Failed to fetch applys
+ *         description: Failed to fetch applies
  */
-applyRouter.get('/post/:postId', a.getApplysByPostId);
+applyRouter.get('/post/:postId', a.getAppliesByPostId);
 
 /**
  * @openapi
- * /api/applys/check/{providerId}/{postId}:
+ * /api/applies/check/{providerId}/{postId}:
  *   get:
  *     summary: Check if a provider has already made an apply for a specific post
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: providerId
@@ -160,11 +160,11 @@ applyRouter.get('/check/:providerId/:postId', a.checkProviderApplyPost);
 
 /**
  * @openapi
- * /api/applys:
+ * /api/applies:
  *   post:
  *     summary: Create a new apply
  *     tags:
- *       - Applys
+ *       - Applies
  *     requestBody:
  *       required: true
  *       content:
@@ -194,7 +194,7 @@ applyRouter.get('/check/:providerId/:postId', a.checkProviderApplyPost);
  *                 maxLength: 2000
  *                 default: ''
  *                 example: I can help clean your house with my expertise
- *               applyedPrice:
+ *               appliedPrice:
  *                 type: number
  *                 minimum: 0
  *                 maximum: 99999999.99
@@ -219,11 +219,11 @@ applyRouter.post('/', a.createApply);
 
 /**
  * @openapi
- * /api/applys/{id}:
+ * /api/applies/{id}:
  *   put:
  *     summary: Update an apply by ID
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: id
@@ -242,7 +242,7 @@ applyRouter.post('/', a.createApply);
  *                 type: string
  *                 maxLength: 2000
  *                 example: Updated apply details
- *               applyedPrice:
+ *               appliedPrice:
  *                 type: number
  *                 minimum: 0
  *                 maximum: 99999999.99
@@ -267,11 +267,11 @@ applyRouter.put('/:id', a.updateApply);
 
 /**
  * @openapi
- * /api/applys/{id}:
+ * /api/applies/{id}:
  *   delete:
  *     summary: Delete an apply by ID
  *     tags:
- *       - Applys
+ *       - Applies
  *     parameters:
  *       - in: path
  *         name: id

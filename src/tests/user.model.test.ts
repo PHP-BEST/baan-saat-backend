@@ -41,6 +41,26 @@ describe('Testing User Model ... ', () => {
     expect(user.providerProfile?.description).toBe('');
   });
 
+  it('Create a customer with provider profile', async () => {
+    const user = await User.create({
+      role: 'customer',
+      providerProfile: { description: 'Valid' },
+    });
+    expect(user._id).toBeTruthy();
+    expect(user.role).toBe('customer');
+    expect(user.providerProfile?.description).toBe('');
+  });
+
+  it('Create a provider with provider profile', async () => {
+    const user = await User.create({
+      role: 'provider',
+      providerProfile: { description: 'Valid' },
+    });
+    expect(user._id).toBeTruthy();
+    expect(user.role).toBe('provider');
+    expect(user.providerProfile?.description).toBe('Valid');
+  });
+
   it('Reject a user with an invalid role', async () => {
     await expect(
       User.create({

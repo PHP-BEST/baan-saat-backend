@@ -91,4 +91,11 @@ const UserSchema = new Schema(
   },
 );
 
+UserSchema.pre('save', function (next) {
+  if (this.role !== 'provider') {
+    this.providerProfile.description = '';
+  }
+  next();
+});
+
 export default model('User', UserSchema);

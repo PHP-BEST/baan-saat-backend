@@ -52,7 +52,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user1_id,
         budget: 300,
-        tags: ['plumbing', 'electrical'],
+        tags: 'plumbing',
         date: new Date('2025-09-08'),
       });
     expect(res.statusCode).toBe(201);
@@ -60,7 +60,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(300);
-    expect(res.body.data.tags).toEqual(['plumbing', 'electrical']);
+    expect(res.body.data.tags).toEqual('plumbing');
+    expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
     firstPostId = res.body.data._id;
   });
@@ -73,7 +74,8 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user1_id,
         budget: 500,
-        tags: ['houseCleaning'],
+        tags: 'houseCleaning',
+        others: 'Specialist',
         date: new Date('2025-08-25'),
       });
     expect(res.statusCode).toBe(201);
@@ -81,7 +83,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(500);
-    expect(res.body.data.tags).toEqual(['houseCleaning']);
+    expect(res.body.data.tags).toEqual('houseCleaning');
+    expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-25'));
     secondPostId = res.body.data._id;
   });
@@ -94,7 +97,8 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user2_id,
         budget: 400,
-        tags: ['houseRepair', 'others'],
+        tags: 'others',
+        others: 'sweeping',
         date: new Date('2025-08-15'),
       });
     expect(res.statusCode).toBe(201);
@@ -102,7 +106,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(400);
-    expect(res.body.data.tags).toEqual(['houseRepair', 'others']);
+    expect(res.body.data.tags).toEqual('others');
+    expect(res.body.data.others).toBe('sweeping');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-15'));
   });
 
@@ -114,7 +119,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user2_id,
         budget: 1200.5,
-        tags: ['houseCleaning', 'hvac'],
+        tags: 'hvac',
         date: new Date('2025-09-02'),
       });
     expect(res.statusCode).toBe(201);
@@ -122,7 +127,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(1200.5);
-    expect(res.body.data.tags).toEqual(['houseCleaning', 'hvac']);
+    expect(res.body.data.tags).toEqual('hvac');
+    expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-02'));
   });
 
@@ -134,7 +140,8 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user1_id,
         budget: 1800,
-        tags: ['houseCleaning', 'plumbing', 'electrical', 'painting'],
+        tags: 'houseCleaning',
+        others: 'Master',
         date: new Date('2025-08-12'),
       });
     expect(res.statusCode).toBe(201);
@@ -142,12 +149,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(1800);
-    expect(res.body.data.tags).toEqual([
-      'houseCleaning',
-      'plumbing',
-      'electrical',
-      'painting',
-    ]);
+    expect(res.body.data.tags).toEqual('houseCleaning');
+    expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-12'));
   });
 
@@ -159,7 +162,8 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user2_id,
         budget: 1500,
-        tags: ['landscaping', 'plumbing', 'electrical', 'others'],
+        tags: 'others',
+        others: 'installation',
         date: new Date('2025-09-05'),
       });
     expect(res.statusCode).toBe(201);
@@ -167,12 +171,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(1500);
-    expect(res.body.data.tags).toEqual([
-      'landscaping',
-      'plumbing',
-      'electrical',
-      'others',
-    ]);
+    expect(res.body.data.tags).toEqual('others');
+    expect(res.body.data.others).toBe('installation');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-05'));
   });
 
@@ -182,7 +182,7 @@ describe('Testing Post API...', () => {
       .send({
         customerId: user2_id,
         budget: 1500,
-        tags: ['houseCleaning', 'hvac', 'electrician', 'others'],
+        tags: 'electrician',
         date: new Date('2025-08-15'),
       });
     expect(res.statusCode).toBe(400);
@@ -205,7 +205,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id', firstPostId);
     expect(res.body.data.title).toBe('Basic Post 1');
     expect(res.body.data.budget).toBe(300);
-    expect(res.body.data.tags).toEqual(['plumbing', 'electrical']);
+    expect(res.body.data.tags).toEqual('plumbing');
+    expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
   });
 
@@ -216,7 +217,8 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id', secondPostId);
     expect(res.body.data.title).toBe('Basic Post 2');
     expect(res.body.data.budget).toBe(500);
-    expect(res.body.data.tags).toEqual(['houseCleaning']);
+    expect(res.body.data.tags).toEqual('houseCleaning');
+    expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-25'));
   });
 
@@ -297,15 +299,17 @@ describe('Testing Post API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(4);
+    expect(res.body.data.length).toBe(2);
   });
 
-  it('Search posts by "s"', async () => {
-    const res = await request(app).get('/posts/search').query({ query: 's' });
+  it('Search posts by "basic"', async () => {
+    const res = await request(app)
+      .get('/posts/search')
+      .query({ query: 'basic' });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(6);
+    expect(res.body.data.length).toBe(3);
   });
 
   it('Search posts by "1500"', async () => {
@@ -421,7 +425,7 @@ describe('Testing Post API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(3);
+    expect(res.body.data.length).toBe(2);
   });
 
   it('Filter posts by tags (plumbing, electrical)', async () => {
@@ -431,7 +435,38 @@ describe('Testing Post API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(3);
+    expect(res.body.data.length).toBe(1);
+  });
+
+  it('Filter posts by tags (plumbing, hvac, houseCleaning)', async () => {
+    const res = await request(app)
+      .get('/posts/filter')
+      .query({ tags: 'plumbing,hvac,houseCleaning' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(4);
+  });
+
+  it('Filter posts by tags (plumbing, hvac, houseCleaning, others)', async () => {
+    const res = await request(app)
+      .get('/posts/filter')
+      .query({ tags: 'plumbing,hvac,houseCleaning,others' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(6);
+  });
+
+  it('Filter posts by tags (plumbing, hvac, houseCleaning, others) and others (sweeping)', async () => {
+    const res = await request(app).get('/posts/filter').query({
+      tags: 'plumbing,hvac,houseCleaning,others',
+      others: 'sweeping',
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(5);
   });
 
   it('Filter posts by tags (houseCleaning, others)', async () => {
@@ -441,7 +476,27 @@ describe('Testing Post API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(0);
+    expect(res.body.data.length).toBe(4);
+  });
+
+  it('Filter posts by tags (houseCleaning, others) and others (sweeping)', async () => {
+    const res = await request(app)
+      .get('/posts/filter')
+      .query({ tags: 'houseCleaning,others', others: 'sweeping' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
+  it('Filter posts by others (sweeping)', async () => {
+    const res = await request(app)
+      .get('/posts/filter')
+      .query({ others: 'sweeping' });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(6);
   });
 
   it('Filter posts by date range (2025-08-01 to 2025-08-31)', async () => {
@@ -484,14 +539,24 @@ describe('Testing Post API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
-  it('Filter posts by many filters (title, tags, budget)', async () => {
+  it('Filter posts by many filters (title, tags (plumbing, electrical), budget)', async () => {
     const res = await request(app)
       .get('/posts/filter')
       .query({ title: 'Deluxe', tags: 'plumbing,electrical', minBudget: 1600 });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(1);
+    expect(res.body.data.length).toBe(0);
+  });
+
+  it('Filter posts by many filters (title, tags (hvac, others), budget)', async () => {
+    const res = await request(app)
+      .get('/posts/filter')
+      .query({ title: 'Deluxe', tags: 'hvac,others', minBudget: 1200 });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(2);
   });
 
   it('Filter posts by many filters (tags, budget, date)', async () => {
@@ -523,37 +588,18 @@ describe('Testing Post API...', () => {
 
   it('Update post by ID', async () => {
     const newTitle = 'Premium Post 1';
-    const res = await request(app)
-      .put(`/posts/${firstPostId}`)
-      .send({
-        title: newTitle,
-        budget: 4000,
-        tags: [
-          'houseCleaning',
-          'houseRepair',
-          'plumbing',
-          'electrical',
-          'hvac',
-          'landscaping',
-          'painting',
-          'others',
-        ],
-      });
+    const res = await request(app).put(`/posts/${firstPostId}`).send({
+      title: newTitle,
+      budget: 4000,
+      tags: 'painting',
+    });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('_id', firstPostId);
     expect(res.body.data.title).toBe(newTitle);
     expect(res.body.data.budget).toBe(4000);
-    expect(res.body.data.tags).toEqual([
-      'houseCleaning',
-      'houseRepair',
-      'plumbing',
-      'electrical',
-      'hvac',
-      'landscaping',
-      'painting',
-      'others',
-    ]);
+    expect(res.body.data.tags).toEqual('painting');
+    expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
   });
 
@@ -579,7 +625,7 @@ describe('Testing Post API...', () => {
   it('Update post with invalid tags', async () => {
     const res = await request(app)
       .put(`/posts/${secondPostId}`)
-      .send({ tags: ['premium', 'fast'] });
+      .send({ tags: 'premiumCleaning' });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('Failed to update post');

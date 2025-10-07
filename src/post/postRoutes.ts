@@ -72,7 +72,13 @@ postRouter.get('/search', p.searchPosts);
  *               - painting
  *               - landscaping
  *               - others
- *         description: Tags to filter by (exact match)
+ *         description: Tags to filter by (partial match)
+ *       - in: query
+ *         name: others
+ *         schema:
+ *           type: string
+ *           maxLength: 200
+ *         description: Neglected if tags does not include 'others'.
  *       - in: query
  *         name: minBudget
  *         schema:
@@ -208,20 +214,22 @@ postRouter.get('/user/:userId', p.getPostsByUserId);
  *                 default: ''
  *                 example: 123 Main St, City, Country
  *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                   enum:
- *                     - houseCleaning
- *                     - houseRepair
- *                     - plumbing
- *                     - electrical
- *                     - hvac
- *                     - painting
- *                     - landscaping
- *                     - others
- *                 default: []
- *                 example: ['houseCleaning', 'plumbing']
+ *                 type: string
+ *                 enum:
+ *                   - houseCleaning
+ *                   - houseRepair
+ *                   - plumbing
+ *                   - electrical
+ *                   - hvac
+ *                   - painting
+ *                   - landscaping
+ *                   - others
+ *                 default: ''
+ *                 example: 'houseCleaning'
+ *               others:
+ *                 type: string
+ *                 maxLength: 200
+ *                 default: ''
  *               date:
  *                 type: string
  *                 format: date-time
@@ -277,19 +285,22 @@ postRouter.post('/', p.createPost);
  *                 maxLength: 2000
  *                 example: 456 Another St, City, Country
  *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                   enum:
- *                     - houseCleaning
- *                     - houseRepair
- *                     - plumbing
- *                     - electrical
- *                     - hvac
- *                     - painting
- *                     - landscaping
- *                     - others
- *                 example: ['electrical', 'hvac']
+ *                 type: string
+ *                 enum:
+ *                   - houseCleaning
+ *                   - houseRepair
+ *                   - plumbing
+ *                   - electrical
+ *                   - hvac
+ *                   - painting
+ *                   - landscaping
+ *                   - others
+ *                 default: ''
+ *                 example: 'electrical'
+ *               others:
+ *                 type: string
+ *                 maxLength: 200
+ *                 default: ''
  *               date:
  *                 type: string
  *                 format: date-time
