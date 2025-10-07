@@ -12,3 +12,5 @@ export const mongoUri =
   process.env.NODE_ENV === 'production'
     ? process.env.MONGO_URI_PROD || ''
     : process.env.MONGO_URI_DEV || '';
+
+export const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';

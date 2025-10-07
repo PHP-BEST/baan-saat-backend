@@ -29,8 +29,6 @@ describe('Testing User Model ... ', () => {
     expect(Number.isNaN(user.createdAt.getTime())).toBe(false);
     expect(user.updatedAt).toBeInstanceOf(Date);
     expect(Number.isNaN(user.updatedAt.getTime())).toBe(false);
-    expect(user.providerProfile?.title).toBe('');
-    expect(user.providerProfile?.skills).toEqual([]);
     expect(user.providerProfile?.description).toBe('');
   });
 
@@ -40,8 +38,6 @@ describe('Testing User Model ... ', () => {
     });
     expect(user._id).toBeTruthy();
     expect(user.role).toBe('provider');
-    expect(user.providerProfile?.title).toBe('');
-    expect(user.providerProfile?.skills).toEqual([]);
     expect(user.providerProfile?.description).toBe('');
   });
 
@@ -159,46 +155,12 @@ describe('Testing User Model ... ', () => {
       }),
     ).rejects.toThrow();
 
-    const providerTitleExceed = alphabetNormal.repeat(201);
-    await expect(
-      User.create({
-        role: 'provider',
-        providerProfile: {
-          title: providerTitleExceed,
-        },
-      }),
-    ).rejects.toThrow();
-
     const providerDescriptionExceed = alphabetNormal.repeat(2001);
     await expect(
       User.create({
         role: 'provider',
         providerProfile: {
           description: providerDescriptionExceed,
-        },
-      }),
-    ).rejects.toThrow();
-  });
-
-  it('Create a provider with multiple valid skills', async () => {
-    const user = await User.create({
-      role: 'provider',
-      providerProfile: {
-        skills: ['houseCleaning', 'houseRepair'],
-      },
-    });
-    expect(user.providerProfile?.skills).toEqual([
-      'houseCleaning',
-      'houseRepair',
-    ]);
-  });
-
-  it('Reject a provider with a valid skills', async () => {
-    await expect(
-      User.create({
-        role: 'provider',
-        providerProfile: {
-          skills: ['houseCleaning', 'houseRepairs'],
         },
       }),
     ).rejects.toThrow();

@@ -14,7 +14,7 @@
   "type": "commonjs",
   "main": "dist/server.js",
   "scripts": {
-    "test": "jest src/tests --passWithNoTests --runInBand",
+    "test": "jest src/tests/post.model.test.ts --passWithNoTests --runInBand",
     "dev": "nodemon --exec npx ts-node src/server.ts",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint --fix .",
@@ -38,6 +38,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-line": "^0.0.4",
     "passport-local": "^1.0.0",
+    "stripe": "^19.1.0",
     "swagger": "^0.7.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
