@@ -41,6 +41,45 @@ userRouter.get('/', u.getUsers);
 
 /**
  * @openapi
+ * /api/users/providers:
+ *   get:
+ *     summary: Get all providers
+ *     tags:
+ *      - Users
+ *     responses:
+ *       200:
+ *         description: Returns a list of all providers
+ *       500:
+ *         description: Failed to fetch providers
+ */
+userRouter.get('/providers', u.getProviders);
+
+/**
+ * @openapi
+ * /api/users/search:
+ *  get:
+ *     summary: Search providers
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The search query string
+ *     responses:
+ *       200:
+ *         description: Returns a list of providers
+ *       400:
+ *         description: Query parameter is required or invalid
+ *       500:
+ *         description: Failed to search providers
+ */
+userRouter.get('/search', u.searchProviders);
+
+/**
+ * @openapi
  * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID

@@ -50,21 +50,55 @@ describe('Testing User API...', () => {
     expect(res.body.data.name).toBe(name);
   });
 
-  it('Add provider with provider profile', async () => {
+  it('Add first provider with provider profile', async () => {
     const name = 'Provider with Provider Profile';
     const res = await request(app)
       .post('/users')
       .send({
         name: name,
         role: 'provider',
-        providerProfile: { description: 'Valid' },
+        providerProfile: { description: 'Expert01' },
       });
     expect(res.statusCode).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.name).toBe(name);
     expect(res.body.data.role).toBe('provider');
-    expect(res.body.data.providerProfile?.description).toBe('Valid');
+    expect(res.body.data.providerProfile?.description).toBe('Expert01');
+  });
+
+  it('Add second provider with provider profile', async () => {
+    const name = 'Provider with Provider Profile 2';
+    const res = await request(app)
+      .post('/users')
+      .send({
+        name: name,
+        role: 'provider',
+        providerProfile: { description: 'Skillful01' },
+      });
+    expect(res.statusCode).toBe(201);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty('_id');
+    expect(res.body.data.name).toBe(name);
+    expect(res.body.data.role).toBe('provider');
+    expect(res.body.data.providerProfile?.description).toBe('Skillful01');
+  });
+
+  it('Add third provider with provider profile', async () => {
+    const name = 'Provider with Provider Profile 3';
+    const res = await request(app)
+      .post('/users')
+      .send({
+        name: name,
+        role: 'provider',
+        providerProfile: { description: 'Expert02' },
+      });
+    expect(res.statusCode).toBe(201);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty('_id');
+    expect(res.body.data.name).toBe(name);
+    expect(res.body.data.role).toBe('provider');
+    expect(res.body.data.providerProfile?.description).toBe('Expert02');
   });
 
   it('Add customer with provider profile', async () => {
@@ -99,7 +133,15 @@ describe('Testing User API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(4);
+    expect(res.body.data.length).toBe(6);
+  });
+
+  it('Get all providers', async () => {
+    const res = await request(app).get('/users/providers');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
   });
 
   it('Get user by ID', async () => {
@@ -122,6 +164,50 @@ describe('Testing User API...', () => {
     expect(res.statusCode).toBe(404);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('User not found');
+  });
+
+  it('Search providers (Expert)', async () => {
+    const query = 'Expert';
+    const res = await request(app).get('/users/search').query({ query: query });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(2);
+  });
+
+  it('Search providers (Skillful)', async () => {
+    const query = 'Skillful';
+    const res = await request(app).get('/users/search').query({ query: query });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(1);
+  });
+
+  it('Search providers (01)', async () => {
+    const query = '01';
+    const res = await request(app).get('/users/search').query({ query: query });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(2);
+  });
+
+  it('Search providers with empty query', async () => {
+    const query = '   ';
+    const res = await request(app).get('/users/search').query({ query: query });
+    expect(res.statusCode).toBe(400);
+    expect(res.body.success).toBe(false);
+    expect(res.body.message).toBe('Query parameter cannot be empty');
+  });
+
+  it('Search providers with no matching query', async () => {
+    const query = 'NonExistingQuery';
+    const res = await request(app).get('/users/search').query({ query: query });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(0);
   });
 
   it('Update user by ID', async () => {
@@ -240,6 +326,6 @@ describe('Testing User API...', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBe(3);
+    expect(res.body.data.length).toBe(5);
   });
 });
