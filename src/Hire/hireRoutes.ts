@@ -41,8 +41,6 @@ hireRouter.get('/', a.getHires);
  */
 hireRouter.get('/:id', a.getHireById);
 
-
-
 /**
  * @swagger
  * /hires/customer/{customerId}:
@@ -260,6 +258,5 @@ hireRouter.put('/:id', a.updateHire);
  *         description: Internal server error
  */
 hireRouter.delete('/:id', a.deleteHire);
-
 
 export default hireRouter;

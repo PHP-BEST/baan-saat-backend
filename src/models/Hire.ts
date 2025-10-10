@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 interface IHire {
   postId: Schema.Types.ObjectId;
   providerId: Schema.Types.ObjectId;
-  customerId: Schema.Types.ObjectId;  
+  customerId: Schema.Types.ObjectId;
   Price?: number;
   status?: 'Pending' | 'Ongoing' | 'Done' | 'Cancelled';
 }
@@ -70,11 +70,11 @@ HireSchema.virtual('customer', {
 });
 //price from post
 HireSchema.virtual('price', {
-    ref: 'Post',
-    localField: 'postId',
-    foreignField: '_id',
-    justOne: true,
-    options: { select: 'price' },
+  ref: 'Post',
+  localField: 'postId',
+  foreignField: '_id',
+  justOne: true,
+  options: { select: 'price' },
 });
 const Hire = model<IHire>('Hire', HireSchema);
 

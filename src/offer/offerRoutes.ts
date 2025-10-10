@@ -63,24 +63,24 @@ offerRouter.get('/:id', a.getOfferById);
 offerRouter.get('/customer/:customerId', a.getOffersByCustomerId);
 
 /**
-* @swagger
-* /offers/provider/{providerId}:
-*     get:
-*         summary: Get offers by provider ID
-*         tags:
-*         - Offers
-*         parameters:
-*         - in: path
-*           name: providerId
-*           required: true
-*           schema:
-*             type: string
-*           description: Provider ID      
-*         responses:
-*           200:
-*             description: List of offers
-*             500:
-*             description: Server error
+ * @swagger
+ * /offers/provider/{providerId}:
+ *     get:
+ *         summary: Get offers by provider ID
+ *         tags:
+ *         - Offers
+ *         parameters:
+ *         - in: path
+ *           name: providerId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: Provider ID
+ *         responses:
+ *           200:
+ *             description: List of offers
+ *             500:
+ *             description: Server error
  */
 offerRouter.get('/provider/:providerId', a.getOffersByProviderId);
 
@@ -126,7 +126,10 @@ offerRouter.get('/post/:postId', a.getOfferByPostId);
  *       500:
  *         description: Server error
  */
-offerRouter.get('/customer/:customerId/details', a.getDetailedOfferByCustomerId);
+offerRouter.get(
+  '/customer/:customerId/details',
+  a.getDetailedOfferByCustomerId,
+);
 
 /**
  * @swagger

@@ -12,7 +12,7 @@ const useRoutes = (app: Application) => {
   app.use('/api/posts', postRoutes);
   app.use('/api/applys', applyRoutes);
   app.use('/api/offers', offerRoutes);
-  app.use('/api/hire',hireRouter );
+  app.use('/api/hire', hireRouter);
 };
 
 export default useRoutes;
