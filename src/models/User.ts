@@ -4,26 +4,6 @@ import { isEmail } from 'validator';
 import { randomUUID } from 'node:crypto';
 
 const ProviderSchema = new Schema({
-  title: {
-    type: String,
-    maxLength: 200,
-    default: '',
-  },
-  skills: [
-    {
-      type: String,
-      enum: [
-        'houseCleaning',
-        'houseRepair',
-        'plumbing',
-        'electrical',
-        'hvac',
-        'painting',
-        'landscaping',
-        'others',
-      ],
-    },
-  ],
   description: {
     type: String,
     maxLength: 2000,
@@ -110,5 +90,12 @@ const UserSchema = new Schema(
     timestamps: true,
   },
 );
+
+UserSchema.pre('save', function (next) {
+  if (this.role !== 'provider') {
+    this.providerProfile.description = '';
+  }
+  next();
+});
 
 export default model('User', UserSchema);

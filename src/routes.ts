@@ -1,16 +1,14 @@
 import { Application } from 'express';
 import authRoutes from './auth/authRoutes';
 import userRoutes from './user/userRoutes';
-import sampleRoutes from './sample/sampleRoutes';
-import serviceRoutes from './service/serviceRoutes';
-import offerRoutes from './offer/offerRoutes';
+import postRoutes from './post/postRoutes';
+import applyRoutes from './apply/applyRoutes';
 
 const useRoutes = (app: Application) => {
   app.use('/', authRoutes);
   app.use('/api/users', userRoutes);
-  app.use('/api/samples', sampleRoutes);
-  app.use('/api/services', serviceRoutes);
-  app.use('/api/offers', offerRoutes);
+  app.use('/api/posts', postRoutes);
+  app.use('/api/applies', applyRoutes);
 };
 
 export default useRoutes;
