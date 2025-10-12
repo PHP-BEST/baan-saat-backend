@@ -132,6 +132,28 @@ applyRouter.get('/post/:postId', a.getAppliesByPostId);
 
 /**
  * @openapi
+ * /api/applies/postId/{postId}/detail:
+ *   get:
+ *     summary: Get detailed applies by Post ID
+ *     tags:
+ *       - Applies
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The post ID
+ *     responses:
+ *       200:
+ *         description: Returns a list of detailed applies
+ *       500:
+ *         description: Failed to fetch applies
+ */
+applyRouter.get('/post/:postId/detail', a.getDetailedApplyByPostId);
+
+/**
+ * @openapi
  * /api/applies/check/{providerId}/{postId}:
  *   get:
  *     summary: Check if a provider has already made an apply for a specific post

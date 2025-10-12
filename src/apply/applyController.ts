@@ -93,6 +93,22 @@ export const getAppliesByPostId = async (req: Request, res: Response) => {
   }
 };
 
+export const getDetailedApplyByPostId = async (req: Request, res: Response) => {
+  const { postId } = req.params;
+  try {
+    const applies = await Apply.find({ postId })
+      .populate('post')
+      .populate('customer')
+      .populate('provider');
+
+    res.status(200).json({ success: true, data: applies });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to fetch applies', error });
+  }
+};
+
 export const checkProviderApplyPost = async (req: Request, res: Response) => {
   const { providerId, postId } = req.params;
 
