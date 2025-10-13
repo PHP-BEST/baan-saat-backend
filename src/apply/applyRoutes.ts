@@ -174,7 +174,7 @@ applyRouter.get('/post/:postId/detail', a.getDetailedApplyByPostId);
  *         description: The post ID
  *     responses:
  *       200:
- *         description: Returns true if an apply exists, false otherwise
+ *         description: Returns the apply the provider applies to the post
  *       500:
  *         description: Failed to check apply
  */
