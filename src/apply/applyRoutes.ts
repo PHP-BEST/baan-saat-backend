@@ -132,7 +132,7 @@ applyRouter.get('/post/:postId', a.getAppliesByPostId);
 
 /**
  * @openapi
- * /api/applies/postId/{postId}/detail:
+ * /api/applies/post/{postId}/detail:
  *   get:
  *     summary: Get detailed applies by Post ID
  *     tags:

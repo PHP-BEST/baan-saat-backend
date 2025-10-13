@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import Post from '../models/Post';
 import User from '../models/User';
+import Apply from '../models/Apply';
 
 //desc Get all posts
 //route GET /api/posts
@@ -235,6 +236,8 @@ export const updatePost = async (req: Request, res: Response) => {
 export const deletePost = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
+    await Apply.deleteMany({ postId: id });
+
     const post = await Post.findByIdAndDelete(id);
     if (!post) {
       return res
