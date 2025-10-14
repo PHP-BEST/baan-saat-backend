@@ -44,6 +44,28 @@ applyRouter.get('/:id', a.getApplyById);
 
 /**
  * @openapi
+ * /api/applies/{id}/detail:
+ *   get:
+ *     summary: Get detailed applies by ID
+ *     tags:
+ *       - Applies
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The apply ID
+ *     responses:
+ *       200:
+ *         description: Returns a detailed apply
+ *       500:
+ *         description: Failed to fetch apply
+ */
+applyRouter.get('/:id/detail', a.getDetailedApplyById);
+
+/**
+ * @openapi
  * /api/applies/customer/{customerId}:
  *   get:
  *     summary: Get applies by Customer ID
@@ -106,7 +128,10 @@ applyRouter.get('/provider/:providerId', a.getAppliesByProviderId);
  *       500:
  *         description: Failed to fetch applies
  */
-applyRouter.get('/provider/:providerId/detail', a.getDetailedApplyByProviderId);
+applyRouter.get(
+  '/provider/:providerId/detail',
+  a.getDetailedAppliesByProviderId,
+);
 
 /**
  * @openapi
@@ -150,7 +175,7 @@ applyRouter.get('/post/:postId', a.getAppliesByPostId);
  *       500:
  *         description: Failed to fetch applies
  */
-applyRouter.get('/post/:postId/detail', a.getDetailedApplyByPostId);
+applyRouter.get('/post/:postId/detail', a.getDetailedAppliesByPostId);
 
 /**
  * @openapi

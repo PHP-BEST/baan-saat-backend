@@ -33,6 +33,28 @@ export const getApplyById = async (req: Request, res: Response) => {
   }
 };
 
+export const getDetailedApplyById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const apply = await Apply.findById(id)
+      .populate('post')
+      .populate('customer')
+      .populate('provider');
+    if (!apply) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Apply not found' });
+    }
+    res.status(200).json({ success: true, data: apply });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch apply',
+      error,
+    });
+  }
+};
+
 export const getAppliesByCustomerId = async (req: Request, res: Response) => {
   const { customerId } = req.params;
   try {
@@ -62,7 +84,7 @@ export const getAppliesByProviderId = async (req: Request, res: Response) => {
   }
 };
 
-export const getDetailedApplyByProviderId = async (
+export const getDetailedAppliesByProviderId = async (
   req: Request,
   res: Response,
 ) => {
@@ -93,7 +115,10 @@ export const getAppliesByPostId = async (req: Request, res: Response) => {
   }
 };
 
-export const getDetailedApplyByPostId = async (req: Request, res: Response) => {
+export const getDetailedAppliesByPostId = async (
+  req: Request,
+  res: Response,
+) => {
   const { postId } = req.params;
   try {
     const applies = await Apply.find({ postId })
