@@ -166,6 +166,15 @@ describe('Testing User API...', () => {
     expect(res.body.message).toBe('User not found');
   });
 
+  it('Search providers (Provider)', async () => {
+    const query = 'Provider';
+    const res = await request(app).get('/users/search').query({ query: query });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
   it('Search providers (Expert)', async () => {
     const query = 'Expert';
     const res = await request(app).get('/users/search').query({ query: query });

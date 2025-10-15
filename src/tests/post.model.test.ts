@@ -31,6 +31,7 @@ describe('Testing Post Model ... ', () => {
     expect(post.location).toBe('');
     expect(post.tag).toEqual('');
     expect(post.others).toBe('');
+    expect(post.status).toEqual('Not working');
     expect(post.date).toBeInstanceOf(Date);
     expect(Number.isNaN(post.date.getTime())).toBe(false);
     expect(post.createdAt).toBeInstanceOf(Date);
@@ -50,6 +51,7 @@ describe('Testing Post Model ... ', () => {
       location: 'Custom Location',
       tag: 'houseCleaning',
       date: new Date(),
+      status: 'In progress',
     });
     expect(post._id).toBeTruthy();
     expect(post.customerId).toEqual(user._id);
@@ -61,6 +63,7 @@ describe('Testing Post Model ... ', () => {
     expect(post.tag).toEqual('houseCleaning');
     expect(post.others).toBe('');
     expect(post.date).toBeInstanceOf(Date);
+    expect(post.status).toBe('In progress');
     expect(Number.isNaN(post.date.getTime())).toBe(false);
     expect(post.createdAt).toBeInstanceOf(Date);
     expect(Number.isNaN(post.createdAt.getTime())).toBe(false);
