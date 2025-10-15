@@ -52,7 +52,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user1_id,
         budget: 300,
-        tags: 'plumbing',
+        tag: 'plumbing',
         date: new Date('2025-09-08'),
       });
     expect(res.statusCode).toBe(201);
@@ -60,7 +60,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(300);
-    expect(res.body.data.tags).toEqual('plumbing');
+    expect(res.body.data.tag).toEqual('plumbing');
     expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
     firstPostId = res.body.data._id;
@@ -74,7 +74,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user1_id,
         budget: 500,
-        tags: 'houseCleaning',
+        tag: 'houseCleaning',
         others: 'Specialist',
         date: new Date('2025-08-25'),
       });
@@ -83,7 +83,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(500);
-    expect(res.body.data.tags).toEqual('houseCleaning');
+    expect(res.body.data.tag).toEqual('houseCleaning');
     expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-25'));
     secondPostId = res.body.data._id;
@@ -97,7 +97,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user2_id,
         budget: 400,
-        tags: 'others',
+        tag: 'others',
         others: 'sweeping',
         date: new Date('2025-08-15'),
       });
@@ -106,7 +106,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(400);
-    expect(res.body.data.tags).toEqual('others');
+    expect(res.body.data.tag).toEqual('others');
     expect(res.body.data.others).toBe('sweeping');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-15'));
   });
@@ -119,7 +119,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user2_id,
         budget: 1200.5,
-        tags: 'hvac',
+        tag: 'hvac',
         date: new Date('2025-09-02'),
       });
     expect(res.statusCode).toBe(201);
@@ -127,7 +127,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(1200.5);
-    expect(res.body.data.tags).toEqual('hvac');
+    expect(res.body.data.tag).toEqual('hvac');
     expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-02'));
   });
@@ -140,7 +140,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user1_id,
         budget: 1800,
-        tags: 'houseCleaning',
+        tag: 'houseCleaning',
         others: 'Master',
         date: new Date('2025-08-12'),
       });
@@ -149,7 +149,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(1800);
-    expect(res.body.data.tags).toEqual('houseCleaning');
+    expect(res.body.data.tag).toEqual('houseCleaning');
     expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-12'));
   });
@@ -162,7 +162,7 @@ describe('Testing Post API...', () => {
         title: title,
         customerId: user2_id,
         budget: 1500,
-        tags: 'others',
+        tag: 'others',
         others: 'installation',
         date: new Date('2025-09-05'),
       });
@@ -171,7 +171,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data.title).toBe(title);
     expect(res.body.data.budget).toBe(1500);
-    expect(res.body.data.tags).toEqual('others');
+    expect(res.body.data.tag).toEqual('others');
     expect(res.body.data.others).toBe('installation');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-05'));
   });
@@ -182,7 +182,7 @@ describe('Testing Post API...', () => {
       .send({
         customerId: user2_id,
         budget: 1500,
-        tags: 'electrician',
+        tag: 'electrician',
         date: new Date('2025-08-15'),
       });
     expect(res.statusCode).toBe(400);
@@ -205,7 +205,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id', firstPostId);
     expect(res.body.data.title).toBe('Basic Post 1');
     expect(res.body.data.budget).toBe(300);
-    expect(res.body.data.tags).toEqual('plumbing');
+    expect(res.body.data.tag).toEqual('plumbing');
     expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
   });
@@ -217,7 +217,7 @@ describe('Testing Post API...', () => {
     expect(res.body.data).toHaveProperty('_id', secondPostId);
     expect(res.body.data.title).toBe('Basic Post 2');
     expect(res.body.data.budget).toBe(500);
-    expect(res.body.data.tags).toEqual('houseCleaning');
+    expect(res.body.data.tag).toEqual('houseCleaning');
     expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-08-25'));
   });
@@ -591,14 +591,14 @@ describe('Testing Post API...', () => {
     const res = await request(app).put(`/posts/${firstPostId}`).send({
       title: newTitle,
       budget: 4000,
-      tags: 'painting',
+      tag: 'painting',
     });
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('_id', firstPostId);
     expect(res.body.data.title).toBe(newTitle);
     expect(res.body.data.budget).toBe(4000);
-    expect(res.body.data.tags).toEqual('painting');
+    expect(res.body.data.tag).toEqual('painting');
     expect(res.body.data.others).toEqual('');
     expect(new Date(res.body.data.date)).toEqual(new Date('2025-09-08'));
   });
@@ -625,7 +625,7 @@ describe('Testing Post API...', () => {
   it('Update post with invalid tags', async () => {
     const res = await request(app)
       .put(`/posts/${secondPostId}`)
-      .send({ tags: 'premiumCleaning' });
+      .send({ tag: 'premiumCleaning' });
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('Failed to update post');

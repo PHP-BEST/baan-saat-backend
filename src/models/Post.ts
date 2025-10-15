@@ -9,7 +9,7 @@ interface IPost extends Document {
   coverPhotoUrl: string;
   telNumber: string;
   location: string;
-  tags: string;
+  tag: string;
   others: string;
   date: Date;
   createdAt: Date;
@@ -76,7 +76,7 @@ const PostSchema = new Schema(
       maxLength: 2000,
       default: '',
     },
-    tags: {
+    tag: {
       type: String,
       enum: [
         '',
@@ -105,7 +105,7 @@ const PostSchema = new Schema(
 );
 
 PostSchema.pre('save', function (next) {
-  if (this.others && this.others.trim() !== '' && this.tags !== 'others') {
+  if (this.others && this.others.trim() !== '' && this.tag !== 'others') {
     this.others = '';
   }
   next();

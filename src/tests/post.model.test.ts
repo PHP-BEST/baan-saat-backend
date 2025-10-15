@@ -29,7 +29,7 @@ describe('Testing Post Model ... ', () => {
     expect(post.budget).toBe(0);
     expect(post.telNumber).toBe('000000000');
     expect(post.location).toBe('');
-    expect(post.tags).toEqual('');
+    expect(post.tag).toEqual('');
     expect(post.others).toBe('');
     expect(post.date).toBeInstanceOf(Date);
     expect(Number.isNaN(post.date.getTime())).toBe(false);
@@ -48,7 +48,7 @@ describe('Testing Post Model ... ', () => {
       budget: 100,
       telNumber: '0123456789',
       location: 'Custom Location',
-      tags: 'houseCleaning',
+      tag: 'houseCleaning',
       date: new Date(),
     });
     expect(post._id).toBeTruthy();
@@ -58,7 +58,7 @@ describe('Testing Post Model ... ', () => {
     expect(post.budget).toBe(100);
     expect(post.telNumber).toBe('0123456789');
     expect(post.location).toBe('Custom Location');
-    expect(post.tags).toEqual('houseCleaning');
+    expect(post.tag).toEqual('houseCleaning');
     expect(post.others).toBe('');
     expect(post.date).toBeInstanceOf(Date);
     expect(Number.isNaN(post.date.getTime())).toBe(false);
@@ -73,14 +73,14 @@ describe('Testing Post Model ... ', () => {
     const post = await Post.create({
       customerId: user._id,
       title: 'Other Tag Post',
-      tags: 'others',
+      tag: 'others',
       others: 'Custom Tag',
       date: new Date(),
     });
     expect(post._id).toBeTruthy();
     expect(post.customerId).toEqual(user._id);
     expect(post.title).toBe('Other Tag Post');
-    expect(post.tags).toEqual('others');
+    expect(post.tag).toEqual('others');
     expect(post.others).toBe('Custom Tag');
   });
 
@@ -89,14 +89,14 @@ describe('Testing Post Model ... ', () => {
     const post = await Post.create({
       customerId: user._id,
       title: 'Invalid other Tag Post',
-      tags: 'plumbing',
+      tag: 'plumbing',
       others: 'Custom Tag',
       date: new Date(),
     });
     expect(post._id).toBeTruthy();
     expect(post.customerId).toEqual(user._id);
     expect(post.title).toBe('Invalid other Tag Post');
-    expect(post.tags).toEqual('plumbing');
+    expect(post.tag).toEqual('plumbing');
     expect(post.others).toBe(''); // others field should be cleared
   });
 
@@ -225,7 +225,7 @@ it.each([
   expect(post.telNumber).toBe(telNumber);
 });
 
-//invalid tags
+//invalid tag
 it.each([
   ['horseCleaning'],
   ['horseRepair'],
@@ -235,19 +235,19 @@ it.each([
   ['panting'],
   ['landsliding'],
   ['otherPost'],
-])('Create a post with invalid tags %s', async (tags) => {
+])('Create a post with invalid tag %s', async (tag) => {
   const user = await User.create({});
   await expect(
     Post.create({
       customerId: user._id,
       title: 'Invalid Post',
-      tags,
+      tag,
       date: new Date(),
     }),
   ).rejects.toThrow();
 });
 
-//valid tags
+//valid tag
 it.each([
   ['houseCleaning'],
   ['houseRepair'],
@@ -257,16 +257,16 @@ it.each([
   ['painting'],
   ['landscaping'],
   ['others'],
-])('Create a post with valid tags %s', async (tags) => {
+])('Create a post with valid tag %s', async (tag) => {
   const user = await User.create({});
   const post = await Post.create({
     customerId: user._id,
     title: 'Valid Post',
-    tags,
+    tag,
     date: new Date(),
   });
   expect(post).toBeTruthy();
-  expect(post.tags).toBe(tags);
+  expect(post.tag).toBe(tag);
 });
 
 //title value exceeds
