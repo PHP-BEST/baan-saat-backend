@@ -24,6 +24,20 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+//desc Get all providers
+//route GET /api/users/providers
+//access Public
+export const getProviders = async (req: Request, res: Response) => {
+  try {
+    const providers = await User.find({ role: 'provider' });
+    res.status(200).json({ success: true, data: providers });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to fetch providers', error });
+  }
+};
+
 //desc Get a user by ID
 //route GET /api/users/:id
 //access Public
@@ -55,6 +69,52 @@ export const createUser = async (req: Request, res: Response) => {
     res
       .status(400)
       .json({ success: false, message: 'Failed to create user', error });
+  }
+};
+
+//desc Search providers
+//route GET /api/users/search?query=your_query
+//access Public
+export const searchProviders = async (req: Request, res: Response) => {
+  const { query } = req.query;
+  if (!query) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Query parameter is required' });
+  }
+
+  if (typeof query !== 'string') {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Query parameter must be a string' });
+  }
+
+  const trimmedQuery = query.trim();
+  if (trimmedQuery.length === 0) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Query parameter cannot be empty' });
+  }
+
+  try {
+    const providers = await User.find({ role: 'provider' }).find({
+      $or: [
+        { name: { $regex: trimmedQuery, $options: 'i' } },
+        { email: { $regex: trimmedQuery, $options: 'i' } },
+        { telNumber: { $regex: trimmedQuery, $options: 'i' } },
+        {
+          'providerProfile.description': {
+            $regex: trimmedQuery,
+            $options: 'i',
+          },
+        },
+      ],
+    });
+    res.status(200).json({ success: true, data: providers });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to search providers', error });
   }
 };
 

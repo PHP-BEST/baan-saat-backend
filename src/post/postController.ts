@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 
 import Post from '../models/Post';
 import User from '../models/User';
+import Apply from '../models/Apply';
 
 //desc Get all posts
 //route GET /api/posts
@@ -128,14 +129,24 @@ export const searchPosts = async (req: Request, res: Response) => {
 //route GET /api/posts/filter
 //access Public
 export const filterPosts = async (req: Request, res: Response) => {
-  const { userId, title, tags, minBudget, maxBudget, startDate, endDate } =
-    req.query;
+  const {
+    userId,
+    title,
+    tags,
+    others,
+    minBudget,
+    maxBudget,
+    startDate,
+    endDate,
+  } = req.query;
 
   interface PostFilter {
     customerId?: string;
     title?: { $regex: string; $options: string };
-    tags?: { $in: string[] };
-    others?: string;
+    $or?: Array<{
+      tags?: { $in: string[] };
+      others?: { $regex: string; $options: string };
+    }>;
     budget?: { $gte?: number; $lte?: number };
     date?: { $gte?: Date; $lte?: Date };
   }
@@ -150,9 +161,22 @@ export const filterPosts = async (req: Request, res: Response) => {
       filter.title = { $regex: title as string, $options: 'i' };
     }
     if (tags) {
+      const orConditions: Array<{
+        tags?: { $in: string[] };
+        others?: { $regex: string; $options: string };
+      }> = [];
+
       const tagsArray = (tags as string).split(',').map((tag) => tag.trim());
-      //remove others tag if have in tagsArray and then add string in others to tags
-      filter.tags = { $in: tagsArray };
+      if (others) {
+        const index = tagsArray.indexOf('others');
+        tagsArray.splice(index, 1);
+        orConditions.push({
+          others: { $regex: others as string, $options: 'i' },
+        });
+      }
+      orConditions.push({ tags: { $in: tagsArray } });
+
+      filter.$or = orConditions;
     }
     if (minBudget || maxBudget) {
       filter.budget = {};
@@ -212,6 +236,8 @@ export const updatePost = async (req: Request, res: Response) => {
 export const deletePost = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
+    await Apply.deleteMany({ postId: id });
+
     const post = await Post.findByIdAndDelete(id);
     if (!post) {
       return res
