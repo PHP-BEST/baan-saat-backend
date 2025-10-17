@@ -14,3 +14,7 @@ export const mongoUri =
     : process.env.MONGO_URI_DEV || '';
 
 export const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+
+export const spaceKey = process.env.SPACES_KEY || '';
+
+export const spaceSecret = process.env.SPACES_SECRET || '';

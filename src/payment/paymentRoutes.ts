@@ -3,12 +3,12 @@ import { createAccountSession, createPaymentIntent } from './paymentController';
 
 const paymentRouter = Router();
 
-paymentRouter.post('/session-secret', async (req: Request, res: Response) => {
+paymentRouter.post('/account-session', async (req: Request, res: Response) => {
   const connectId = (req.user as any).connectId;
   try {
     const accountSession = await createAccountSession(connectId);
     res.json({
-      clientSecret: accountSession.client_secret,
+      client_secret: accountSession.client_secret,
     });
   } catch (error) {
     console.error(
@@ -23,7 +23,7 @@ paymentRouter.post('/payment-intent', async (req: Request, res: Response) => {
   const connectId = (req.user as any).connectId;
   const paymentIntent = await createPaymentIntent(req.body.amount, connectId);
   res.json({
-    clientSecret: paymentIntent.client_secret,
+    client_secret: paymentIntent.client_secret,
   });
 });
 

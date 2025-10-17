@@ -15,6 +15,9 @@ export const createConnectAccount = async () => {
       card_payments: {
         requested: true,
       },
+      promptpay_payments: {
+        requested: true,
+      },
       transfers: {
         requested: true,
       },
@@ -32,6 +35,9 @@ export const prefillAccount = async (connectId: string) => {
         requested: true,
       },
       promptpay_payments: {
+        requested: true,
+      },
+      transfers: {
         requested: true,
       },
     },
