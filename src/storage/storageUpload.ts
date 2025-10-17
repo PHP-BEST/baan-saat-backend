@@ -1,4 +1,4 @@
-import { S3 } from '@aws-sdk/client-s3';
+import { S3, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { spaceKey, spaceSecret } from '../configs';
 
 import multer from 'multer';
@@ -33,5 +33,14 @@ const storage = multerS3({
     cb(null, `files/${prefix}-${file.originalname}`);
   },
 });
+
+export const deleteFile = async (key: string): Promise<void> => {
+  const deleteCommand = new DeleteObjectCommand({
+    Bucket: 'baan-saat',
+    Key: key,
+  });
+
+  await s3Client.send(deleteCommand);
+};
 
 export default multer({ storage, fileFilter });
