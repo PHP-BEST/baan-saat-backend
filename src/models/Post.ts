@@ -12,6 +12,9 @@ interface IPost extends Document {
   tags: string;
   others: string;
   date: Date;
+  paymentSecret: string;
+  paymentStatus: string;
+  paymentId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -99,6 +102,16 @@ const PostSchema = new Schema(
     date: {
       type: Date,
       required: true,
+    },
+    paymentSecret: {
+      type: String,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ['pending', 'processing', 'succeeded'],
+    },
+    paymentId: {
+      type: String,
     },
   },
   { timestamps: true },

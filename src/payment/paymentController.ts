@@ -109,3 +109,9 @@ export const createPaymentIntent = async (
 
   return paymentIntent;
 };
+
+export const retrievePaymentStatus = async (paymentId: string) => {
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
+
+  return paymentIntent.status;
+};
