@@ -101,7 +101,6 @@ export const searchProviders = async (req: Request, res: Response) => {
       $or: [
         { name: { $regex: trimmedQuery, $options: 'i' } },
         { email: { $regex: trimmedQuery, $options: 'i' } },
-        { telNumber: { $regex: trimmedQuery, $options: 'i' } },
         {
           'providerProfile.description': {
             $regex: trimmedQuery,

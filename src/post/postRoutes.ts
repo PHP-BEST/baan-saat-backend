@@ -201,6 +201,21 @@ postRouter.get('/user/:userId', p.getPostsByUserId);
  *                 maxLength: 2000
  *                 default: ''
  *                 example: http://example.com/photo.jpg
+ *               image1Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/image1.jpg
+ *               image2Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/image2.jpg
+ *               image3Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/image3.jpg
  *               telNumber:
  *                 type: string
  *                 description: Must be 9-10 digits and start with '0' or be empty string
@@ -213,7 +228,7 @@ postRouter.get('/user/:userId', p.getPostsByUserId);
  *                 maxLength: 2000
  *                 default: ''
  *                 example: 123 Main St, City, Country
- *               tags:
+ *               tag:
  *                 type: string
  *                 enum:
  *                   - houseCleaning
@@ -230,6 +245,14 @@ postRouter.get('/user/:userId', p.getPostsByUserId);
  *                 type: string
  *                 maxLength: 200
  *                 default: ''
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - Not working
+ *                   - In progress
+ *                   - Completed
+ *                 default: 'Not working'
+ *                 example: 'Not working'
  *               date:
  *                 type: string
  *                 format: date-time
@@ -276,6 +299,26 @@ postRouter.post('/', p.createPost);
  *                 minimum: 0
  *                 maximum: 99999999.99
  *                 example: 750.75
+ *               coverPhotoUrl:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newphoto.jpg
+ *               image1Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newimage1.jpg
+ *               image2Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newimage2.jpg
+ *               image3Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newimage3.jpg
  *               telNumber:
  *                 type: string
  *                 description: Must be 9-10 digits and start with '0' or be empty string
@@ -284,7 +327,7 @@ postRouter.post('/', p.createPost);
  *                 type: string
  *                 maxLength: 2000
  *                 example: 456 Another St, City, Country
- *               tags:
+ *               tag:
  *                 type: string
  *                 enum:
  *                   - houseCleaning
@@ -301,6 +344,14 @@ postRouter.post('/', p.createPost);
  *                 type: string
  *                 maxLength: 200
  *                 default: ''
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - Not working
+ *                   - In progress
+ *                   - Completed
+ *                 default: 'Not working'
+ *                 example: 'Not working'
  *               date:
  *                 type: string
  *                 format: date-time
