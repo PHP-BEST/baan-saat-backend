@@ -108,7 +108,7 @@ export const searchPosts = async (req: Request, res: Response) => {
         { description: { $regex: trimmedQuery, $options: 'i' } },
         { budget: isNaN(Number(trimmedQuery)) ? -1 : Number(trimmedQuery) },
         { location: { $regex: trimmedQuery, $options: 'i' } },
-        { tags: { $regex: trimmedQuery, $options: 'i' } },
+        { tag: { $regex: trimmedQuery, $options: 'i' } },
         { others: { $regex: trimmedQuery, $options: 'i' } },
         { customerId: { $in: userIds } },
       ],
@@ -144,7 +144,7 @@ export const filterPosts = async (req: Request, res: Response) => {
     customerId?: string;
     title?: { $regex: string; $options: string };
     $or?: Array<{
-      tags?: { $in: string[] };
+      tag?: { $in: string[] };
       others?: { $regex: string; $options: string };
     }>;
     budget?: { $gte?: number; $lte?: number };
@@ -162,7 +162,7 @@ export const filterPosts = async (req: Request, res: Response) => {
     }
     if (tags) {
       const orConditions: Array<{
-        tags?: { $in: string[] };
+        tag?: { $in: string[] };
         others?: { $regex: string; $options: string };
       }> = [];
 
@@ -174,7 +174,7 @@ export const filterPosts = async (req: Request, res: Response) => {
           others: { $regex: others as string, $options: 'i' },
         });
       }
-      orConditions.push({ tags: { $in: tagsArray } });
+      orConditions.push({ tag: { $in: tagsArray } });
 
       filter.$or = orConditions;
     }

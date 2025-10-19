@@ -7,10 +7,14 @@ interface IPost extends Document {
   description: string;
   budget: number;
   coverPhotoUrl: string;
+  image1Url: string;
+  image2Url: string;
+  image3Url: string;
   telNumber: string;
   location: string;
-  tags: string;
+  tag: string;
   others: string;
+  status: string;
   date: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -59,6 +63,21 @@ const PostSchema = new Schema(
       //   message: 'Please fill in a valid cover photo URL.',
       // },
     },
+    image1Url: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    image2Url: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    image3Url: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     telNumber: {
       type: String,
       minLength: 9,
@@ -76,7 +95,7 @@ const PostSchema = new Schema(
       maxLength: 2000,
       default: '',
     },
-    tags: {
+    tag: {
       type: String,
       enum: [
         '',
@@ -96,6 +115,11 @@ const PostSchema = new Schema(
       maxLength: 200,
       default: '',
     },
+    status: {
+      type: String,
+      enum: ['Not working', 'In progress', 'Completed'],
+      default: 'Not working',
+    },
     date: {
       type: Date,
       required: true,
@@ -105,7 +129,7 @@ const PostSchema = new Schema(
 );
 
 PostSchema.pre('save', function (next) {
-  if (this.others && this.others.trim() !== '' && this.tags !== 'others') {
+  if (this.others && this.others.trim() !== '' && this.tag !== 'others') {
     this.others = '';
   }
   next();

@@ -67,7 +67,7 @@ userRouter.get('/providers', u.getProviders);
  *         required: true
  *         schema:
  *           type: string
- *           description: The search query string
+ *           description: The search query string to partially match against provider names, email addresses, and provider descriptions.
  *     responses:
  *       200:
  *         description: Returns a list of providers
