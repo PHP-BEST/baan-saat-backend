@@ -10,7 +10,7 @@ const useRoutes = (app: Application) => {
   app.use('/', authRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/posts', postRoutes);
-  app.use('/api/applys', applyRoutes);
+  app.use('/api/applies', applyRoutes);
   app.use('/api/payments', paymentRouter);
 
   app.use('/api/storage', storageRouter);

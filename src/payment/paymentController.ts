@@ -1,117 +1,94 @@
-import Stripe from 'stripe';
-import { stripeSecretKey } from '../configs';
+import { Request, Response } from 'express';
+import {
+  createAccountSessionRepo,
+  createPaymentIntentRepo,
+  retrievePaymentStatusRepo,
+} from './paymentRepo';
+import Post from '../models/Post';
+import User from '../models/User';
+import PostPayment from '../models/PostPayment';
 
-const stripe = new Stripe(stripeSecretKey);
-
-export const createConnectAccount = async () => {
-  const account = await stripe.accounts.create({
-    country: 'TH',
-    controller: {
-      stripe_dashboard: {
-        type: 'none',
-      },
-    },
-    capabilities: {
-      card_payments: {
-        requested: true,
-      },
-      promptpay_payments: {
-        requested: true,
-      },
-      transfers: {
-        requested: true,
-      },
-    },
-  });
-
-  return account.id;
+export const createAccountSession = async (req: Request, res: Response) => {
+  const connectId = (req.user as any).connectId;
+  try {
+    const accountSession = await createAccountSessionRepo(connectId);
+    res.json({
+      client_secret: accountSession.client_secret,
+    });
+  } catch (error) {
+    console.error(
+      'An error occurred when calling the Stripe API to create an account session',
+      error,
+    );
+    res.status(500).send((error as Error).message);
+  }
 };
 
-export const prefillAccount = async (connectId: string) => {
-  await stripe.accounts.update(connectId, {
-    business_type: 'company',
-    capabilities: {
-      card_payments: {
-        requested: true,
-      },
-      promptpay_payments: {
-        requested: true,
-      },
-      transfers: {
-        requested: true,
-      },
-    },
+export const getPaymentIntentSecret = async (req: Request, res: Response) => {
+  const { postId } = req.params;
+
+  const postPayment = await PostPayment.findOne({ postId: postId });
+  if (!postPayment) {
+    return res.status(404).send('Post payment detail not found!');
+  }
+
+  return res.json({
+    client_secret: postPayment.paymentSecret,
   });
 };
 
-export const createAccountSession = async (connectId: string) => {
-  const accountSession = await stripe.accountSessions.create({
-    account: connectId,
-    components: {
-      account_onboarding: {
-        enabled: true,
-        features: {
-          external_account_collection: true,
-        },
-      },
-      account_management: {
-        enabled: true,
-        features: {
-          external_account_collection: true,
-        },
-      },
-      notification_banner: {
-        enabled: true,
-        features: {
-          external_account_collection: true,
-        },
-      },
-      payments: {
-        enabled: true,
-        features: {
-          refund_management: true,
-          dispute_management: true,
-          capture_payments: true,
-        },
-      },
-      payouts: {
-        enabled: true,
-        features: {
-          instant_payouts: true,
-          standard_payouts: true,
-          edit_payout_schedule: true,
-          external_account_collection: true,
-        },
-      },
-    },
+export const createPaymentIntent = async (req: Request, res: Response) => {
+  const { postId, providerId, amount } = req.body;
+
+  const post = await Post.findById(postId);
+  if (!post) {
+    return res.status(404).send('Post not found!');
+  }
+
+  const provider = await User.findById(providerId);
+  if (!provider) {
+    return res.status(404).send('Provider not found!');
+  }
+
+  const connectId = provider.connectId;
+  const paymentIntent = await createPaymentIntentRepo(amount, connectId);
+
+  try {
+    const postPayment = new PostPayment({
+      postId: postId,
+      paymentId: paymentIntent.id,
+      paymentSecret: paymentIntent.client_secret || '',
+      paymentStatus: 'pending',
+    });
+    await postPayment.save();
+  } catch (err) {
+    console.error('Failed to create PostPayment', err);
+    return res.status(500).send('Failed to save payment record');
+  }
+
+  return res.json({
+    client_secret: paymentIntent.client_secret,
   });
-
-  return accountSession;
 };
 
-export const createPaymentIntent = async (
-  amount: number,
-  connectId: string,
-) => {
-  const paymentIntent = await stripe.paymentIntents.create(
-    {
-      amount: amount,
-      currency: 'thb',
-      automatic_payment_methods: {
-        enabled: true,
-      },
-      application_fee_amount: 100,
-    },
-    {
-      stripeAccount: connectId,
-    },
-  );
+export const getPaymentStatus = async (req: Request, res: Response) => {
+  const { postId } = req.params;
+  const postPayment = await PostPayment.findById(postId);
 
-  return paymentIntent;
-};
+  if (!postPayment) {
+    return res.status(404).send('Post not found!');
+  }
 
-export const retrievePaymentStatus = async (paymentId: string) => {
-  const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
+  if (postPayment.paymentStatus === 'succeeded') {
+    return res.json({ status: 'succeeded' });
+  }
 
-  return paymentIntent.status;
+  const newStatus = await retrievePaymentStatusRepo(postPayment.paymentId);
+  if (newStatus === 'processing' || newStatus === 'succeeded') {
+    postPayment.paymentStatus = newStatus;
+    await postPayment.save();
+    return res.json({ status: newStatus });
+  }
+
+  return res.json({ status: 'pending' });
 };
