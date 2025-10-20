@@ -103,7 +103,7 @@ export const createPaymentIntentRepo = async (
       automatic_payment_methods: {
         enabled: true,
       },
-      application_fee_amount: 100,
+      // application_fee_amount: 100,
     },
     {
       stripeAccount: connectId,
