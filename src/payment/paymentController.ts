@@ -56,6 +56,7 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
   try {
     const postPayment = new PostPayment({
       postId: postId,
+      providerId: providerId,
       paymentId: paymentIntent.id,
       paymentSecret: paymentIntent.client_secret || '',
       paymentStatus: 'pending',
@@ -73,7 +74,7 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
 
 export const getPaymentStatus = async (req: Request, res: Response) => {
   const { postId } = req.params;
-  const postPayment = await PostPayment.findById(postId);
+  const postPayment = await PostPayment.findOne({ postId: postId });
 
   if (!postPayment) {
     return res.status(404).send('Post not found!');
@@ -83,7 +84,16 @@ export const getPaymentStatus = async (req: Request, res: Response) => {
     return res.json({ status: 'succeeded' });
   }
 
-  const newStatus = await retrievePaymentStatusRepo(postPayment.paymentId);
+  const provider = await User.findById(postPayment.providerId);
+  if (!provider) {
+    return res.status(404).send('Provider not found!');
+  }
+
+  const newStatus = await retrievePaymentStatusRepo(
+    postPayment.paymentId,
+    provider.connectId,
+  );
+
   if (newStatus === 'processing' || newStatus === 'succeeded') {
     postPayment.paymentStatus = newStatus;
     await postPayment.save();

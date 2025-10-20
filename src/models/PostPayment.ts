@@ -2,6 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface IPostPayment extends Document {
   postId: string;
+  providerId: string;
   paymentId: string;
   paymentSecret: string;
   paymentStatus: 'pending' | 'processing' | 'succeeded';
@@ -12,6 +13,10 @@ export interface IPostPayment extends Document {
 const PostPaymentSchema = new Schema<IPostPayment>(
   {
     postId: {
+      type: String,
+      required: true,
+    },
+    providerId: {
       type: String,
       required: true,
     },

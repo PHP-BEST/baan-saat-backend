@@ -113,8 +113,13 @@ export const createPaymentIntentRepo = async (
   return paymentIntent;
 };
 
-export const retrievePaymentStatusRepo = async (paymentId: string) => {
-  const paymentIntent = await stripe.paymentIntents.retrieve(paymentId);
+export const retrievePaymentStatusRepo = async (
+  paymentId: string,
+  connectId: string,
+) => {
+  const paymentIntent = await stripe.paymentIntents.retrieve(paymentId, {
+    stripeAccount: connectId,
+  });
 
   return paymentIntent.status;
 };
