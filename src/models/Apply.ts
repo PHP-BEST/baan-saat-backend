@@ -1,27 +1,30 @@
 import { Schema, model } from 'mongoose';
 
-interface IOffer {
+interface IApply {
   postId: Schema.Types.ObjectId;
   providerId: Schema.Types.ObjectId;
   customerId: Schema.Types.ObjectId;
+  description?: string;
+  appliedPrice?: number;
+  date: Date;
   status?: 'Pending' | 'Accepted' | 'Rejected';
 }
 
-const OfferSchema = new Schema(
+const ApplySchema = new Schema(
   {
-    // Post that the customer want to offer to the provider
+    // งานที่ Customer แปะไว้
     postId: {
       type: Schema.Types.ObjectId,
       ref: 'Post',
       required: true,
     },
-    // Provider who is being offered the job
+    // คนเสนอตัวทำงาน
     providerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    // Customer who is making the offer
+    // คนแปะความต้องการ
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -30,6 +33,21 @@ const OfferSchema = new Schema(
     description: {
       type: String,
       maxLength: 2000,
+      default: '',
+    },
+    appliedPrice: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 99999999.99,
+      validate: {
+        validator: (v: number) => /^\d+(\.\d{1,2})?$/.test(String(v)),
+        message: 'Budget must have at most 2 decimal places.',
+      },
+    },
+    date: {
+      type: Date,
+      required: true,
     },
     status: {
       type: String,
@@ -44,27 +62,27 @@ const OfferSchema = new Schema(
   },
 );
 
-OfferSchema.virtual('post', {
+ApplySchema.virtual('post', {
   ref: 'Post',
   localField: 'postId',
   foreignField: '_id',
   justOne: true,
 });
 
-OfferSchema.virtual('provider', {
+ApplySchema.virtual('provider', {
   ref: 'User',
   localField: 'providerId',
   foreignField: '_id',
   justOne: true,
 });
 
-OfferSchema.virtual('customer', {
+ApplySchema.virtual('customer', {
   ref: 'User',
   localField: 'customerId',
   foreignField: '_id',
   justOne: true,
 });
 
-const Offer = model<IOffer>('Offer', OfferSchema);
+const Apply = model<IApply>('Apply', ApplySchema);
 
-export default Offer;
+export default Apply;

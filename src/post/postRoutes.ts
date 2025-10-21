@@ -1,55 +1,55 @@
 import express from 'express';
-import * as s from './serviceController';
+import * as p from './postController';
 
-const serviceRouter = express.Router();
+const postRouter = express.Router();
 
 /**
  * @openapi
- * /api/services:
+ * /api/posts:
  *   get:
- *     summary: Get all services
+ *     summary: Get all posts
  *     tags:
- *       - Services
+ *       - Posts
  *     responses:
  *       200:
- *         description: Returns a list of all services
+ *         description: Returns a list of all posts
  *       500:
- *        description: Failed to fetch services
+ *        description: Failed to fetch posts
  */
-serviceRouter.get('/', s.getServices);
+postRouter.get('/', p.getPosts);
 
 /**
  * @openapi
- * /api/services/search:
+ * /api/posts/search:
  *   get:
- *     summary: Search services
+ *     summary: Search posts
  *     tags:
- *       - Services
+ *       - Posts
  *     parameters:
  *       - in: query
  *         name: query
  *         required: true
  *     responses:
  *       200:
- *         description: Returns a list of services
+ *         description: Returns a list of posts
  *       500:
- *         description: Failed to fetch services
+ *         description: Failed to fetch posts
  */
-serviceRouter.get('/search', s.searchServices);
+postRouter.get('/search', p.searchPosts);
 
 /**
  * @openapi
- * /api/services/filter:
+ * /api/posts/filter:
  *   get:
- *     summary: Filter services
+ *     summary: Filter posts
  *     tags:
- *       - Services
+ *       - Posts
  *     parameters:
  *       - in: query
  *         name: userId
  *         schema:
  *           type: string
- *         description: User ID to filter services by (exact match)
+ *         description: User ID to filter posts by (exact match)
  *       - in: query
  *         name: title
  *         schema:
@@ -72,7 +72,13 @@ serviceRouter.get('/search', s.searchServices);
  *               - painting
  *               - landscaping
  *               - others
- *         description: Tags to filter by (exact match)
+ *         description: Tags to filter by (partial match)
+ *       - in: query
+ *         name: others
+ *         schema:
+ *           type: string
+ *           maxLength: 200
+ *         description: Neglected if tags does not include 'others'.
  *       - in: query
  *         name: minBudget
  *         schema:
@@ -99,43 +105,43 @@ serviceRouter.get('/search', s.searchServices);
  *         description: End date to filter by (inclusive)
  *     responses:
  *       200:
- *         description: Returns a list of services matching the search criteria
+ *         description: Returns a list of posts matching the search criteria
  *       500:
- *         description: Failed to fetch services
+ *         description: Failed to fetch posts
  */
-serviceRouter.get('/filter', s.filterServices);
+postRouter.get('/filter', p.filterPosts);
 
 /**
  * @openapi
- * /api/services/{id}:
+ * /api/posts/{id}:
  *   get:
- *     summary: Get a service by ID
+ *     summary: Get a post by ID
  *     tags:
- *       - Services
+ *       - Posts
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The service ID
+ *         description: The post ID
  *     responses:
  *       200:
- *         description: Returns the service
+ *         description: Returns the post
  *       404:
- *         description: Service not found
+ *         description: Post not found
  *       500:
- *         description: Failed to fetch service
+ *         description: Failed to fetch post
  */
-serviceRouter.get('/:id', s.getServiceById);
+postRouter.get('/:id', p.getPostById);
 
 /**
  * @openapi
- * /api/services/user/{userId}:
+ * /api/posts/user/{userId}:
  *   get:
- *     summary: Get services by User ID
+ *     summary: Get posts by User ID
  *     tags:
- *       - Services
+ *       - Posts
  *     parameters:
  *       - in: path
  *         name: userId
@@ -145,21 +151,21 @@ serviceRouter.get('/:id', s.getServiceById);
  *         description: The user ID
  *     responses:
  *       200:
- *         description: Returns a list of services for the user
+ *         description: Returns a list of posts for the user
  *       404:
  *         description: User not found
  *       500:
- *         description: Failed to fetch services
+ *         description: Failed to fetch posts
  */
-serviceRouter.get('/user/:userId', s.getServicesByUserId);
+postRouter.get('/user/:userId', p.getPostsByUserId);
 
 /**
  * @openapi
- * /api/services:
+ * /api/posts:
  *   post:
- *     summary: Create a new service
+ *     summary: Create a new post
  *     tags:
- *       - Services
+ *       - Posts
  *     requestBody:
  *       required: true
  *       content:
@@ -173,7 +179,7 @@ serviceRouter.get('/user/:userId', s.getServicesByUserId);
  *             properties:
  *               customerId:
  *                 type: string
- *                 description: The ID of the customer creating the service
+ *                 description: The ID of the customer creating the post
  *                 example: 64a7b2f5e4b0c8a1d2f3g4h5
  *               title:
  *                 type: string
@@ -195,6 +201,21 @@ serviceRouter.get('/user/:userId', s.getServicesByUserId);
  *                 maxLength: 2000
  *                 default: ''
  *                 example: http://example.com/photo.jpg
+ *               image1Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/image1.jpg
+ *               image2Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/image2.jpg
+ *               image3Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/image3.jpg
  *               telNumber:
  *                 type: string
  *                 description: Must be 9-10 digits and start with '0' or be empty string
@@ -207,47 +228,57 @@ serviceRouter.get('/user/:userId', s.getServicesByUserId);
  *                 maxLength: 2000
  *                 default: ''
  *                 example: 123 Main St, City, Country
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                   enum:
- *                     - houseCleaning
- *                     - houseRepair
- *                     - plumbing
- *                     - electrical
- *                     - hvac
- *                     - painting
- *                     - landscaping
- *                     - others
- *                 default: []
- *                 example: ['houseCleaning', 'plumbing']
+ *               tag:
+ *                 type: string
+ *                 enum:
+ *                   - houseCleaning
+ *                   - houseRepair
+ *                   - plumbing
+ *                   - electrical
+ *                   - hvac
+ *                   - painting
+ *                   - landscaping
+ *                   - others
+ *                 default: ''
+ *                 example: 'houseCleaning'
+ *               others:
+ *                 type: string
+ *                 maxLength: 200
+ *                 default: ''
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - Not working
+ *                   - In progress
+ *                   - Completed
+ *                 default: 'Not working'
+ *                 example: 'Not working'
  *               date:
  *                 type: string
  *                 format: date-time
  *                 example: 2025-07-01T10:00:00Z
  *     responses:
  *       201:
- *         description: Returns the created service
+ *         description: Returns the created post
  *       400:
- *         description: Failed to create service
+ *         description: Failed to create post
  */
-serviceRouter.post('/', s.createService);
+postRouter.post('/', p.createPost);
 
 /**
  * @openapi
- * /api/services/{id}:
+ * /api/posts/{id}:
  *   put:
- *     summary: Update a service by ID
+ *     summary: Update a post by ID
  *     tags:
- *       - Services
+ *       - Posts
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The service ID
+ *         description: The post ID
  *     requestBody:
  *       required: true
  *       content:
@@ -258,16 +289,36 @@ serviceRouter.post('/', s.createService);
  *               title:
  *                 type: string
  *                 maxLength: 200
- *                 example: Updated Service Title
+ *                 example: Updated Post Title
  *               description:
  *                 type: string
  *                 maxLength: 2000
- *                 example: Updated description of the service.
+ *                 example: Updated description of the post.
  *               budget:
  *                 type: number
  *                 minimum: 0
  *                 maximum: 99999999.99
  *                 example: 750.75
+ *               coverPhotoUrl:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newphoto.jpg
+ *               image1Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newimage1.jpg
+ *               image2Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newimage2.jpg
+ *               image3Url:
+ *                 type: string
+ *                 maxLength: 2000
+ *                 default: ''
+ *                 example: http://example.com/newimage3.jpg
  *               telNumber:
  *                 type: string
  *                 description: Must be 9-10 digits and start with '0' or be empty string
@@ -276,71 +327,82 @@ serviceRouter.post('/', s.createService);
  *                 type: string
  *                 maxLength: 2000
  *                 example: 456 Another St, City, Country
- *               tags:
- *                 type: array
- *                 items:
- *                   type: string
- *                   enum:
- *                     - houseCleaning
- *                     - houseRepair
- *                     - plumbing
- *                     - electrical
- *                     - hvac
- *                     - painting
- *                     - landscaping
- *                     - others
- *                 example: ['electrical', 'hvac']
+ *               tag:
+ *                 type: string
+ *                 enum:
+ *                   - houseCleaning
+ *                   - houseRepair
+ *                   - plumbing
+ *                   - electrical
+ *                   - hvac
+ *                   - painting
+ *                   - landscaping
+ *                   - others
+ *                 default: ''
+ *                 example: 'electrical'
+ *               others:
+ *                 type: string
+ *                 maxLength: 200
+ *                 default: ''
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - Not working
+ *                   - In progress
+ *                   - Completed
+ *                 default: 'Not working'
+ *                 example: 'Not working'
  *               date:
  *                 type: string
  *                 format: date-time
  *                 example: 2025-08-01T14:00:00Z
  *     responses:
  *       200:
- *         description: Returns the updated service
+ *         description: Returns the updated post
  *       400:
- *         description: Failed to update service
+ *         description: Failed to update post
  *       404:
- *         description: Service not found
+ *         description: Post not found
  */
-serviceRouter.put('/:id', s.updateService);
+postRouter.put('/:id', p.updatePost);
 
 /**
  * @openapi
- * /api/services/{id}:
+ * /api/posts/{id}:
  *   delete:
- *     summary: Delete a service by ID
+ *     summary: Delete a post by ID
  *     tags:
- *       - Services
+ *       - Posts
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The service ID
+ *         description: The post ID
  *     responses:
  *       200:
- *         description: Returns the deleted service
+ *         description: Returns the deleted post
  *       404:
- *         description: Service not found
+ *         description: Post not found
  *       500:
- *         description: Failed to delete service
+ *         description: Failed to delete post
  */
-serviceRouter.delete('/:id', s.deleteService);
+postRouter.delete('/:id', p.deletePost);
 
 // /**
 //  * @openapi
-//  * /api/services:
+//  * /api/posts:
 //  *   delete:
-//  *     summary: Delete all services (Use with caution)
+//  *     summary: Delete all posts (Use with caution)
 //  *     tags:
-//  *       - Services
+//  *       - Posts
 //  *     responses:
 //  *       200:
-//  *         description: All services deleted successfully
+//  *         description: All posts deleted successfully
 //  *       500:
-//  *         description: Failed to delete services
+//  *         description: Failed to delete posts
 //  */
-// serviceRouter.delete('/', deleteAllServices);
+// postRouter.delete('/', deleteAllPosts);
 
-export default serviceRouter;
+export default postRouter;

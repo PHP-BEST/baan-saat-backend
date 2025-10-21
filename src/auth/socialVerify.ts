@@ -1,6 +1,10 @@
 import { Profile } from 'passport';
 import { VerifyCallback } from 'passport-google-oauth20';
 import User from '../models/User';
+import {
+  createConnectAccountRepo,
+  prefillAccountRepo,
+} from '../payment/paymentRepo';
 
 const findOrCreateNewUser = async (
   social: string,
@@ -23,11 +27,15 @@ const findOrCreateNewUser = async (
     }
 
     // User doesn't exist, create new user
+    const connectId = await createConnectAccountRepo();
+    await prefillAccountRepo(connectId);
+
     user = new User({
       userId: userId,
       name: profile.displayName,
       email: profile.emails?.[0]?.value,
       avatarUrl: profile.photos?.[0]?.value,
+      connectId: connectId,
     });
 
     await user.save();

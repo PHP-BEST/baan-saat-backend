@@ -1,7 +1,26 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 // import { isURL } from 'validator';
 
-const ServiceSchema = new Schema(
+interface IPost extends Document {
+  customerId: Schema.Types.ObjectId;
+  title: string;
+  description: string;
+  budget: number;
+  coverPhotoUrl: string;
+  image1Url: string;
+  image2Url: string;
+  image3Url: string;
+  telNumber: string;
+  location: string;
+  tag: string;
+  others: string;
+  status: string;
+  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const PostSchema = new Schema(
   {
     customerId: {
       type: Schema.Types.ObjectId,
@@ -44,6 +63,21 @@ const ServiceSchema = new Schema(
       //   message: 'Please fill in a valid cover photo URL.',
       // },
     },
+    image1Url: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    image2Url: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    image3Url: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     telNumber: {
       type: String,
       minLength: 9,
@@ -61,22 +95,31 @@ const ServiceSchema = new Schema(
       maxLength: 2000,
       default: '',
     },
-    tags: [
-      {
-        type: String,
-        enum: [
-          'houseCleaning',
-          'houseRepair',
-          'plumbing',
-          'electrical',
-          'hvac',
-          'painting',
-          'landscaping',
-          'others',
-        ],
-        default: [],
-      },
-    ],
+    tag: {
+      type: String,
+      enum: [
+        '',
+        'houseCleaning',
+        'houseRepair',
+        'plumbing',
+        'electrical',
+        'hvac',
+        'painting',
+        'landscaping',
+        'others',
+      ],
+      default: '',
+    },
+    others: {
+      type: String,
+      maxLength: 200,
+      default: '',
+    },
+    status: {
+      type: String,
+      enum: ['Not working', 'In progress', 'Completed'],
+      default: 'Not working',
+    },
     date: {
       type: Date,
       required: true,
@@ -85,6 +128,13 @@ const ServiceSchema = new Schema(
   { timestamps: true },
 );
 
-const Service = model('Service', ServiceSchema);
+PostSchema.pre('save', function (next) {
+  if (this.others && this.others.trim() !== '' && this.tag !== 'others') {
+    this.others = '';
+  }
+  next();
+});
 
-export default Service;
+const Post = model<IPost>('Post', PostSchema);
+
+export default Post;

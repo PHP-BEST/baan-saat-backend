@@ -41,6 +41,45 @@ userRouter.get('/', u.getUsers);
 
 /**
  * @openapi
+ * /api/users/providers:
+ *   get:
+ *     summary: Get all providers
+ *     tags:
+ *      - Users
+ *     responses:
+ *       200:
+ *         description: Returns a list of all providers
+ *       500:
+ *         description: Failed to fetch providers
+ */
+userRouter.get('/providers', u.getProviders);
+
+/**
+ * @openapi
+ * /api/users/search:
+ *  get:
+ *     summary: Search providers
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The search query string to partially match against provider names, email addresses, and provider descriptions.
+ *     responses:
+ *       200:
+ *         description: Returns a list of providers
+ *       400:
+ *         description: Query parameter is required or invalid
+ *       500:
+ *         description: Failed to search providers
+ */
+userRouter.get('/search', u.searchProviders);
+
+/**
+ * @openapi
  * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID
@@ -113,17 +152,6 @@ userRouter.get('/:id', u.getUserById);
  *               providerProfile:
  *                 type: object
  *                 properties:
- *                   title:
- *                     type: string
- *                     maxLength: 200
- *                     default: ''
- *                     example: Plumber
- *                   skills:
- *                     type: array
- *                     items:
- *                       type: string
- *                       enum: [houseCleaning, houseRepair, plumbing, electrical, hvac, painting, landscaping, others]
- *                     example: [houseCleaning, houseRepair]
  *                   description:
  *                     type: string
  *                     maxLength: 2000
@@ -188,16 +216,6 @@ userRouter.post('/', u.createUser);
  *               providerProfile:
  *                 type: object
  *                 properties:
- *                   title:
- *                     type: string
- *                     maxLength: 200
- *                     example: Electrician
- *                   skills:
- *                     type: array
- *                     items:
- *                       type: string
- *                       enum: [houseCleaning, houseRepair, plumbing, electrical, hvac, painting, landscaping, others]
- *                     example: [electrical, hvac]
  *                   description:
  *                     type: string
  *                     maxLength: 2000
@@ -250,6 +268,8 @@ userRouter.delete('/:id', u.deleteUser);
 //  *         description: Failed to delete users
 //  */
 // userRouter.delete('/', deleteAllUsers);
+
+userRouter.post('/promotion', u.promoteUser);
 
 userRouter.use(isAuthenticated);
 
