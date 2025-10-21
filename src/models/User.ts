@@ -85,6 +85,11 @@ const UserSchema = new Schema(
       type: ProviderSchema,
       default: () => ({}),
     },
+    connectId: {
+      type: String,
+      required: true,
+      default: randomUUID,
+    },
   },
   {
     timestamps: true,

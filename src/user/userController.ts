@@ -172,3 +172,21 @@ export const deleteUser = async (req: Request, res: Response) => {
 //       .json({ success: false, message: 'Failed to delete users', error });
 //   }
 // };
+
+export const promoteUser = async (req: Request, res: Response) => {
+  try {
+    const user = req.user as any;
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, message: 'No authenticated user found' });
+    }
+    user.role = 'provider';
+    await user.save();
+    res.status(200).json({ success: true, data: user });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to promote user', error });
+  }
+};

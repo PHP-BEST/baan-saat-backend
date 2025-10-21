@@ -269,6 +269,8 @@ userRouter.delete('/:id', u.deleteUser);
 //  */
 // userRouter.delete('/', deleteAllUsers);
 
+userRouter.post('/promotion', u.promoteUser);
+
 userRouter.use(isAuthenticated);
 
 export default userRouter;
