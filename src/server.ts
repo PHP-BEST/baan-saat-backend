@@ -13,10 +13,9 @@ import initializeRoutes from './routes';
 
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
+import {app , server} from './socket/socket';
 dotenv.config();
 
-const app: Application = express();
 
 (async () => {
   mongoose.set('strictQuery', true);
@@ -85,7 +84,7 @@ app.use(express.json());
 
 initializeRoutes(app);
 
-app.listen(process.env.PORT, () =>
+server.listen(process.env.PORT, () =>
   console.log(
     `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`,
   ),
