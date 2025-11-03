@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import express, { Application } from 'express';
+import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
 import session from 'express-session';
@@ -13,9 +13,8 @@ import initializeRoutes from './routes';
 
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import {app , server} from './socket/socket';
+import { app, server } from './socket/socket';
 dotenv.config();
-
 
 (async () => {
   mongoose.set('strictQuery', true);

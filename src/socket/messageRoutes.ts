@@ -1,5 +1,5 @@
-import express from "express";
-import { getMessages, sendMessage } from "../socket/messageController";
+import express from 'express';
+import { getMessages, sendMessage } from '../socket/messageController';
 
 const messageRoutes = express.Router();
 
@@ -47,7 +47,7 @@ const messageRoutes = express.Router();
  *       500:
  *         description: Internal server error
  */
-messageRoutes.get("/:id", getMessages);
+messageRoutes.get('/:id', getMessages);
 
 /**
  * @swagger
@@ -98,6 +98,6 @@ messageRoutes.get("/:id", getMessages);
  *       500:
  *         description: Internal server error
  */
-messageRoutes.post("/send/:id", sendMessage);
+messageRoutes.post('/send/:id', sendMessage);
 
 export default messageRoutes;
