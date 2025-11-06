@@ -14,8 +14,8 @@ const useRoutes = (app: Application) => {
   app.use('/api/applies', applyRoutes);
   app.use('/api/offers', offerRoutes);
   app.use('/api/payments', paymentRouter);
-
   app.use('/api/storage', storageRouter);
+  
 };
 
 export default useRoutes;
