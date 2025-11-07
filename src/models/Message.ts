@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 interface IMessage {
   reciever?: Schema.Types.ObjectId;
   sender?: Schema.Types.ObjectId;
-  text: string;
+  text?: string;
   url?: string;
 }
 
@@ -19,7 +19,6 @@ const MessageSchema = new Schema(
     },
     text: {
       type: String,
-      required: true,
       maxLength: 2000,
     },
     url: {

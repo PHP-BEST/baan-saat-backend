@@ -7,7 +7,7 @@ export const getMessages = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { id } = req.params; // receiver id
+    const { id } = req.params;
     const senderId = (req.user as any)._id;
 
     const messages = await Message.find({
@@ -40,11 +40,9 @@ export const sendMessage = async (
 
     // Basic validation
     if (!room || !sender || !receiver || (!text && !url)) {
-      res
-        .status(400)
-        .json({
-          message: 'room, sender, receiver, and text or url are required',
-        });
+      res.status(400).json({
+        message: 'room, sender, receiver, and text or url are required',
+      });
       return;
     }
 
