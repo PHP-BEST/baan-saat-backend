@@ -7,14 +7,8 @@ export const getMessages = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { id } = req.params;
-    const senderId = (req.user as any)._id;
-
     const messages = await Message.find({
-      $or: [
-        { sender: senderId, receiver: id },
-        { sender: id, receiver: senderId },
-      ],
+      room: req.params.id,
     }).sort({ createdAt: 1 });
 
     res.status(200).json(messages);
@@ -39,7 +33,7 @@ export const sendMessage = async (
     };
 
     // Basic validation
-    if (!room || !sender || !receiver || (!text && !url)) {
+    if (!room || !sender || !receiver || (!text && !url) || !room) {
       res.status(400).json({
         message: 'room, sender, receiver, and text or url are required',
       });

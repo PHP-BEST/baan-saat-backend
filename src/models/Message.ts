@@ -5,6 +5,7 @@ interface IMessage {
   sender?: Schema.Types.ObjectId;
   text?: string;
   url?: string;
+  room?: string;
 }
 
 const MessageSchema = new Schema(
@@ -22,6 +23,10 @@ const MessageSchema = new Schema(
       maxLength: 2000,
     },
     url: {
+      type: String,
+      default: '',
+    },
+    room: {
       type: String,
       default: '',
     },
