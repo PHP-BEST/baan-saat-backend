@@ -156,6 +156,147 @@ export const checkProviderApplyPost = async (req: Request, res: Response) => {
   }
 };
 
+//desc Filter applies
+//route GET /api/applies/filter
+//access Public
+export const filterApplies = async (req: Request, res: Response) => {
+  const {
+    postId,
+    providerId,
+    customerId,
+    status,
+    minPrice,
+    maxPrice,
+    startDate,
+    endDate,
+  } = req.query;
+
+  interface ApplyFilter {
+    postId?: string;
+    providerId?: string;
+    customerId?: string;
+    status?: { $in: string[] };
+    appliedPrice?: { $gte?: number; $lte?: number };
+    date?: { $gte?: Date; $lte?: Date };
+  }
+
+  const filter: ApplyFilter = {};
+
+  try {
+    if (postId) {
+      filter.postId = postId as string;
+    }
+    if (providerId) {
+      filter.providerId = providerId as string;
+    }
+    if (customerId) {
+      filter.customerId = customerId as string;
+    }
+    if (status) {
+      const statusArray = (status as string).split(',').map((s) => s.trim());
+      filter.status = { $in: statusArray };
+    }
+    if (minPrice || maxPrice) {
+      filter.appliedPrice = {};
+      if (minPrice) {
+        filter.appliedPrice.$gte = Number(minPrice);
+      }
+      if (maxPrice) {
+        filter.appliedPrice.$lte = Number(maxPrice);
+      }
+    }
+    if (startDate || endDate) {
+      filter.date = {};
+      if (startDate) {
+        filter.date.$gte = new Date(startDate as string);
+      }
+      if (endDate) {
+        filter.date.$lte = new Date(endDate as string);
+      }
+    }
+
+    const applies = await Apply.find(filter);
+    res.status(200).json({ success: true, data: applies });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to filter applies', error });
+  }
+};
+
+//desc Filter detailed applies with population
+//route GET /api/applies/filter/detail
+//access Public
+export const filterDetailedApplies = async (req: Request, res: Response) => {
+  const {
+    postId,
+    providerId,
+    customerId,
+    status,
+    minPrice,
+    maxPrice,
+    startDate,
+    endDate,
+  } = req.query;
+
+  interface ApplyFilter {
+    postId?: string;
+    providerId?: string;
+    customerId?: string;
+    status?: { $in: string[] };
+    appliedPrice?: { $gte?: number; $lte?: number };
+    date?: { $gte?: Date; $lte?: Date };
+  }
+
+  const filter: ApplyFilter = {};
+
+  try {
+    if (postId) {
+      filter.postId = postId as string;
+    }
+    if (providerId) {
+      filter.providerId = providerId as string;
+    }
+    if (customerId) {
+      filter.customerId = customerId as string;
+    }
+    if (status) {
+      const statusArray = (status as string).split(',').map((s) => s.trim());
+      filter.status = { $in: statusArray };
+    }
+    if (minPrice || maxPrice) {
+      filter.appliedPrice = {};
+      if (minPrice) {
+        filter.appliedPrice.$gte = Number(minPrice);
+      }
+      if (maxPrice) {
+        filter.appliedPrice.$lte = Number(maxPrice);
+      }
+    }
+    if (startDate || endDate) {
+      filter.date = {};
+      if (startDate) {
+        filter.date.$gte = new Date(startDate as string);
+      }
+      if (endDate) {
+        filter.date.$lte = new Date(endDate as string);
+      }
+    }
+
+    const applies = await Apply.find(filter)
+      .populate('post')
+      .populate('customer')
+      .populate('provider');
+    res.status(200).json({ success: true, data: applies });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to filter detailed applies',
+      error,
+    });
+  }
+};
+
 export const createApply = async (req: Request, res: Response) => {
   try {
     const apply = await Apply.create(req.body);

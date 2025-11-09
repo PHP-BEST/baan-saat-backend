@@ -232,6 +232,98 @@ offerRouter.get('/check/:postId/:providerId', o.checkPostOfferProvider);
 
 /**
  * @openapi
+ * /api/offers/filter:
+ *   get:
+ *     summary: Filter offers by various criteria
+ *     description: Filter offers by postId, providerId, customerId, and status
+ *     tags:
+ *       - Offers
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         description: Filter by post ID
+ *       - in: query
+ *         name: providerId
+ *         schema:
+ *           type: string
+ *         description: Filter by provider ID
+ *       - in: query
+ *         name: customerId
+ *         schema:
+ *           type: string
+ *         description: Filter by customer ID
+ *       - in: query
+ *         name: status
+ *         style: form
+ *         explode: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *             enum:
+ *               - Pending
+ *               - Accepted
+ *               - Rejected
+ *               - Deleted
+ *         description: Filter by offer status (partial matching)
+ *     responses:
+ *       200:
+ *         description: Returns a list of offers matching the filter criteria
+ *       500:
+ *         description: Failed to filter offers
+ */
+offerRouter.get('/filter', o.filterOffers);
+
+/**
+ * @openapi
+ * /api/offers/filter/detail:
+ *   get:
+ *     summary: Filter offers with detailed information (populated data)
+ *     description: Filter offers by various criteria and return detailed information including populated post, provider, and customer data
+ *     tags:
+ *       - Offers
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         description: Filter by post ID
+ *       - in: query
+ *         name: providerId
+ *         schema:
+ *           type: string
+ *         description: Filter by provider ID
+ *       - in: query
+ *         name: customerId
+ *         schema:
+ *           type: string
+ *         description: Filter by customer ID
+ *       - in: query
+ *         name: status
+ *         style: form
+ *         explode: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *             enum:
+ *               - Pending
+ *               - Accepted
+ *               - Rejected
+ *               - Deleted
+ *         description: Filter by offer status (partial matching)
+ *     responses:
+ *       200:
+ *         description: Returns a list of detailed offers with populated post, provider, and customer information
+ *       500:
+ *         description: Failed to filter detailed offers
+ */
+offerRouter.get('/filter/detail', o.filterDetailedOffers);
+
+/**
+ * @openapi
  * /api/offers:
  *   post:
  *     summary: Create a new offer
