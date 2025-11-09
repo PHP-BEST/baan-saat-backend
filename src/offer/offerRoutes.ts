@@ -321,7 +321,8 @@ offerRouter.put('/:id', o.updateOffer);
  * @openapi
  * /api/offers/{id}:
  *   delete:
- *     summary: Delete an offer by ID
+ *     summary: Delete an offer by ID (soft delete - changes status to 'Deleted')
+ *     description: Soft deletes an offer by changing its status to 'Deleted' instead of permanently removing it
  *     tags:
  *       - Offers
  *     parameters:
@@ -333,7 +334,7 @@ offerRouter.put('/:id', o.updateOffer);
  *         description: The offer ID
  *     responses:
  *       200:
- *         description: Returns success message for deleted offer
+ *         description: Returns the updated offer with status 'Deleted' and success message
  *       404:
  *         description: Offer not found
  *       500:

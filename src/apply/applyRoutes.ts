@@ -316,7 +316,8 @@ applyRouter.put('/:id', a.updateApply);
  * @openapi
  * /api/applies/{id}:
  *   delete:
- *     summary: Delete an apply by ID
+ *     summary: Delete an apply by ID (soft delete - changes status to 'Deleted')
+ *     description: Soft deletes an apply by changing its status to 'Deleted' instead of permanently removing it
  *     tags:
  *       - Applies
  *     parameters:
@@ -328,7 +329,7 @@ applyRouter.put('/:id', a.updateApply);
  *         description: The apply ID
  *     responses:
  *       200:
- *         description: Returns the deleted apply
+ *         description: Returns the updated apply with status 'Deleted' and success message
  *       404:
  *         description: Apply not found
  *       500:

@@ -190,15 +190,24 @@ export const updateApply = async (req: Request, res: Response) => {
 export const deleteApply = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    const apply = await Apply.findByIdAndDelete(id);
+    // Check if apply exists
+    const apply = await Apply.findById(id);
     if (!apply) {
       return res
         .status(404)
         .json({ success: false, message: 'Apply not found' });
     }
+
+    // Soft delete by changing status to 'Deleted'
+    const updatedApply = await Apply.findByIdAndUpdate(
+      id,
+      { status: 'Deleted' },
+      { new: true },
+    );
+
     res.status(200).json({
       success: true,
-      data: apply,
+      data: updatedApply,
       message: 'Apply deleted successfully',
     });
   } catch (error) {
