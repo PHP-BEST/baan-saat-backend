@@ -138,6 +138,7 @@ export const filterPosts = async (req: Request, res: Response) => {
     maxBudget,
     startDate,
     endDate,
+    isMatched,
   } = req.query;
 
   interface PostFilter {
@@ -149,6 +150,7 @@ export const filterPosts = async (req: Request, res: Response) => {
     }>;
     budget?: { $gte?: number; $lte?: number };
     date?: { $gte?: Date; $lte?: Date };
+    isMatched?: boolean;
   }
 
   const filter: PostFilter = {};
@@ -195,6 +197,9 @@ export const filterPosts = async (req: Request, res: Response) => {
       if (endDate) {
         filter.date.$lte = new Date(endDate as string);
       }
+    }
+    if (isMatched) {
+      filter.isMatched = isMatched === 'true';
     }
 
     const posts = await Post.find(filter);

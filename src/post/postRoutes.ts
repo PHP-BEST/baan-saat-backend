@@ -103,6 +103,11 @@ postRouter.get('/search', p.searchPosts);
  *           type: string
  *           format: date-time
  *         description: End date to filter by (inclusive)
+ *       - in: query
+ *         name: isMatched
+ *         schema:
+ *           type: boolean
+ *         description: Whether the post is matched or not
  *     responses:
  *       200:
  *         description: Returns a list of posts matching the search criteria
@@ -257,6 +262,10 @@ postRouter.get('/user/:userId', p.getPostsByUserId);
  *                 type: string
  *                 format: date-time
  *                 example: 2025-07-01T10:00:00Z
+ *               isMatched:
+ *                 type: boolean
+ *                 default: false
+ *                 example: true
  *     responses:
  *       201:
  *         description: Returns the created post
@@ -356,6 +365,10 @@ postRouter.post('/', p.createPost);
  *                 type: string
  *                 format: date-time
  *                 example: 2025-08-01T14:00:00Z
+ *               isMatched:
+ *                 type: boolean
+ *                 default: false
+ *                 example: true
  *     responses:
  *       200:
  *         description: Returns the updated post

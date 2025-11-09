@@ -15,6 +15,7 @@ interface IPost extends Document {
   tag: string;
   others: string;
   status: string;
+  isMatched: boolean;
   date: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -117,8 +118,12 @@ const PostSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['Not working', 'In progress', 'Completed'],
+      enum: ['Not working', 'In progress', 'Completed', 'deleted'],
       default: 'Not working',
+    },
+    isMatched: {
+      type: Boolean,
+      default: false,
     },
     date: {
       type: Date,
