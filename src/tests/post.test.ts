@@ -44,6 +44,14 @@ describe('Testing Post API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
+  it('Get all available posts', async () => {
+    const res = await request(app).get('/posts/available');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(0);
+  });
+
   it('Add the first post', async () => {
     const title = 'Basic Post 1';
     const res = await request(app)
