@@ -118,7 +118,7 @@ const PostSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['Not working', 'In progress', 'Completed', 'deleted'],
+      enum: ['Not working', 'In progress', 'Completed', 'Deleted'],
       default: 'Not working',
     },
     isMatched: {

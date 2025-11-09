@@ -253,7 +253,7 @@ applyRouter.get('/check/:providerId/:postId', a.checkProviderApplyPost);
  *                 example: 2025-07-01T10:00:00Z
  *               status:
  *                 type: string
- *                 enum: [Pending, Accepted, Rejected]
+ *                 enum: [Pending, Accepted, Rejected, Deleted]
  *                 default: Pending
  *                 example: Pending
  *     responses:
@@ -300,7 +300,7 @@ applyRouter.post('/', a.createApply);
  *                 example: 2025-08-01T14:00:00Z
  *               status:
  *                 type: string
- *                 enum: [Pending, Accepted, Rejected]
+ *                 enum: [Pending, Accepted, Rejected, Deleted]
  *                 example: Accepted
  *     responses:
  *       200:
