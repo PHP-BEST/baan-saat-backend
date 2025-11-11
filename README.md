@@ -83,6 +83,7 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 The backend is deployed on Vercel with two environments:
 
 - **Development**: https://baan-saat-backend-dev.vercel.app/
+- **Development**: https://baan-saat-backend-dev.vercel.app/
   - Automatically deploys from the `developer` branch
   - Used for testing and staging
   - Connected to development database and services
