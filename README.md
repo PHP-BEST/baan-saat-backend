@@ -30,7 +30,7 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
    ```bash
    npm install
    npm install husky --save-dev
-   npx husky install
+   npx husky
    ```
 
 ## Environment Setup
@@ -52,58 +52,6 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
   ```
 
 ## Project Structure
-
-```
-src/
-  configs/      # Configuration files (e.g., MongoDB connection)
-  controllers/  # Express route handlers
-  models/       # Mongoose schemas and models
-  routes/       # Express route definitions
-  tests/        # Jest and Supertest tests
-  server.ts     # Application entry point
-  ...
-```
-
-### File Index and Naming Conventions
-
-#### `/src/configs/` - Configuration Files
-
-**Purpose**: Database connections, external service configurations, and environment-specific settings
-**Naming Convention**: `<service-name>.ts`
-
-- `mongodb.ts` - MongoDB connection configuration with environment-based URI selection
-
-#### `/src/controllers/` - Route Handlers
-
-**Purpose**: Business logic and request/response handling for API endpoints
-**Naming Convention**: `<resource-name>.ts`
-
-- `sample.ts` - CRUD operations for Sample resource (getSamples, getSampleById, addSample, updateSample, deleteSample)
-
-#### `/src/models/` - Database Models
-
-**Purpose**: Mongoose schemas and data models for MongoDB collections
-**Naming Convention**: `<ModelName>.ts` (PascalCase, singular)
-
-- `Sample.ts` - Sample model with name and description fields
-
-#### `/src/routes/` - API Route Definitions
-
-**Purpose**: Express route definitions with OpenAPI/Swagger documentation
-**Naming Convention**: `<resource-name>.ts` (should match corresponding controller)
-
-- `sample.ts` - Sample API routes with full CRUD endpoints and Swagger documentation
-
-#### `/src/tests/` - Test Files
-
-**Purpose**: Jest and Supertest integration and unit tests
-**Naming Convention**: `<resource-name>.test.ts`
-
-- `sample.test.ts` - Integration tests for Sample API endpoints with full CRUD testing workflow
-
-#### Root Files
-
-- `server.ts` - Main application entry point with Express setup, middleware configuration, and Swagger integration
 
 🚧🚧 **Under Construction** 🚧🚧
 
@@ -134,6 +82,7 @@ src/
 
 The backend is deployed on Vercel with two environments:
 
+- **Development**: https://baan-saat-backend-dev.vercel.app/
 - **Development**: https://baan-saat-backend-dev.vercel.app/
   - Automatically deploys from the `developer` branch
   - Used for testing and staging
