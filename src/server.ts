@@ -46,7 +46,6 @@ const swaggerOptions = {
       title: 'Project Baan Saat API',
       version: '1.0.0',
       description: 'API documentation for Baan Saat',
-      description: 'API documentation for Baan Saat',
     },
   },
   apis: ['./src/**/*Routes.ts'],
