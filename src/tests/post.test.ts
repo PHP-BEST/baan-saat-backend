@@ -44,6 +44,14 @@ describe('Testing Post API...', () => {
     expect(res.body.data.length).toBe(0);
   });
 
+  it('Get all available posts', async () => {
+    const res = await request(app).get('/posts/available');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(0);
+  });
+
   it('Add the first post', async () => {
     const title = 'Basic Post 1';
     const res = await request(app)
@@ -651,14 +659,16 @@ describe('Testing Post API...', () => {
     const res = await request(app).delete(`/posts/${firstPostId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.message).toBe('Post deleted successfully');
+    expect(res.body.message).toBe(
+      'Post and related applications/offers deleted successfully',
+    );
   });
 
   it('Get deleted post by ID', async () => {
     const res = await request(app).get(`/posts/${firstPostId}`);
-    expect(res.statusCode).toBe(404);
-    expect(res.body.success).toBe(false);
-    expect(res.body.message).toBe('Post not found');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.status).toBe('Deleted');
   });
 
   it('Delete post by invalid ID', async () => {
@@ -671,6 +681,14 @@ describe('Testing Post API...', () => {
 
   it('Get all posts', async () => {
     const res = await request(app).get('/posts');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(6);
+  });
+
+  it('Get all available posts', async () => {
+    const res = await request(app).get('/posts/available');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);
@@ -688,6 +706,14 @@ describe('Testing Post API...', () => {
 
   it('Get all posts', async () => {
     const res = await request(app).get('/posts');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    expect(res.body.data.length).toBe(3);
+  });
+
+  it('Get all available posts', async () => {
+    const res = await request(app).get('/posts/available');
     expect(res.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
     expect(Array.isArray(res.body.data)).toBe(true);

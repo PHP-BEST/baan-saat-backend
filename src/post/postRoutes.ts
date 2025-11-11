@@ -39,9 +39,49 @@ postRouter.get('/search', p.searchPosts);
 
 /**
  * @openapi
+ * /api/posts/search/available:
+ *   get:
+ *     summary: Search available posts (unmatched and not deleted)
+ *     tags:
+ *       - Posts
+ *     parameters:
+ *       - in: query
+ *         name: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search query for available posts
+ *     responses:
+ *       200:
+ *         description: Returns a list of available posts matching the search criteria
+ *       400:
+ *         description: Query parameter is required or invalid
+ *       500:
+ *         description: Failed to search available posts
+ */
+postRouter.get('/search/available', p.searchAvailablePosts);
+
+/**
+ * @openapi
+ * /api/posts/available:
+ *   get:
+ *     summary: Get all available posts (unmatched and not deleted)
+ *     tags:
+ *       - Posts
+ *     responses:
+ *       200:
+ *         description: Returns a list of all available posts
+ *       500:
+ *         description: Failed to fetch available posts
+ */
+postRouter.get('/available', p.getAvailablePosts);
+
+/**
+ * @openapi
  * /api/posts/filter:
  *   get:
- *     summary: Filter posts
+ *     summary: Filter posts by various criteria
+ *     description: Filter posts by userId, title, tags, budget, date range, match status, and post status
  *     tags:
  *       - Posts
  *     parameters:
@@ -103,6 +143,25 @@ postRouter.get('/search', p.searchPosts);
  *           type: string
  *           format: date-time
  *         description: End date to filter by (inclusive)
+ *       - in: query
+ *         name: isMatched
+ *         schema:
+ *           type: boolean
+ *         description: Whether the post is matched or not
+ *       - in: query
+ *         name: status
+ *         style: form
+ *         explode: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *             enum:
+ *               - Not working
+ *               - In progress
+ *               - Completed
+ *               - Deleted
+ *         description: Filter by post status (partial match)
  *     responses:
  *       200:
  *         description: Returns a list of posts matching the search criteria
@@ -158,6 +217,28 @@ postRouter.get('/:id', p.getPostById);
  *         description: Failed to fetch posts
  */
 postRouter.get('/user/:userId', p.getPostsByUserId);
+
+/**
+ * @openapi
+ * /api/posts/user/{userId}/available:
+ *   get:
+ *     summary: Get available posts by User ID (unmatched and not deleted)
+ *     tags:
+ *       - Posts
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: Returns a list of available posts for the user
+ *       500:
+ *         description: Failed to fetch available posts
+ */
+postRouter.get('/user/:userId/available', p.getAvailablePostsByUserId);
 
 /**
  * @openapi
@@ -257,6 +338,10 @@ postRouter.get('/user/:userId', p.getPostsByUserId);
  *                 type: string
  *                 format: date-time
  *                 example: 2025-07-01T10:00:00Z
+ *               isMatched:
+ *                 type: boolean
+ *                 default: false
+ *                 example: true
  *     responses:
  *       201:
  *         description: Returns the created post
@@ -356,6 +441,10 @@ postRouter.post('/', p.createPost);
  *                 type: string
  *                 format: date-time
  *                 example: 2025-08-01T14:00:00Z
+ *               isMatched:
+ *                 type: boolean
+ *                 default: false
+ *                 example: true
  *     responses:
  *       200:
  *         description: Returns the updated post
@@ -370,7 +459,8 @@ postRouter.put('/:id', p.updatePost);
  * @openapi
  * /api/posts/{id}:
  *   delete:
- *     summary: Delete a post by ID
+ *     summary: Delete a post by ID (soft delete - changes status to 'Deleted')
+ *     description: Soft deletes a post by changing its status to 'Deleted' and also updates all related applications and offers to 'Deleted' status
  *     tags:
  *       - Posts
  *     parameters:
@@ -382,7 +472,7 @@ postRouter.put('/:id', p.updatePost);
  *         description: The post ID
  *     responses:
  *       200:
- *         description: Returns the deleted post
+ *         description: Returns the updated post with status 'Deleted' and confirms related data was also updated
  *       404:
  *         description: Post not found
  *       500:
