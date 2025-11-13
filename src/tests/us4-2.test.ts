@@ -11,12 +11,6 @@ app.use('/users', userRouter);
 
 let userId: string;
 
-const postTitle = 'Clean my house';
-const postDescription = 'My house is dirty.';
-const postBudget = 1000;
-const contactNumber = '0123456789';
-const performDate = new Date('2025-11-18');
-
 beforeAll(async () => {
   const mongo_uri = process.env.MONGO_URI_TEST || '';
   await mongoose.connect(mongo_uri);
@@ -39,6 +33,12 @@ afterAll(async () => {
 });
 
 describe('US4-2: Post Description', () => {
+  const postTitle = 'Clean my house';
+  const postDescription = 'My house is dirty.';
+  const postBudget = 1000;
+  const contactNumber = '0123456789';
+  const performDate = new Date('2025-11-18');
+
   it('TC2-1: Filled Description', async () => {
     const res = await request(app).post('/posts').send({
       customerId: userId,
@@ -59,11 +59,14 @@ describe('US4-2: Post Description', () => {
   });
 
   it('TC2-2: No Description', async () => {
-    const postDescription = '';
+    const postTitle = 'Clean my house';
+    const postBudget = 1000;
+    const contactNumber = '0123456789';
+    const performDate = new Date('2025-11-18');
+
     const res = await request(app).post('/posts').send({
       customerId: userId,
       title: postTitle,
-      description: postDescription,
       budget: postBudget,
       telNumber: contactNumber,
       date: performDate,
@@ -72,7 +75,7 @@ describe('US4-2: Post Description', () => {
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.title).toBe(postTitle);
-    expect(res.body.data.description).toBe(postDescription);
+    expect(res.body.data.description).toBe('');
     expect(res.body.data.budget).toBe(postBudget);
     expect(res.body.data.telNumber).toBe(contactNumber);
     expect(new Date(res.body.data.date)).toEqual(performDate);
