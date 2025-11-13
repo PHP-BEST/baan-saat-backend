@@ -8,8 +8,20 @@ const config: Config = {
   transform: {
     ...tsJestTransformCfg,
   },
+
   maxWorkers: 1,
   setupFiles: ['dotenv/config'],
+  reporters: [
+    'default',
+    [
+      'jest-html-reporters',
+      {
+        publicPath: './reports',
+        filename: 'report.html',
+        expand: true,
+      },
+    ],
+  ],
 };
 
 export default config;
