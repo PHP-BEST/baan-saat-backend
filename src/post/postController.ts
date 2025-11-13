@@ -352,7 +352,7 @@ export const updatePost = async (req: Request, res: Response) => {
 export const updateManyPosts = async (req: Request, res: Response) => {
   try {
     const { postsId } = req.body;
-    console.log(postsId)
+    console.log(postsId);
     if (postsId && Array.isArray(postsId)) {
       const result = await Post.updateMany(
         { _id: { $in: postsId } },
