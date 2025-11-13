@@ -1,5 +1,4 @@
 import { Schema, model, Document } from 'mongoose';
-// import { isURL } from 'validator';
 
 interface IPost extends Document {
   customerId: Schema.Types.ObjectId;
@@ -40,8 +39,7 @@ const PostSchema = new Schema(
     },
     budget: {
       type: Number,
-      default: 0,
-      min: 0,
+      min: 1,
       max: 99999999.99,
       validate: {
         validator: (v: number) => /^\d+(\.\d{1,2})?$/.test(String(v)),
@@ -52,17 +50,6 @@ const PostSchema = new Schema(
       type: String,
       trim: true,
       default: '',
-      // validate: {
-      //   validator: (value: string) =>
-      //     value === '' ||
-      //     isURL(value, {
-      //       require_protocol: false,
-      //       require_host: true,
-      //       require_tld: true,
-      //       max_allowed_length: 2000,
-      //     }),
-      //   message: 'Please fill in a valid cover photo URL.',
-      // },
     },
     image1Url: {
       type: String,
