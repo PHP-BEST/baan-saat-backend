@@ -35,6 +35,7 @@ afterAll(async () => {
 describe('US4-3: Post Photos', () => {
   it('TC3-1: Post with No Cover Photo and Additional Photos', async () => {
     const postTitle = 'Clean my house';
+    const postDescription = 'My house is dirty.';
     const postBudget = 1000;
     const contactNumber = '0123456789';
     const performDate = new Date('2025-11-18');
@@ -42,6 +43,7 @@ describe('US4-3: Post Photos', () => {
     const res = await request(app).post('/posts').send({
       customerId: userId,
       title: postTitle,
+      description: postDescription,
       budget: postBudget,
       telNumber: contactNumber,
       date: performDate,
@@ -50,6 +52,7 @@ describe('US4-3: Post Photos', () => {
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.title).toBe(postTitle);
+    expect(res.body.data.description).toBe(postDescription);
     expect(res.body.data.budget).toBe(postBudget);
     expect(res.body.data.telNumber).toBe(contactNumber);
     expect(new Date(res.body.data.date)).toEqual(performDate);
@@ -61,6 +64,7 @@ describe('US4-3: Post Photos', () => {
 
   it('TC3-2: Post with Cover Photo and Additional Photos', async () => {
     const postTitle = 'Clean my house';
+    const postDescription = 'My house is dirty.';
     const postBudget = 1000;
     const contactNumber = '0123456789';
     const performDate = new Date('2025-11-18');
@@ -72,6 +76,7 @@ describe('US4-3: Post Photos', () => {
     const res = await request(app).post('/posts').send({
       customerId: userId,
       title: postTitle,
+      description: postDescription,
       budget: postBudget,
       telNumber: contactNumber,
       date: performDate,
@@ -84,6 +89,7 @@ describe('US4-3: Post Photos', () => {
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.title).toBe(postTitle);
+    expect(res.body.data.description).toBe(postDescription);
     expect(res.body.data.budget).toBe(postBudget);
     expect(res.body.data.telNumber).toBe(contactNumber);
     expect(new Date(res.body.data.date)).toEqual(performDate);
@@ -99,10 +105,12 @@ describe('US4-3: Post Photos', () => {
     const contactNumber = '0123456789';
     const performDate = new Date('2025-11-18');
     const postCoverPhotoUrl = 'cover1.png';
+    const postDescription = 'My house is dirty.';
 
     const res = await request(app).post('/posts').send({
       customerId: userId,
       title: postTitle,
+      description: postDescription,
       budget: postBudget,
       telNumber: contactNumber,
       date: performDate,
@@ -112,6 +120,7 @@ describe('US4-3: Post Photos', () => {
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.title).toBe(postTitle);
+    expect(res.body.data.description).toBe(postDescription);
     expect(res.body.data.budget).toBe(postBudget);
     expect(res.body.data.telNumber).toBe(contactNumber);
     expect(new Date(res.body.data.date)).toEqual(performDate);
@@ -123,6 +132,7 @@ describe('US4-3: Post Photos', () => {
 
   it('TC3-4: Post with No Cover Photo but Have Additional Photos', async () => {
     const postTitle = 'Clean my house';
+    const postDescription = 'My house is dirty.';
     const postBudget = 1000;
     const contactNumber = '0123456789';
     const performDate = new Date('2025-11-18');
@@ -133,6 +143,7 @@ describe('US4-3: Post Photos', () => {
     const res = await request(app).post('/posts').send({
       customerId: userId,
       title: postTitle,
+      description: postDescription,
       budget: postBudget,
       telNumber: contactNumber,
       date: performDate,
@@ -144,6 +155,7 @@ describe('US4-3: Post Photos', () => {
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.title).toBe(postTitle);
+    expect(res.body.data.description).toBe(postDescription);
     expect(res.body.data.budget).toBe(postBudget);
     expect(res.body.data.telNumber).toBe(contactNumber);
     expect(new Date(res.body.data.date)).toEqual(performDate);
