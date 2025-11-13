@@ -39,7 +39,7 @@ afterAll(async () => {
   await mongoose.disconnect();
 });
 
-describe('US4-1: Create Post with Validation', () => {
+describe('US4-1: Create Post', () => {
   it('TC1-1: Create Normal Post', async () => {
     const res = await request(app).post('/posts').send({
       customerId: userId,
