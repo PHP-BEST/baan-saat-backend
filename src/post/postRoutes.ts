@@ -456,6 +456,79 @@ postRouter.post('/', p.createPost);
 postRouter.put('/:id', p.updatePost);
 
 /**
+ * @swagger
+ * /update-poststatus:
+ *   post:
+ *     summary: Update multiple posts' match status
+ *     description: Set `isMatched` to `true` for all posts whose IDs are provided.
+ *     tags:
+ *       - Posts
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - postsId
+ *             properties:
+ *               postsId:
+ *                 type: array
+ *                 description: List of post IDs to update.
+ *                 items:
+ *                   type: string
+ *                   example: "64f8c1a9b2e4a123456789ab"
+ *           example:
+ *             postsId:
+ *               - "64f8c1a9b2e4a123456789ab"
+ *               - "64f8c1a9b2e4a123456789ac"
+ *     responses:
+ *       200:
+ *         description: Successfully updated one or more posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: string
+ *                   example: Updated 2 posts
+ *       404:
+ *         description: Posts not found or invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Post not found
+ *       400:
+ *         description: Bad request (invalid input or server error)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Failed to update post
+ *                 error:
+ *                   type: string
+ *                   example: ValidationError
+ */
+postRouter.post('/update-poststatus', p.updateManyPosts);
+
+/**
  * @openapi
  * /api/posts/{id}:
  *   delete:

@@ -317,7 +317,6 @@ export const filterPosts = async (req: Request, res: Response) => {
       const statusArray = (status as string).split(',').map((s) => s.trim());
       filter.status = { $in: statusArray };
     }
-
     const posts = await Post.find(filter);
     res.status(200).json({ success: true, data: posts });
   } catch (error) {
@@ -350,7 +349,31 @@ export const updatePost = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Failed to update post', error });
   }
 };
-
+export const updateManyPosts = async (req: Request, res: Response) => {
+  try {
+    const { postsId } = req.body;
+    console.log(postsId)
+    if (postsId && Array.isArray(postsId)) {
+      const result = await Post.updateMany(
+        { _id: { $in: postsId } },
+        { $set: { isMatched: true } },
+      );
+      if (result.modifiedCount > 0) {
+        return res.status(200).json({
+          success: true,
+          data: `Updated ${result.modifiedCount} posts`,
+        });
+      }
+      res.status(404).json({ success: false, message: 'Post not found' });
+    }
+    res.status(404).json({ success: false, message: 'Failed to update post' });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(400)
+      .json({ success: false, message: 'Failed to update post', error });
+  }
+};
 //@desc Delete a post by ID (soft delete)
 //@route DELETE /api/posts/:id
 //@access Public
