@@ -34,7 +34,6 @@ const reviewRouter = express.Router();
  */
 reviewRouter.get('/', reviewController.getReviews);
 
-
 /**
  * @openapi
  * /api/reviews/{id}:
@@ -68,7 +67,10 @@ reviewRouter.get('/', reviewController.getReviews);
  *      500:
  *        description: Failed to fetch review
  */
-reviewRouter.get('/provider/:providerId', reviewController.getReviewsByProviderId);
+reviewRouter.get(
+  '/provider/:providerId',
+  reviewController.getReviewsByProviderId,
+);
 
 /**
  * @openapi

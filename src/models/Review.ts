@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 interface IReview {
-      postId: Schema.Types.ObjectId;
+  postId: Schema.Types.ObjectId;
   providerId: Schema.Types.ObjectId;
   customerId: Schema.Types.ObjectId;
   description?: string;
@@ -14,34 +14,33 @@ const ReviewSchema = new Schema(
     postId: {
       type: Schema.Types.ObjectId,
       ref: 'Post',
-        required: true,
+      required: true,
     },
     // ผู้ให้บริการที่ถูกรีวิว
     providerId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
     // ลูกค้าที่รีวิว
     customerId: {
-        type: Schema.Types.ObjectId,    
-        ref: 'User',
-        required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
     description: {
       type: String,
       maxLength: 2000,
-        default: '',
-
+      default: '',
     },
     rating: {
       type: Number,
-        required: true,
-        min: 1,
-        max: 5,
+      required: true,
+      min: 1,
+      max: 5,
     },
   },
-    {
+  {
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
@@ -57,17 +56,17 @@ ReviewSchema.virtual('post', {
 ReviewSchema.virtual('provider', {
   ref: 'User',
   localField: 'providerId',
-    foreignField: '_id',
-    justOne: true,
+  foreignField: '_id',
+  justOne: true,
 });
 ReviewSchema.virtual('customer', {
   ref: 'User',
-    localField: 'customerId',
-    foreignField: '_id',
-    justOne: true,
+  localField: 'customerId',
+  foreignField: '_id',
+  justOne: true,
 });
 
-
+ReviewSchema.index({ postId: 1, customerId: 1 }, { unique: true });
 
 const Review = model<IReview>('Review', ReviewSchema);
 
