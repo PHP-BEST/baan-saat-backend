@@ -15,10 +15,22 @@ let userId2: string;
 beforeAll(async () => {
   const mongo_uri = process.env.MONGO_URI_TEST || '';
 
+  if (!mongo_uri) {
+    throw new Error('MONGO_URI_TEST is not defined in environment variables');
+  }
+
   try {
     await mongoose.connect(mongo_uri, {
       serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
     });
+
+    const collections = await mongoose.connection.db?.collections();
+    if (collections) {
+      for (const collection of collections) {
+        await collection.deleteMany({});
+      }
+    }
 
     const user1 = await User.create({
       email: 'testuser@test.com',
