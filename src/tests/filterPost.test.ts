@@ -14,88 +14,101 @@ let userId2: string;
 
 beforeAll(async () => {
   const mongo_uri = process.env.MONGO_URI_TEST || '';
-  await mongoose.connect(mongo_uri);
 
-  const user1 = await User.create({
-    email: 'testuser@test.com',
-    name: 'Test User',
-    role: 'customer',
-  });
-  userId = user1._id.toString();
+  try {
+    await mongoose.connect(mongo_uri, {
+      serverSelectionTimeoutMS: 10000,
+    });
 
-  const user2 = await User.create({
-    email: 'testuser2@test.com',
-    name: 'Test User 2',
-    role: 'customer',
-  });
-  userId2 = user2._id.toString();
+    const user1 = await User.create({
+      email: 'testuser@test.com',
+      name: 'Test User',
+      role: 'customer',
+    });
+    userId = user1._id.toString();
 
-  await Post.create([
-    {
-      customerId: userId,
-      title: 'House Cleaning Service',
-      description: 'Need thorough cleaning',
-      budget: 1500,
-      tag: 'houseCleaning',
-      telNumber: '0123456789',
-      date: new Date('2025-11-20'),
-      isMatched: false,
-      status: 'Not working',
-    },
-    {
-      customerId: userId,
-      title: 'Plumbing Repair',
-      description: 'Fix leaking pipes',
-      budget: 800,
-      tag: 'plumbing',
-      telNumber: '0987654321',
-      date: new Date('2025-11-25'),
-      isMatched: true,
-      status: 'In progress',
-    },
-    {
-      customerId: userId2,
-      title: 'Electrical Work',
-      description: 'Install new outlets',
-      budget: 2500,
-      tag: 'electrical',
-      telNumber: '0111222333',
-      date: new Date('2025-12-01'),
-      isMatched: false,
-      status: 'Completed',
-    },
-    {
-      customerId: userId,
-      title: 'Custom Carpentry',
-      description: 'Build custom shelves',
-      budget: 3000,
-      tag: 'others',
-      others: 'Carpentry',
-      telNumber: '0444555666',
-      date: new Date('2025-12-10'),
-      isMatched: false,
-      status: 'Not working',
-    },
-    {
-      customerId: userId,
-      title: 'Garden Maintenance',
-      description: 'Trim hedges and mow lawn',
-      budget: 500,
-      tag: 'landscaping',
-      telNumber: '0777888999',
-      date: new Date('2025-11-15'),
-      isMatched: false,
-      status: 'Deleted',
-    },
-  ]);
-});
+    const user2 = await User.create({
+      email: 'testuser2@test.com',
+      name: 'Test User 2',
+      role: 'customer',
+    });
+    userId2 = user2._id.toString();
+
+    await Post.create([
+      {
+        customerId: userId,
+        title: 'House Cleaning Service',
+        description: 'Need thorough cleaning',
+        budget: 1500,
+        tag: 'houseCleaning',
+        telNumber: '0123456789',
+        date: new Date('2025-11-20'),
+        isMatched: false,
+        status: 'Not working',
+      },
+      {
+        customerId: userId,
+        title: 'Plumbing Repair',
+        description: 'Fix leaking pipes',
+        budget: 800,
+        tag: 'plumbing',
+        telNumber: '0987654321',
+        date: new Date('2025-11-25'),
+        isMatched: true,
+        status: 'In progress',
+      },
+      {
+        customerId: userId2,
+        title: 'Electrical Work',
+        description: 'Install new outlets',
+        budget: 2500,
+        tag: 'electrical',
+        telNumber: '0111222333',
+        date: new Date('2025-12-01'),
+        isMatched: false,
+        status: 'Completed',
+      },
+      {
+        customerId: userId,
+        title: 'Custom Carpentry',
+        description: 'Build custom shelves',
+        budget: 3000,
+        tag: 'others',
+        others: 'Carpentry',
+        telNumber: '0444555666',
+        date: new Date('2025-12-10'),
+        isMatched: false,
+        status: 'Not working',
+      },
+      {
+        customerId: userId,
+        title: 'Garden Maintenance',
+        description: 'Trim hedges and mow lawn',
+        budget: 500,
+        tag: 'landscaping',
+        telNumber: '0777888999',
+        date: new Date('2025-11-15'),
+        isMatched: false,
+        status: 'Deleted',
+      },
+    ]);
+  } catch (error) {
+    console.error('Error in beforeAll:', error);
+    throw error;
+  }
+}, 30000);
 
 afterAll(async () => {
-  if (mongoose.connection.db) {
-    await mongoose.connection.db.dropDatabase();
+  try {
+    if (mongoose.connection.db) {
+      await mongoose.connection.db.dropDatabase();
+    }
+    await mongoose.disconnect();
+  } catch (error) {
+    console.error('Error in afterAll:', error);
+    throw error;
   }
-  await mongoose.disconnect();
-});
+}, 30000);
 
 describe('filterPosts', () => {
   it('TC1: Filter by userId only', async () => {
