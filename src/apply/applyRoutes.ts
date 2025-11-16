@@ -135,6 +135,31 @@ applyRouter.get(
 
 /**
  * @openapi
+ * /api/applies/customer/{customerId}:
+ *   get:
+ *     summary: Get applies by Customer ID
+ *     tags:
+ *       - Applies
+ *     parameters:
+ *       - in: path
+ *         name: customerId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The customer ID
+ *     responses:
+ *       200:
+ *         description: Returns a list of applies with populated details
+ *       500:
+ *         description: Failed to fetch applies
+ */
+applyRouter.get(
+  '/customer/:customerId/detail',
+  a.getDetailedAppliesByCustomerId,
+);
+
+/**
+ * @openapi
  * /api/applies/post/{postId}:
  *   get:
  *     summary: Get applies by Post ID
