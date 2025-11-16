@@ -6,7 +6,7 @@ export const isAuthenticated = (
   next: NextFunction,
 ) => {
   if (req.isAuthenticated()) {
-    next();
+    return next();
   }
   res.status(401).send();
 };
