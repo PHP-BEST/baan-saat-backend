@@ -11,6 +11,24 @@ app.use('/users', userRouter);
 beforeAll(async () => {
   const mongo_uri = process.env.MONGO_URI_TEST || '';
   await mongoose.connect(mongo_uri);
+
+  await Promise.all([
+    mongoose.connection.collection('users').deleteMany({
+      name: { $in: ['User 1', 'User 2'] },
+    }),
+    mongoose.connection.collection('posts').deleteMany({
+      title: {
+        $in: [
+          'Basic Post 1',
+          'Basic Post 2',
+          'Basic Post 3',
+          'Deluxe Post 1',
+          'Deluxe Post 2',
+          'Deluxe Post 3',
+        ],
+      },
+    }),
+  ]);
 });
 
 afterAll(async () => {
