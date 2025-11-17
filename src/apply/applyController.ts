@@ -83,7 +83,24 @@ export const getAppliesByProviderId = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Failed to fetch applies', error });
   }
 };
+export const getDetailedAppliesByCustomerId = async (
+  req: Request,
+  res: Response,
+) => {
+  const { customerId } = req.params;
+  try {
+    const applies = await Apply.find({ customerId: customerId })
+      .populate('post')
+      .populate('customer')
+      .populate('provider');
 
+    res.status(200).json({ success: true, data: applies });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to fetch applies', error });
+  }
+};
 export const getDetailedAppliesByProviderId = async (
   req: Request,
   res: Response,

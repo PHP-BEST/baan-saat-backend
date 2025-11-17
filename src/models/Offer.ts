@@ -4,7 +4,9 @@ interface IOffer {
   postId: Schema.Types.ObjectId;
   providerId: Schema.Types.ObjectId;
   customerId: Schema.Types.ObjectId;
-  status?: 'Pending' | 'Accepted' | 'Rejected' | 'Deleted';
+  date: Date;
+  price: number;
+  status?: 'Pending' | 'Accepted' | 'Rejected' | 'Deleted' | 'Taken' | 'Cancel';
 }
 
 const OfferSchema = new Schema(
@@ -27,13 +29,22 @@ const OfferSchema = new Schema(
       ref: 'User',
       required: true,
     },
+    date: {
+      type: Date,
+      required: true,
+      default: new Date(),
+    },
+    price: {
+      type: Number,
+      require: true,
+    },
     description: {
       type: String,
       maxLength: 2000,
     },
     status: {
       type: String,
-      enum: ['Pending', 'Accepted', 'Rejected', 'Deleted'],
+      enum: ['Pending', 'Accepted', 'Rejected', 'Deleted', 'Taken', 'Cancel'],
       default: 'Pending',
     },
   },

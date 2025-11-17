@@ -258,7 +258,6 @@ export const updatePost = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Failed to update post', error });
   }
 };
-
 //@desc Delete a post by ID (soft delete)
 //@route DELETE /api/posts/:id
 //@access Public

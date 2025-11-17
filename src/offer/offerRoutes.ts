@@ -408,7 +408,6 @@ offerRouter.post('/', o.createOffer);
  *         description: Failed to update offer
  */
 offerRouter.put('/:id', o.updateOffer);
-
 /**
  * @openapi
  * /api/offers/{id}:
