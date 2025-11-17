@@ -40,12 +40,15 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 ## Running the Application
 
 - **Start the development server:**
+
   ```bash
   npm run dev
   ```
+
 - By default, the app runs on `localhost:5000`.
 
 - **Start the production server:**
+
   ```bash
   npm run build
   npm start
@@ -58,21 +61,101 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 ## Code Quality
 
 - **Linting:**
+
   ```bash
   npm run lint
   ```
+
 - **Formatting:**
+
   ```bash
   npm run format
   ```
 
 ## Testing
 
-- **Run tests:**
+### Running Tests
+
+- To run all Jest tests:
+
   ```bash
-  npm test
+  npm run test
   ```
+
 - Test files are located in `src/tests/`.
+
+### Test Reporting (HTML UI)
+
+This project uses **jest-html-reporters** to generate a visual HTML report after every test run.
+
+- After running tests, the report is generated at:
+
+  ```
+  reports/report.html
+  ```
+
+- Open this file by typing this command to view test results.
+
+```sh
+start reports/report.html
+```
+
+### Adding New Tests
+
+- Use the naming convention:
+
+```
+
+<feature>.test.ts
+
+```
+
+Example:
+
+```
+
+src/tests/auth/login.test.ts
+
+```
+
+- Tests follow the Jest pattern:
+
+```ts
+describe('Login API', () => {
+  it('should return 200 for valid credentials', async () => {
+    const res = await request(app)
+      .post('/login')
+      .send({ username: 'a', password: 'b' });
+    expect(res.status).toBe(200);
+  });
+});
+```
+
+### API Testing with Supertest
+
+To test backend endpoints, this project uses **Supertest**:
+
+```ts
+import request from 'supertest';
+import app from '../../app';
+
+describe('User API', () => {
+  it('should fetch user list', async () => {
+    const response = await request(app).get('/api/users');
+    expect(response.status).toBe(200);
+  });
+});
+```
+
+### Environment Variables in Tests
+
+Jest loads environment variables from `.env` automatically through:
+
+```
+setupFiles: ['dotenv/config']
+```
+
+---
 
 ## API Documentation
 
@@ -82,13 +165,12 @@ This guide outlines how to set up, develop, test, and maintain the `baan-saat-ba
 
 The backend is deployed on Vercel with two environments:
 
-- **Development**: https://baan-saat-backend-dev.vercel.app/
-- **Development**: https://baan-saat-backend-dev.vercel.app/
+- **Development**: [https://baan-saat-backend-dev.vercel.app/](https://baan-saat-backend-dev.vercel.app/)
   - Automatically deploys from the `developer` branch
   - Used for testing and staging
   - Connected to development database and services
 
-- **Production**: https://baan-saat-backend.vercel.app/
+- **Production**: [https://baan-saat-backend.vercel.app/](https://baan-saat-backend.vercel.app/)
   - Automatically deploys from the `main` branch
   - Live production environment
   - Connected to production database and services
@@ -108,7 +190,9 @@ The backend is deployed on Vercel with two environments:
      - For documentation: `docs/<short-description>`
      - For refactoring: `refactor/<short-description>`
      - For chores/maintenance: `chore/<short-description>`
+
    - Example:
+
      ```bash
      git checkout developer
      git pull
@@ -123,6 +207,7 @@ The backend is deployed on Vercel with two environments:
      - For documentation: `docs: <short-description>`
      - For refactoring: `refactor: <short-description>`
      - For chores/maintenance: `chore: <short-description>`
+
    - Example:
 
      ```bash
@@ -136,6 +221,7 @@ The backend is deployed on Vercel with two environments:
    - Assign reviewers if required.
    - Wait for approval and merge.
    - After merging, **delete your working branch** and recreate it from the updated `developer` branch for your next task:
+
      ```bash
      git checkout developer
      git pull
@@ -156,5 +242,3 @@ git pull
 git checkout <your-feature-branch>
 git merge developer
 ```
-
----
