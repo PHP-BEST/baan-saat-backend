@@ -34,7 +34,6 @@ const reviewRouter = express.Router();
  */
 reviewRouter.get('/', reviewController.getReviews);
 
-
 /**
  * @openapi
  * /api/reviews/provider/{providerId}:

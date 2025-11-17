@@ -1,5 +1,6 @@
 import express from 'express';
 import * as p from './postController';
+import { filterPosts } from './filterPost';
 
 const postRouter = express.Router();
 
@@ -168,7 +169,7 @@ postRouter.get('/available', p.getAvailablePosts);
  *       500:
  *         description: Failed to fetch posts
  */
-postRouter.get('/filter', p.filterPosts);
+postRouter.get('/filter', filterPosts);
 
 /**
  * @openapi
