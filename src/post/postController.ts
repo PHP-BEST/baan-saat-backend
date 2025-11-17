@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import Post from '../models/Post';
 import User from '../models/User';
 import Apply from '../models/Apply';
+import Offer from '../models/Offer';
 
 //desc Get all posts
 //route GET /api/posts
@@ -15,6 +16,25 @@ export const getPosts = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ success: false, message: 'Failed to fetch posts', error });
+  }
+};
+
+//desc Get all available posts (unmatched and not deleted)
+//route GET /api/posts/available
+//access Public
+export const getAvailablePosts = async (req: Request, res: Response) => {
+  try {
+    const posts = await Post.find({
+      isMatched: false,
+      status: { $ne: 'Deleted' },
+    });
+    res.status(200).json({ success: true, data: posts });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch available posts',
+      error,
+    });
   }
 };
 
@@ -50,6 +70,30 @@ export const getPostsByUserId = async (req: Request, res: Response) => {
     res
       .status(500)
       .json({ success: false, message: 'Failed to fetch posts', error });
+  }
+};
+
+//desc Get available posts by User ID
+//route GET /api/posts/user/:userId/available
+//access Public
+export const getAvailablePostsByUserId = async (
+  req: Request,
+  res: Response,
+) => {
+  const { userId } = req.params;
+  try {
+    const posts = await Post.find({
+      customerId: userId,
+      isMatched: false,
+      status: { $ne: 'Deleted' },
+    });
+    res.status(200).json({ success: true, data: posts });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch available posts',
+      error,
+    });
   }
 };
 
@@ -125,84 +169,69 @@ export const searchPosts = async (req: Request, res: Response) => {
   }
 };
 
-//desc Filter posts
-//route GET /api/posts/filter
-//access Public
-export const filterPosts = async (req: Request, res: Response) => {
-  const {
-    userId,
-    title,
-    tags,
-    others,
-    minBudget,
-    maxBudget,
-    startDate,
-    endDate,
-  } = req.query;
-
-  interface PostFilter {
-    customerId?: string;
-    title?: { $regex: string; $options: string };
-    $or?: Array<{
-      tag?: { $in: string[] };
-      others?: { $regex: string; $options: string };
-    }>;
-    budget?: { $gte?: number; $lte?: number };
-    date?: { $gte?: Date; $lte?: Date };
+// desc Search available posts (unmatched and not deleted)
+// route GET /api/posts/search/available?query=your_query
+// access Public
+export const searchAvailablePosts = async (req: Request, res: Response) => {
+  const { query } = req.query;
+  if (!query) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Query parameter is required' });
   }
 
-  const filter: PostFilter = {};
+  if (typeof query !== 'string') {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Query parameter must be a string' });
+  }
+
+  const trimmedQuery = query.trim();
+  if (trimmedQuery.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Query parameter cannot be whitespace',
+    });
+  }
 
   try {
-    if (userId) {
-      filter.customerId = userId as string;
-    }
-    if (title) {
-      filter.title = { $regex: title as string, $options: 'i' };
-    }
-    if (tags) {
-      const orConditions: Array<{
-        tag?: { $in: string[] };
-        others?: { $regex: string; $options: string };
-      }> = [];
+    const matchingUsers = await User.find({
+      $or: [
+        { name: { $regex: trimmedQuery, $options: 'i' } },
+        { email: { $regex: trimmedQuery, $options: 'i' } },
+      ],
+    }).select('_id');
 
-      const tagsArray = (tags as string).split(',').map((tag) => tag.trim());
-      if (others) {
-        const index = tagsArray.indexOf('others');
-        tagsArray.splice(index, 1);
-        orConditions.push({
-          others: { $regex: others as string, $options: 'i' },
-        });
-      }
-      orConditions.push({ tag: { $in: tagsArray } });
+    const userIds = matchingUsers.map((user) => user._id);
 
-      filter.$or = orConditions;
-    }
-    if (minBudget || maxBudget) {
-      filter.budget = {};
-      if (minBudget) {
-        filter.budget.$gte = Number(minBudget);
-      }
-      if (maxBudget) {
-        filter.budget.$lte = Number(maxBudget);
-      }
-    }
-    if (startDate || endDate) {
-      filter.date = {};
-      if (startDate) {
-        filter.date.$gte = new Date(startDate as string);
-      }
-      if (endDate) {
-        filter.date.$lte = new Date(endDate as string);
-      }
-    }
+    const posts = await Post.find({
+      $and: [
+        {
+          $or: [
+            { title: { $regex: trimmedQuery, $options: 'i' } },
+            { description: { $regex: trimmedQuery, $options: 'i' } },
+            { budget: isNaN(Number(trimmedQuery)) ? -1 : Number(trimmedQuery) },
+            { location: { $regex: trimmedQuery, $options: 'i' } },
+            { tag: { $regex: trimmedQuery, $options: 'i' } },
+            { others: { $regex: trimmedQuery, $options: 'i' } },
+            { customerId: { $in: userIds } },
+          ],
+        },
+        { isMatched: false },
+        { status: { $ne: 'Deleted' } },
+      ],
+    }).populate(
+      'customerId',
+      'name email telNumber address role providerProfile',
+    );
 
-    const posts = await Post.find(filter);
     res.status(200).json({ success: true, data: posts });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: 'Failed to search posts', error });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to search available posts',
+      error,
+    });
   }
 };
 
@@ -229,25 +258,37 @@ export const updatePost = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Failed to update post', error });
   }
 };
-
-//@desc Delete a post by ID
+//@desc Delete a post by ID (soft delete)
 //@route DELETE /api/posts/:id
 //@access Public
 export const deletePost = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
-    await Apply.deleteMany({ postId: id });
-
-    const post = await Post.findByIdAndDelete(id);
+    // Check if post exists
+    const post = await Post.findById(id);
     if (!post) {
       return res
         .status(404)
         .json({ success: false, message: 'Post not found' });
     }
+
+    // Soft delete the post by changing status to 'Deleted'
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { status: 'Deleted' },
+      { new: true },
+    );
+
+    // Update all related applies to 'Deleted' status
+    await Apply.updateMany({ postId: id }, { status: 'Deleted' });
+
+    // Update all related offers to 'Deleted' status
+    await Offer.updateMany({ postId: id }, { status: 'Deleted' });
+
     res.status(200).json({
       success: true,
-      data: post,
-      message: 'Post deleted successfully',
+      data: updatedPost,
+      message: 'Post and related applications/offers deleted successfully',
     });
   } catch (error) {
     res

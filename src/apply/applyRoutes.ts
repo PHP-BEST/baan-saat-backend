@@ -135,6 +135,31 @@ applyRouter.get(
 
 /**
  * @openapi
+ * /api/applies/customer/{customerId}:
+ *   get:
+ *     summary: Get applies by Customer ID
+ *     tags:
+ *       - Applies
+ *     parameters:
+ *       - in: path
+ *         name: customerId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The customer ID
+ *     responses:
+ *       200:
+ *         description: Returns a list of applies with populated details
+ *       500:
+ *         description: Failed to fetch applies
+ */
+applyRouter.get(
+  '/customer/:customerId/detail',
+  a.getDetailedAppliesByCustomerId,
+);
+
+/**
+ * @openapi
  * /api/applies/post/{postId}:
  *   get:
  *     summary: Get applies by Post ID
@@ -207,6 +232,146 @@ applyRouter.get('/check/:providerId/:postId', a.checkProviderApplyPost);
 
 /**
  * @openapi
+ * /api/applies/filter:
+ *   get:
+ *     summary: Filter applies by various criteria
+ *     description: Filter applies by postId, providerId, customerId, status, applied price range, and date range
+ *     tags:
+ *       - Applies
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         description: Filter by post ID
+ *       - in: query
+ *         name: providerId
+ *         schema:
+ *           type: string
+ *         description: Filter by provider ID
+ *       - in: query
+ *         name: customerId
+ *         schema:
+ *           type: string
+ *         description: Filter by customer ID
+ *       - in: query
+ *         name: status
+ *         style: form
+ *         explode: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *             enum:
+ *               - Pending
+ *               - Accepted
+ *               - Rejected
+ *               - Deleted
+ *         description: Filter by apply status (partial matching)
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Minimum applied price to filter by
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Maximum applied price to filter by
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Start date to filter by (inclusive)
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: End date to filter by (inclusive)
+ *     responses:
+ *       200:
+ *         description: Returns a list of applies matching the filter criteria
+ *       500:
+ *         description: Failed to filter applies
+ */
+applyRouter.get('/filter', a.filterApplies);
+
+/**
+ * @openapi
+ * /api/applies/filter/detail:
+ *   get:
+ *     summary: Filter applies with detailed information (populated data)
+ *     description: Filter applies by various criteria and return detailed information including populated post, provider, and customer data
+ *     tags:
+ *       - Applies
+ *     parameters:
+ *       - in: query
+ *         name: postId
+ *         schema:
+ *           type: string
+ *         description: Filter by post ID
+ *       - in: query
+ *         name: providerId
+ *         schema:
+ *           type: string
+ *         description: Filter by provider ID
+ *       - in: query
+ *         name: customerId
+ *         schema:
+ *           type: string
+ *         description: Filter by customer ID
+ *       - in: query
+ *         name: status
+ *         style: form
+ *         explode: false
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *             enum:
+ *               - Pending
+ *               - Accepted
+ *               - Rejected
+ *               - Deleted
+ *         description: Filter by apply status (partial matching)
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Minimum applied price to filter by
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *           minimum: 0
+ *         description: Maximum applied price to filter by
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Start date to filter by (inclusive)
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: End date to filter by (inclusive)
+ *     responses:
+ *       200:
+ *         description: Returns a list of detailed applies with populated post, provider, and customer information
+ *       500:
+ *         description: Failed to filter detailed applies
+ */
+applyRouter.get('/filter/detail', a.filterDetailedApplies);
+
+/**
+ * @openapi
  * /api/applies:
  *   post:
  *     summary: Create a new apply
@@ -253,7 +418,7 @@ applyRouter.get('/check/:providerId/:postId', a.checkProviderApplyPost);
  *                 example: 2025-07-01T10:00:00Z
  *               status:
  *                 type: string
- *                 enum: [Pending, Accepted, Rejected]
+ *                 enum: [Pending, Accepted, Rejected, Deleted]
  *                 default: Pending
  *                 example: Pending
  *     responses:
@@ -300,7 +465,7 @@ applyRouter.post('/', a.createApply);
  *                 example: 2025-08-01T14:00:00Z
  *               status:
  *                 type: string
- *                 enum: [Pending, Accepted, Rejected]
+ *                 enum: [Pending, Accepted, Rejected, Deleted]
  *                 example: Accepted
  *     responses:
  *       200:
@@ -316,7 +481,8 @@ applyRouter.put('/:id', a.updateApply);
  * @openapi
  * /api/applies/{id}:
  *   delete:
- *     summary: Delete an apply by ID
+ *     summary: Delete an apply by ID (soft delete - changes status to 'Deleted')
+ *     description: Soft deletes an apply by changing its status to 'Deleted' instead of permanently removing it
  *     tags:
  *       - Applies
  *     parameters:
@@ -328,7 +494,7 @@ applyRouter.put('/:id', a.updateApply);
  *         description: The apply ID
  *     responses:
  *       200:
- *         description: Returns the deleted apply
+ *         description: Returns the updated apply with status 'Deleted' and success message
  *       404:
  *         description: Apply not found
  *       500:

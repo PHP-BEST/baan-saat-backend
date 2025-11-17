@@ -1,51 +1,43 @@
 import { Schema, model } from 'mongoose';
 
-interface IOffer {
+interface IReview {
   postId: Schema.Types.ObjectId;
   providerId: Schema.Types.ObjectId;
   customerId: Schema.Types.ObjectId;
-  date: Date;
-  price: number;
-  status?: 'Pending' | 'Accepted' | 'Rejected' | 'Deleted' | 'Taken' | 'Cancel';
+  description?: string;
+  rating: number;
 }
 
-const OfferSchema = new Schema(
+const ReviewSchema = new Schema(
   {
-    // Post that the customer want to offer to the provider
+    // Post ที่รีวิว
     postId: {
       type: Schema.Types.ObjectId,
       ref: 'Post',
       required: true,
     },
-    // Provider who is being offered the job
+    // ผู้ให้บริการที่ถูกรีวิว
     providerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    // Customer who is making the offer
+    // ลูกค้าที่รีวิว
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    date: {
-      type: Date,
-      required: true,
-      default: new Date(),
-    },
-    price: {
-      type: Number,
-      require: true,
-    },
     description: {
       type: String,
       maxLength: 2000,
+      default: '',
     },
-    status: {
-      type: String,
-      enum: ['Pending', 'Accepted', 'Rejected', 'Deleted', 'Taken', 'Cancel'],
-      default: 'Pending',
+    rating: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 5,
     },
   },
   {
@@ -55,27 +47,27 @@ const OfferSchema = new Schema(
   },
 );
 
-OfferSchema.virtual('post', {
+ReviewSchema.virtual('post', {
   ref: 'Post',
   localField: 'postId',
   foreignField: '_id',
   justOne: true,
 });
-
-OfferSchema.virtual('provider', {
+ReviewSchema.virtual('provider', {
   ref: 'User',
   localField: 'providerId',
   foreignField: '_id',
   justOne: true,
 });
-
-OfferSchema.virtual('customer', {
+ReviewSchema.virtual('customer', {
   ref: 'User',
   localField: 'customerId',
   foreignField: '_id',
   justOne: true,
 });
 
-const Offer = model<IOffer>('Offer', OfferSchema);
+ReviewSchema.index({ postId: 1, customerId: 1 }, { unique: true });
 
-export default Offer;
+const Review = model<IReview>('Review', ReviewSchema);
+
+export default Review;

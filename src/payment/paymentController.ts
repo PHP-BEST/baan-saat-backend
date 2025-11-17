@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import {
   createAccountSessionRepo,
-  createPaymentIntentRepo,
   retrievePaymentStatusRepo,
 } from './paymentRepo';
-import Post from '../models/Post';
 import User from '../models/User';
 import PostPayment from '../models/PostPayment';
+import { createPaymentIntentService } from './paymentService';
 
 export const createAccountSession = async (req: Request, res: Response) => {
   const connectId = (req.user as any).connectId;
@@ -24,7 +23,16 @@ export const createAccountSession = async (req: Request, res: Response) => {
   }
 };
 
-export const getPaymentIntentSecret = async (req: Request, res: Response) => {
+export const getPaymentIntent = async (req: Request, res: Response) => {
+  const postPayments = await PostPayment.find();
+
+  return res.json({ postPayments: postPayments });
+};
+
+export const getPaymentIntentSecretById = async (
+  req: Request,
+  res: Response,
+) => {
   const { postId } = req.params;
 
   const postPayment = await PostPayment.findOne({ postId: postId });
@@ -37,39 +45,48 @@ export const getPaymentIntentSecret = async (req: Request, res: Response) => {
   });
 };
 
-export const createPaymentIntent = async (req: Request, res: Response) => {
+export const createPaymentIntentController = async (
+  req: Request,
+  res: Response,
+) => {
   const { postId, providerId, amount } = req.body;
 
-  const post = await Post.findById(postId);
-  if (!post) {
-    return res.status(404).send('Post not found!');
+  // Validation
+  if (!postId || !providerId || !amount) {
+    return res
+      .status(400)
+      .send('Missing required fields: postId, providerId, or amount');
   }
 
-  const provider = await User.findById(providerId);
-  if (!provider) {
-    return res.status(404).send('Provider not found!');
+  if (typeof amount !== 'number' || amount <= 0) {
+    return res.status(400).send('Invalid amount');
   }
-
-  const connectId = provider.connectId;
-  const paymentIntent = await createPaymentIntentRepo(amount, connectId);
 
   try {
-    const postPayment = new PostPayment({
-      postId: postId,
-      providerId: providerId,
-      paymentId: paymentIntent.id,
-      paymentSecret: paymentIntent.client_secret || '',
-      paymentStatus: 'pending',
+    const result = await createPaymentIntentService({
+      postId,
+      providerId,
+      amount,
     });
-    await postPayment.save();
-  } catch (err) {
-    console.error('Failed to create PostPayment', err);
-    return res.status(500).send('Failed to save payment record');
-  }
 
-  return res.json({
-    client_secret: paymentIntent.client_secret,
-  });
+    return res.json(result);
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+
+    if (
+      errorMessage === 'Post not found!' ||
+      errorMessage === 'Provider not found!'
+    ) {
+      return res.status(404).send(errorMessage);
+    }
+
+    if (errorMessage === 'Failed to save payment record') {
+      return res.status(500).send(errorMessage);
+    }
+
+    console.error('Unexpected error in createPaymentIntent:', error);
+    return res.status(500).send('An unexpected error occurred');
+  }
 };
 
 export const getPaymentStatus = async (req: Request, res: Response) => {
