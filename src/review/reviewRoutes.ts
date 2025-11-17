@@ -34,43 +34,6 @@ const reviewRouter = express.Router();
  */
 reviewRouter.get('/', reviewController.getReviews);
 
-/**
- * @openapi
- * /api/reviews/{id}:
- *  get:
- *    summary: Get a single review by ID
- *    tags:
- *      - Reviews
- *    parameters:
- *      - in: path
- *        name: id
- *        schema:
- *          type: string
- *        required: true
- *        description: Review ID
- *    responses:
- *      200:
- *        description: Successfully retrieved the review
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                success:
- *                  type: boolean
- *                  example: true
- *                data:
- *      400:
- *        description: Invalid review ID
- *      404:
- *        description: Review not found
- *      500:
- *        description: Failed to fetch review
- */
-reviewRouter.get(
-  '/provider/:providerId',
-  reviewController.getReviewsByProviderId,
-);
 
 /**
  * @openapi
@@ -103,6 +66,45 @@ reviewRouter.get(
  *        description: Invalid provider ID
  *      500:
  *        description: Failed to fetch reviews
+ */
+
+reviewRouter.get(
+  '/provider/:providerId',
+  reviewController.getReviewsByProviderId,
+);
+
+/**
+ * @openapi
+ * /api/reviews/{id}:
+ *  get:
+ *    summary: Get a single review by ID
+ *    tags:
+ *      - Reviews
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Review ID
+ *    responses:
+ *      200:
+ *        description: Successfully retrieved the review
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                success:
+ *                  type: boolean
+ *                  example: true
+ *                data:
+ *      400:
+ *        description: Invalid review ID
+ *      404:
+ *        description: Review not found
+ *      500:
+ *        description: Failed to fetch review
  */
 reviewRouter.get('/:id', reviewController.getReviewById);
 /**
