@@ -44,7 +44,6 @@ const swaggerOptions = {
       title: 'Project Baan Saat API',
       version: '1.0.0',
       description: 'API documentation for Baan Saat',
-      description: 'API documentation for Baan Saat',
     },
   },
   apis: ['./src/**/*Routes.ts'],
@@ -70,6 +69,7 @@ app.use(
       // Cookie expiration in milliseconds (e.g., 7 days)
       maxAge: 1000 * 60 * 60 * 24 * 7,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       httpOnly: true, // Prevent XSS attacks
     },
   }),
