@@ -69,6 +69,7 @@ app.use(
       // Cookie expiration in milliseconds (e.g., 7 days)
       maxAge: 1000 * 60 * 60 * 24 * 7,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       httpOnly: true, // Prevent XSS attacks
     },
   }),
