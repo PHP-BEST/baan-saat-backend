@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import express, { Application } from 'express';
+import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
 import session from 'express-session';
@@ -13,10 +13,8 @@ import initializeRoutes from './routes';
 
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
+import { app, server } from './socket/socket';
 dotenv.config();
-
-const app: Application = express();
 
 (async () => {
   mongoose.set('strictQuery', true);
@@ -46,7 +44,6 @@ const swaggerOptions = {
       title: 'Project Baan Saat API',
       version: '1.0.0',
       description: 'API documentation for Baan Saat',
-      description: 'API documentation for Baan Saat',
     },
   },
   apis: ['./src/**/*Routes.ts'],
@@ -72,6 +69,7 @@ app.use(
       // Cookie expiration in milliseconds (e.g., 7 days)
       maxAge: 1000 * 60 * 60 * 24 * 7,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
       httpOnly: true, // Prevent XSS attacks
     },
   }),
@@ -86,7 +84,7 @@ app.use(express.json());
 
 initializeRoutes(app);
 
-app.listen(process.env.PORT, () =>
+server.listen(process.env.PORT, () =>
   console.log(
     `Server started on port ${process.env.PORT} in ${process.env.NODE_ENV} mode`,
   ),

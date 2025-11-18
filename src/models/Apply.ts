@@ -7,7 +7,7 @@ interface IApply {
   description?: string;
   appliedPrice?: number;
   date: Date;
-  status?: 'Pending' | 'Accepted' | 'Rejected';
+  status?: 'Pending' | 'Accepted' | 'Rejected' | 'Deleted';
 }
 
 const ApplySchema = new Schema(
@@ -51,7 +51,7 @@ const ApplySchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Accepted', 'Rejected'],
+      enum: ['Pending', 'Accepted', 'Rejected', 'Deleted'],
       default: 'Pending',
     },
   },
